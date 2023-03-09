@@ -1,11 +1,9 @@
-import 'package:nfc_e_wallet/root_web_page.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:nfc_e_wallet/style/color.dart';
+import 'package:nfc_e_wallet/ui/screen/root_screen.dart';
+import 'package:nfc_e_wallet/ui/style/color.dart';
 import 'package:flutter/foundation.dart' show kIsWeb;
-import 'package:nfc_e_wallet/view/screen/utils/snackbar.dart';
-
-import '../../root_page.dart';
+import 'package:nfc_e_wallet/utils/snackbar.dart';
 
 class SignIn extends StatefulWidget {
   const SignIn({Key? key}) : super(key: key);

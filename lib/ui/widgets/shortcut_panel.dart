@@ -1,9 +1,4 @@
-import 'package:ewallet/pages/qr_page.dart';
-import 'package:ewallet/pages/select_transfer_page.dart';
-import 'package:ewallet/pages/widgets/shortcut_icon.dart';
-import 'package:ewallet/pages/widgets/snackbar.dart';
-import 'package:ewallet/pages/withdraw_page.dart';
-import 'package:ewallet/style/color.dart';
+
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
