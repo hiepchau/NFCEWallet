@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:nfc_e_wallet/ui/style/color.dart';
-import 'package:nfc_e_wallet/ui/widgets/nofitication_widget.dart';
+import 'package:nfc_e_wallet/ui/screen/notification/nofitication_widget.dart';
 import '../app_navigator.dart';
 
 class NotificationPage extends StatefulWidget {
