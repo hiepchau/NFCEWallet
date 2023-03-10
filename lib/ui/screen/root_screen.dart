@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_font_icons/flutter_font_icons.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:nfc_e_wallet/ui/style/color.dart';
+import 'package:nfc_e_wallet/ui/widgets/shortcut_panel.dart';
 
 class RootApp extends StatefulWidget {
   const RootApp({Key? key}) : super(key: key);

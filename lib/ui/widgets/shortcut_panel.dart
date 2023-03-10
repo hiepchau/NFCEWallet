@@ -1,10 +1,10 @@
-
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-
-import '../../app_navigator.dart';
+import 'package:nfc_e_wallet/ui/screen/app_navigator.dart';
+import 'package:nfc_e_wallet/ui/style/color.dart';
+import 'package:nfc_e_wallet/utils/snackbar.dart';
 
 class ShortcutPanel extends StatefulWidget {
   const ShortcutPanel({Key? key}) : super(key: key);
