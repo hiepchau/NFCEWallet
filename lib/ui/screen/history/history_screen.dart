@@ -9,14 +9,14 @@ import 'package:nfc_e_wallet/ui/style/color.dart';
 import 'history_list.dart';
 import 'history_widget.dart';
 
-class HistoryPage extends StatefulWidget {
-  const HistoryPage({Key? key}) : super(key: key);
+class HistoryScreen extends StatefulWidget {
+  const HistoryScreen({Key? key}) : super(key: key);
 
   @override
-  _HistoryPage createState() => _HistoryPage();
+  _HistoryScreen createState() => _HistoryScreen();
 }
 
-class _HistoryPage extends State<HistoryPage> {
+class _HistoryScreen extends State<HistoryScreen> {
   bool obscureText = true;
   @override
   Widget build(BuildContext context) {

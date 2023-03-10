@@ -4,14 +4,14 @@ import 'package:nfc_e_wallet/ui/style/color.dart';
 import 'package:nfc_e_wallet/ui/screen/notification/nofitication_widget.dart';
 import '../app_navigator.dart';
 
-class NotificationPage extends StatefulWidget {
-  const NotificationPage({super.key});
+class NotificationScreen extends StatefulWidget {
+  const NotificationScreen({super.key});
 
   @override
-  _NotificationPage createState() => _NotificationPage();
+  _NotificationScreen createState() => _NotificationScreen();
 }
 
-class _NotificationPage extends State<NotificationPage> {
+class _NotificationScreen extends State<NotificationScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
