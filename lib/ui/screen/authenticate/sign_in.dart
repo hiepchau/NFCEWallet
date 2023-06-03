@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:nfc_e_wallet/ui/screen/root_screen.dart';
-import 'package:nfc_e_wallet/ui/style/color.dart';
+
 import 'package:flutter/foundation.dart' show kIsWeb;
-import 'package:nfc_e_wallet/utils/snackbar.dart';
+
+import '../../../utils/snackbar.dart';
+import '../../style/color.dart';
+import '../root_screen.dart';
 
 class SignIn extends StatefulWidget {
   const SignIn({Key? key}) : super(key: key);
@@ -183,7 +185,7 @@ class _SignInState extends State<SignIn> {
                       Navigator.pushAndRemoveUntil(
                         context,
                         MaterialPageRoute(
-                            builder: (context) => kIsWeb ? const RootWebApp() : const RootApp()),
+                            builder: (context) => const RootApp()),
                             (_) => false,
                       );
                     }),

@@ -1,8 +1,8 @@
-import 'package:ewallet/pages/payment_success_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import '../../style/color.dart';
 import 'package:flutter/foundation.dart' show kIsWeb;
+import '../payment/payment_success_screen.dart';
 
 class HistoryWidget extends StatefulWidget {
   const HistoryWidget({
