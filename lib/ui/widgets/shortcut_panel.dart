@@ -6,6 +6,10 @@ import 'package:nfc_e_wallet/ui/screen/app_navigator.dart';
 import 'package:nfc_e_wallet/ui/style/color.dart';
 import 'package:nfc_e_wallet/utils/snackbar.dart';
 
+import '../select_transfer_page.dart';
+import '../withdraw_page.dart';
+import 'shortcut_icon.dart';
+
 class ShortcutPanel extends StatefulWidget {
   const ShortcutPanel({Key? key}) : super(key: key);
 
