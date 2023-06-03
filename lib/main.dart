@@ -27,5 +27,5 @@ void main() {
           home: child, //TODO: change back to login page
         );
       },
-      child: const LoginPage()));
+      child: LoginPage()));
 }
