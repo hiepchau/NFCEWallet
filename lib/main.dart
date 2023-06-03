@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:nfc_e_wallet/ui/screen/app_navigator.dart';
 
+import 'ui/screen/authenticate/login_page.dart';
+
 void main() {
   AppNav.init();
   runApp(ScreenUtilInit(
