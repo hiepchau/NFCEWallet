@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:fluttertoast/fluttertoast.dart';
+import 'package:nfc_e_wallet/l10n/l10n.dart';
 import 'package:nfc_e_wallet/ui/screen/root_screen.dart';
 import 'package:nfc_e_wallet/utils/toast_helper.dart';
 import 'package:pin_code_fields/pin_code_fields.dart';
@@ -25,13 +25,13 @@ class OTPScreen extends StatelessWidget {
       child: BlocListener<OtpBloc, OtpState>(
         listener: (context, state) {
           if (state is OtpSuccess) {
-            ToastHelper.showToast("OTP validated successfully", status: ToastStatus.success);
+            ToastHelper.showToast(L10n.of(context).verifySuccess, status: ToastStatus.success);
             Navigator.push(
               context,
               MaterialPageRoute(builder: (context) => RootApp()),
             );
           } else if (state is OtpFailure) {
-            ToastHelper.showToast("Failed to validate OTP: ${state.error}", status: ToastStatus.failure);
+            ToastHelper.showToast("${L10n.of(context).verifySuccess}: ${state.error}", status: ToastStatus.failure);
           }
         },
         child: Scaffold(

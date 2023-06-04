@@ -1,0 +1,15 @@
+{
+  "account": "Tài khoản",
+  "accountNotExist": "Tài khoản không tồn tại!",
+  "accountUpdateFailed": "Thiết lập tài khoản thất bại!",
+  "signIn": "Đăng nhập",
+  "signInFailed": "Đăng nhập thất bại!",
+  "signInSuccess": "Đăng nhập thành công!",
+  "verifyCode": "Mã xác thực",
+  "verifySuccess": "Xác thực thành công!",
+  "verifyFailed": "Xác thực thất bại!",
+  "verifyCodeFailed": "Mã xác thực không đúng!",
+  "signOut": "Đăng xuất"
+  "signOutSuccess": "Đăng xuất thành công!",
+  "signOutFailed": "Đăng xuất thất bại!"
+}

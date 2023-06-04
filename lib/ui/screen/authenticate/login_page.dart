@@ -1,16 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:nfc_e_wallet/ui/screen/otp/otp_screen.dart';
 import 'package:nfc_e_wallet/ui/screen/dashboard_page.dart';
+import 'package:nfc_e_wallet/utils/toast_helper.dart';
+import '../../../l10n/l10n.dart';
 import '../../style/color.dart';
 import '../root_screen.dart';
 import 'login_bloc.dart';
 import 'login_event.dart';
-
-enum LoginMethod {
-  email,
-  phone,
-}
 
 class LoginPage extends StatelessWidget {
   @override
@@ -30,12 +28,8 @@ class LoginForm extends StatefulWidget {
 }
 
 class _LoginFormState extends State<LoginForm> {
-  LoginMethod _method = LoginMethod.email;
-  void _switchMethod() {
-    setState(() {
-      _method = _method == LoginMethod.email ? LoginMethod.phone : LoginMethod.email;
-    });
-  }
+  final _phoneNumberController = TextEditingController();
+  final _passwordController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -83,30 +77,38 @@ class _LoginFormState extends State<LoginForm> {
                   padding: EdgeInsets.symmetric(horizontal: 24),
                   child: Column(
                     children: [
-                      _method == LoginMethod.email ? _EmailSignInForm() : _PhoneNumberSignInForm(),
-                      SizedBox(height: 16),
-                      Container(
-                        width: double.infinity,
-                        child: ElevatedButton(
-                          onPressed: _switchMethod,
-                          child: Text(_method == LoginMethod.email ? 'Sign in with Phone Number' : 'Sign in with Email'),
-                          style: ElevatedButton.styleFrom(
-                            primary: Colors.transparent, // Button's fill color
-                            side: BorderSide(color: Color(0xFF3F63F6)), // Border color
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(8),
-                            ),
-                          ),
+                      TextField(
+                        controller: _phoneNumberController,
+                        decoration: InputDecoration(
+                          hintText: 'Your phone number',
+                          border: OutlineInputBorder(borderRadius: BorderRadius.circular(8.0)),
                         ),
+                        onChanged: (value) {
+                          // Handle phone number input change
+                        },
+                      ),
+                      SizedBox(height: 24.0),
+                      TextField(
+                        controller: _passwordController,
+                        obscureText: true,
+                        decoration: InputDecoration(
+                          hintText: 'Password',
+                          border: OutlineInputBorder(borderRadius: BorderRadius.circular(8.0)),
+                          suffixIcon: Icon(Icons.visibility_off), // Eye icon
+                        ),
+                        onChanged: (value) {
+                          context.read<LoginBloc>().add(PasswordChanged(value));
+                        },
                       ),
                       SizedBox(height: 16),
                       Container(
                         width: double.infinity,
                         child: ElevatedButton(
                           onPressed: () {
+                            ToastHelper.showToast(L10n.of(context).signInSuccess, status: ToastStatus.success);
                             Navigator.push(
                               context,
-                              MaterialPageRoute(builder: (context) => OTPScreen(phoneNumber: "123")),
+                              MaterialPageRoute(builder: (context) => RootApp()),
                             );
                           },
                           child: Text('Sign In'),
@@ -126,60 +128,6 @@ class _LoginFormState extends State<LoginForm> {
           ),
         ),
       ],
-    );
-  }
-}
-
-class _EmailSignInForm extends StatelessWidget {
-  final _emailController = TextEditingController();
-  final _passwordController = TextEditingController();
-
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      children: [
-        TextField(
-          controller: _emailController,
-          decoration: InputDecoration(
-            hintText: 'Enter your email address',
-            border: OutlineInputBorder(borderRadius: BorderRadius.circular(8.0)),
-          ),
-          onChanged:  (value) {
-            context.read<LoginBloc>().add(EmailChanged(value));
-          },
-        ),
-        SizedBox(height: 24.0),
-        TextField(
-          controller: _passwordController,
-          obscureText: true,
-          decoration: InputDecoration(
-            hintText: 'Password',
-            border: OutlineInputBorder(borderRadius: BorderRadius.circular(8.0)),
-            suffixIcon: Icon(Icons.visibility_off), // Eye icon
-          ),
-          onChanged: (value) {
-            context.read<LoginBloc>().add(PasswordChanged(value));
-          },
-        ),
-      ],
-    );
-  }
-}
-
-class _PhoneNumberSignInForm extends StatelessWidget {
-  final _phoneNumberController = TextEditingController();
-
-  @override
-  Widget build(BuildContext context) {
-    return TextField(
-      controller: _phoneNumberController,
-      decoration: InputDecoration(
-        hintText: 'Your phone number',
-        border: OutlineInputBorder(borderRadius: BorderRadius.circular(8.0)),
-      ),
-      onChanged: (value) {
-        // Handle phone number input change
-      },
     );
   }
 }
