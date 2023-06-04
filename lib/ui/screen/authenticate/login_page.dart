@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:nfc_e_wallet/ui/screen/otp/otp_screen.dart';
 import 'package:nfc_e_wallet/ui/screen/dashboard_page.dart';
+import '../../style/color.dart';
 import '../root_screen.dart';
 import 'login_bloc.dart';
 import 'login_event.dart';
@@ -67,6 +69,7 @@ class _LoginFormState extends State<LoginForm> {
                 SizedBox(height: 8),
                 FlatButton(
                   onPressed: () {
+
                     // navigate to create account screen
                   },
                   child: Text(
@@ -103,12 +106,12 @@ class _LoginFormState extends State<LoginForm> {
                           onPressed: () {
                             Navigator.push(
                               context,
-                              MaterialPageRoute(builder: (context) => RootApp()),
+                              MaterialPageRoute(builder: (context) => OTPScreen(phoneNumber: "123")),
                             );
                           },
                           child: Text('Sign In'),
                           style: ElevatedButton.styleFrom(
-                            primary: Colors.green, // Button's fill color
+                            primary: green1, // Button's fill color
                             shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(8),
                             ),
@@ -141,7 +144,7 @@ class _EmailSignInForm extends StatelessWidget {
             hintText: 'Enter your email address',
             border: OutlineInputBorder(borderRadius: BorderRadius.circular(8.0)),
           ),
-          onChanged: (value) {
+          onChanged:  (value) {
             context.read<LoginBloc>().add(EmailChanged(value));
           },
         ),
