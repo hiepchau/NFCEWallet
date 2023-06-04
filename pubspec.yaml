@@ -29,6 +29,8 @@ dependencies:
   flutter_bloc: ^7.1.0
   equatable: ^2.0.5
   pin_code_fields: ^7.4.0
+  fluttertoast: ^8.2.2
+  rxdart: ^0.27.7
 
 dev_dependencies:
   flutter_test:

@@ -4,36 +4,46 @@ PODS:
     - MTBBarcodeScanner
     - SwiftProtobuf
   - Flutter (1.0.0)
+  - fluttertoast (0.0.2):
+    - Flutter
+    - Toast
   - MTBBarcodeScanner (5.0.11)
   - qr_code_scanner (0.2.0):
     - Flutter
     - MTBBarcodeScanner
   - SwiftProtobuf (1.20.3)
+  - Toast (4.0.0)
 
 DEPENDENCIES:
   - barcode_scan2 (from `.symlinks/plugins/barcode_scan2/ios`)
   - Flutter (from `Flutter`)
+  - fluttertoast (from `.symlinks/plugins/fluttertoast/ios`)
   - qr_code_scanner (from `.symlinks/plugins/qr_code_scanner/ios`)
 
 SPEC REPOS:
   trunk:
     - MTBBarcodeScanner
     - SwiftProtobuf
+    - Toast
 
 EXTERNAL SOURCES:
   barcode_scan2:
     :path: ".symlinks/plugins/barcode_scan2/ios"
   Flutter:
     :path: Flutter
+  fluttertoast:
+    :path: ".symlinks/plugins/fluttertoast/ios"
   qr_code_scanner:
     :path: ".symlinks/plugins/qr_code_scanner/ios"
 
 SPEC CHECKSUMS:
   barcode_scan2: 0af2bb63c81b4565aab6cd78278e4c0fa136dbb0
   Flutter: 50d75fe2f02b26cc09d224853bb45737f8b3214a
+  fluttertoast: fafc4fa4d01a6a9e4f772ecd190ffa525e9e2d9c
   MTBBarcodeScanner: f453b33c4b7dfe545d8c6484ed744d55671788cb
   qr_code_scanner: bb67d64904c3b9658ada8c402e8b4d406d5d796e
   SwiftProtobuf: b02b5075dcf60c9f5f403000b3b0c202a11b6ae1
+  Toast: 91b396c56ee72a5790816f40d3a94dd357abc196
 
 PODFILE CHECKSUM: aafe91acc616949ddb318b77800a7f51bffa2a4c
 
