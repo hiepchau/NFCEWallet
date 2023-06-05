@@ -3,7 +3,7 @@ import '../../../wallet_list.dart';
 import '../../style/color.dart';
 import '../../style/constants.dart';
 import '../../widgets/profile_widget.dart';
-import '../authenticate/login_page.dart';
+import '../authenticate/login/login_page.dart';
 
 
 class AccountPage extends StatefulWidget {

@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-import 'package:nfc_e_wallet/ui/screen/authenticate/signup_screen.dart';
+import 'package:nfc_e_wallet/ui/screen/authenticate/signup/signup_screen.dart';
 import 'package:nfc_e_wallet/ui/screen/otp/otp_screen.dart';
 import 'package:nfc_e_wallet/ui/screen/dashboard_page.dart';
 import 'package:nfc_e_wallet/utils/toast_helper.dart';
-import '../../../l10n/l10n.dart';
-import '../../style/color.dart';
-import '../root_screen.dart';
+import '../../../../l10n/l10n.dart';
+import '../../../style/color.dart';
+import '../../root_screen.dart';
 import 'login_bloc.dart';
 import 'login_event.dart';
 

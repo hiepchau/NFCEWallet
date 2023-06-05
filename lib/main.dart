@@ -4,7 +4,7 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:nfc_e_wallet/l10n/l10n.dart';
 import 'package:nfc_e_wallet/ui/screen/app_navigator.dart';
-import 'package:nfc_e_wallet/ui/screen/authenticate/login_page.dart';
+import 'package:nfc_e_wallet/ui/screen/authenticate/login/login_page.dart';
 
 void main() {
   AppNav.init();
