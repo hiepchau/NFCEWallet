@@ -1,285 +1,150 @@
 import 'package:flutter/material.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import '../../../l10n/l10n.dart';
+import '../../../utils/toast_helper.dart';
+import '../../style/color.dart';
+import '../otp/otp_screen.dart';
+import 'signup_bloc.dart';
 
-import 'package:flutter/foundation.dart' show kIsWeb;
-import 'package:nfc_e_wallet/ui/style/color.dart';
-import 'package:nfc_e_wallet/utils/snackbar.dart';
 
-class SignUp extends StatefulWidget {
-  const SignUp({Key? key}) : super(key: key);
-
+class SignUpPage extends StatelessWidget {
   @override
-  _SignUpState createState() => _SignUpState();
+  Widget build(BuildContext context) {
+    return Scaffold(
+      body: BlocProvider(
+        create: (context) => SignUpBloc(),
+        child: SignUpForm(),
+      ),
+    );
+  }
 }
 
-class _SignUpState extends State<SignUp> {
-  final FocusNode focusNodePassword = FocusNode();
-  final FocusNode focusNodeConfirmPassword = FocusNode();
-  final FocusNode focusNodeEmail = FocusNode();
-  final FocusNode focusNodeName = FocusNode();
-
-  bool _obscureTextPassword = true;
-  bool _obscureTextConfirmPassword = true;
-
-  TextEditingController signupEmailController = TextEditingController();
-  TextEditingController signupNameController = TextEditingController();
-  TextEditingController signupPasswordController = TextEditingController();
-  TextEditingController signupConfirmPasswordController =
-  TextEditingController();
-
+class SignUpForm extends StatefulWidget {
   @override
-  void dispose() {
-    focusNodePassword.dispose();
-    focusNodeConfirmPassword.dispose();
-    focusNodeEmail.dispose();
-    focusNodeName.dispose();
-    super.dispose();
-  }
+  _SignUpFormState createState() => _SignUpFormState();
+}
+
+class _SignUpFormState extends State<SignUpForm> {
+  final _phoneNumberController = TextEditingController();
+  final _passwordController = TextEditingController();
+  final _repeatPasswordController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
-    return SingleChildScrollView(
-      padding: const EdgeInsets.only(top: 23.0),
-      child: Column(
-        children: <Widget>[
-          Stack(
-            alignment: Alignment.topCenter,
-            children: <Widget>[
-              Card(
-                elevation: 2.0,
-                color: Colors.white,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(8.0),
-                ),
-                child: ConstrainedBox(
-                  constraints: BoxConstraints(
-                    minWidth: MediaQuery.of(context).size.width < 900 ? MediaQuery.of(context).size.width : MediaQuery.of(context).size.width/3,
-                    minHeight: MediaQuery.of(context).size.height < 250 ? 150 : 360 ,
-                    maxWidth:
-                    MediaQuery.of(context).size.width >=900 ? MediaQuery.of(context).size.width / 3 : MediaQuery.of(context).size.width,
-                    maxHeight: MediaQuery.of(context).size.height >= 250 ? 360 : 150,
+    return Stack(
+      children: [
+        Container(
+          height: 250,
+          width: double.infinity,
+          color: Color(0xFF3F63F6),
+        ),
+        SafeArea(
+          child: Padding(
+            padding: EdgeInsets.only(left: 24),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                SizedBox(height: 24),
+                Container(
+                  width: 44,
+                  height: 44,
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(24),
                   ),
+                ),
+                SizedBox(height: 24),
+                Text(
+                  'Create Account',
+                  style: TextStyle(color: Colors.white, fontSize: 24, fontWeight: FontWeight.w600),
+                ),
+                SizedBox(height: 8),
+                TextButton(
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                  },
+                  child: Text(
+                    "Already have an account? Sign In",
+                    style: TextStyle(color: Colors.blue, fontSize: 16),
+                  ),
+                ),
+                SizedBox(height: 32),
+                Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 24),
                   child: Column(
-                    children: <Widget>[
-                      Padding(
-                        padding: const EdgeInsets.only(
-                            top: 15.0, bottom: 15.0, left: 25.0, right: 25.0),
-                        child: TextField(
-                          focusNode: focusNodeName,
-                          controller: signupNameController,
-                          keyboardType: TextInputType.text,
-                          textCapitalization: TextCapitalization.words,
-                          autocorrect: false,
-                          style: const TextStyle(
-                              fontFamily: 'WorkSansSemiBold',
-                              fontSize: 16.0,
-                              color: Colors.black),
-                          decoration: const InputDecoration(
-                            border: InputBorder.none,
-                            icon: Icon(
-                              FontAwesomeIcons.user,
-                              color: Colors.black,
-                            ),
-                            hintText: 'Name',
-                            hintStyle: TextStyle(
-                                fontFamily: 'WorkSansSemiBold', fontSize: 16.0),
-                          ),
-                          onSubmitted: (_) {
-                            focusNodeEmail.requestFocus();
-                          },
+                    children: [
+                      TextField(
+                        controller: _phoneNumberController,
+                        decoration: InputDecoration(
+                          hintText: 'Your phone number',
+                          border: OutlineInputBorder(borderRadius: BorderRadius.circular(8.0)),
                         ),
+                        onChanged: (value) {
+                          context.read<SignUpBloc>().add(PhoneNumberChanged(value));
+                        },
                       ),
-                      Container(
-                        width: MediaQuery.of(context).size.width >= 900
-                            ? MediaQuery.of(context).size.width / 3 -150
-                            : MediaQuery.of(context).size.width -150,
-                        height: 1.0,
-                        color: Colors.grey[400],
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.only(
-                            top: 15.0, bottom: 15.0, left: 25.0, right: 25.0),
-                        child: TextField(
-                          focusNode: focusNodeEmail,
-                          controller: signupEmailController,
-                          keyboardType: TextInputType.emailAddress,
-                          autocorrect: false,
-                          style: const TextStyle(
-                              fontFamily: 'WorkSansSemiBold',
-                              fontSize: 16.0,
-                              color: Colors.black),
-                          decoration: const InputDecoration(
-                            border: InputBorder.none,
-                            icon: Icon(
-                              FontAwesomeIcons.envelope,
-                              color: Colors.black,
-                            ),
-                            hintText: 'Email Address',
-                            hintStyle: TextStyle(
-                                fontFamily: 'WorkSansSemiBold', fontSize: 16.0),
-                          ),
-                          onSubmitted: (_) {
-                            focusNodePassword.requestFocus();
-                          },
+                      SizedBox(height: 24.0),
+                      TextField(
+                        controller: _passwordController,
+                        obscureText: true,
+                        decoration: InputDecoration(
+                          hintText: 'Password',
+                          border: OutlineInputBorder(borderRadius: BorderRadius.circular(8.0)),
+                          suffixIcon: Icon(Icons.visibility_off), // Eye icon
                         ),
+                        onChanged: (value) {
+                          context.read<SignUpBloc>().add(PasswordChanged(value));
+                        },
                       ),
-                      Container(
-                        width: MediaQuery.of(context).size.width >= 900
-                            ? MediaQuery.of(context).size.width / 3 - 150
-                            : MediaQuery.of(context).size.width - 150,
-                        height: 1.0,
-                        color: Colors.grey[400],
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.only(
-                            top: 15.0, bottom: 15.0, left: 25.0, right: 25.0),
-                        child: TextField(
-                          focusNode: focusNodePassword,
-                          controller: signupPasswordController,
-                          obscureText: _obscureTextPassword,
-                          autocorrect: false,
-                          style: const TextStyle(
-                              fontFamily: 'WorkSansSemiBold',
-                              fontSize: 16.0,
-                              color: Colors.black),
-                          decoration: InputDecoration(
-                            border: InputBorder.none,
-                            icon: const Icon(
-                              FontAwesomeIcons.lock,
-                              color: Colors.black,
-                            ),
-                            hintText: 'Password',
-                            hintStyle: const TextStyle(
-                                fontFamily: 'WorkSansSemiBold', fontSize: 16.0),
-                            suffixIcon: GestureDetector(
-                              onTap: _toggleSignup,
-                              child: Icon(
-                                _obscureTextPassword
-                                    ? FontAwesomeIcons.eye
-                                    : FontAwesomeIcons.eyeSlash,
-                                size: 15.0,
-                                color: Colors.black,
-                              ),
-                            ),
-                          ),
-                          onSubmitted: (_) {
-                            focusNodeConfirmPassword.requestFocus();
-                          },
+                      SizedBox(height: 24.0),
+                      TextField(
+                        controller: _repeatPasswordController,
+                        obscureText: true,
+                        decoration: InputDecoration(
+                          hintText: 'Repeat Password',
+                          border: OutlineInputBorder(borderRadius: BorderRadius.circular(8.0)),
+                          suffixIcon: Icon(Icons.visibility_off), // Eye icon
                         ),
+                        onChanged: (value) {
+                          context.read<SignUpBloc>().add(RepeatPasswordChanged(value));
+                        },
                       ),
+                      SizedBox(height: 16),
                       Container(
-                        width: MediaQuery.of(context).size.width >= 900
-                            ? MediaQuery.of(context).size.width / 3 - 150
-                            : MediaQuery.of(context).size.width - 150,
-                        height: 1.0,
-                        color: Colors.grey[400],
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.only(
-                            top: 15.0, bottom: 15.0, left: 25.0, right: 25.0),
-                        child: TextField(
-                          focusNode: focusNodeConfirmPassword,
-                          controller: signupConfirmPasswordController,
-                          obscureText: _obscureTextConfirmPassword,
-                          autocorrect: false,
-                          style: const TextStyle(
-                              fontFamily: 'WorkSansSemiBold',
-                              fontSize: 16.0,
-                              color: Colors.black),
-                          decoration: InputDecoration(
-                            border: InputBorder.none,
-                            icon: const Icon(
-                              FontAwesomeIcons.lock,
-                              color: Colors.black,
-                            ),
-                            hintText: 'Confirmation',
-                            hintStyle: const TextStyle(
-                                fontFamily: 'WorkSansSemiBold', fontSize: 16.0),
-                            suffixIcon: GestureDetector(
-                              onTap: _toggleSignupConfirm,
-                              child: Icon(
-                                _obscureTextConfirmPassword
-                                    ? FontAwesomeIcons.eye
-                                    : FontAwesomeIcons.eyeSlash,
-                                size: 15.0,
-                                color: Colors.black,
-                              ),
+                        width: double.infinity,
+                        child: ElevatedButton(
+                          onPressed: () {
+                            if (_phoneNumberController.text.isNotEmpty &&
+                                _passwordController.text.isNotEmpty &&
+                                _repeatPasswordController.text.isNotEmpty) {
+                              context.read<SignUpBloc>().add(SignUpSubmitted());
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => OTPScreen(phoneNumber: _phoneNumberController.text),
+                                ),
+                              );
+                            } else {
+                              ToastHelper.showToast("Vui lòng nhập đủ thông tin!", status: ToastStatus.failure);
+                            }
+                          },
+                          child: Text('Sign Up'),
+                          style: ElevatedButton.styleFrom(
+                            primary: green1, // Button's fill color
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(8),
                             ),
                           ),
-                          onSubmitted: (_) {
-                            _toggleSignUpButton();
-                          },
-                          textInputAction: TextInputAction.go,
                         ),
                       ),
                     ],
                   ),
                 ),
-              ),
-              Container(
-                margin: const EdgeInsets.only(top: 340.0),
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.all(Radius.circular(5.0)),
-                  boxShadow: <BoxShadow>[
-                    BoxShadow(
-                      color: CustomTheme.loginGradientStart,
-                      offset: Offset(1.0, 6.0),
-                      blurRadius: 20.0,
-                    ),
-                    BoxShadow(
-                      color: CustomTheme.loginGradientEnd,
-                      offset: Offset(1.0, 6.0),
-                      blurRadius: 20.0,
-                    ),
-                  ],
-                  gradient: LinearGradient(
-                      colors: <Color>[
-                        CustomTheme.loginGradientEnd,
-                        CustomTheme.loginGradientStart
-                      ],
-                      begin: FractionalOffset(0.2, 0.2),
-                      end: FractionalOffset(1.0, 1.0),
-                      stops: <double>[0.0, 1.0],
-                      tileMode: TileMode.clamp),
-                ),
-                child: MaterialButton(
-                  highlightColor: Colors.transparent,
-                  splashColor: CustomTheme.loginGradientEnd,
-                  //shape: RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(5.0))),
-                  child: const Padding(
-                    padding:
-                    EdgeInsets.symmetric(vertical: 10.0, horizontal: 42.0),
-                    child: Text(
-                      'SIGN UP',
-                      style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 25.0,
-                          fontFamily: 'WorkSansBold'),
-                    ),
-                  ),
-                  onPressed: () => _toggleSignUpButton(),
-                ),
-              )
-            ],
+              ],
+            ),
           ),
-        ],
-      ),
+        ),
+      ],
     );
-  }
-
-  void _toggleSignUpButton() {
-    CustomSnackBar(context, const Text('SignUp button pressed'));
-  }
-
-  void _toggleSignup() {
-    setState(() {
-      _obscureTextPassword = !_obscureTextPassword;
-    });
-  }
-
-  void _toggleSignupConfirm() {
-    setState(() {
-      _obscureTextConfirmPassword = !_obscureTextConfirmPassword;
-    });
   }
 }

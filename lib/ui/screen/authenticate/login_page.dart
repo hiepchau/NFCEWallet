@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:nfc_e_wallet/ui/screen/authenticate/signup_screen.dart';
 import 'package:nfc_e_wallet/ui/screen/otp/otp_screen.dart';
 import 'package:nfc_e_wallet/ui/screen/dashboard_page.dart';
 import 'package:nfc_e_wallet/utils/toast_helper.dart';
@@ -63,8 +64,11 @@ class _LoginFormState extends State<LoginForm> {
                 SizedBox(height: 8),
                 FlatButton(
                   onPressed: () {
-
                     // navigate to create account screen
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => SignUpPage()),
+                    );
                   },
                   child: Text(
                     "Don’t have an account? Create Account",
