@@ -1,16 +1,87 @@
-
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../style/color.dart';
 import '../app_navigator.dart';
 import 'payment_confirm.dart';
+import 'payment_screen_bloc.dart';
+import 'payment_screen_event.dart';
+import 'payment_screen_state.dart';
 
-class PaymentScreen extends StatefulWidget {
-  PaymentScreen({Key? key}) : super(key: key);
+class PaymentScreen extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return BlocProvider(
+      create: (context) => PaymentBloc(),
+      child: PaymentPage(),
+    );
+  }
+}
+
+class PaymentPage extends StatefulWidget {
+  @override
+  _PaymentPageState createState() => _PaymentPageState();
+}
+
+class _PaymentPageState extends State<PaymentPage> {
+  final _controller = TextEditingController();
+  final _msgController = TextEditingController();
 
   @override
-  State<PaymentScreen> createState() => _PaymentScreenState();
+  Widget build(BuildContext context) {
+    return BlocBuilder<PaymentBloc, PaymentState>(
+      builder: (context, state) {
+        return Scaffold(
+          resizeToAvoidBottomInset: false,
+          appBar: AppBar(
+            leading: BackButton(color: onPrimary),
+            backgroundColor: primary,
+          ),
+          body: Column(
+            children: [
+              // other widgets...
+              TextFormField(
+                controller: _controller,
+                decoration: InputDecoration(
+                  // decoration settings...
+                ),
+                onChanged: (value) {
+                  context.read<PaymentBloc>().add(UpdateValueEvent(value));
+                },
+              ),
+              // other widgets...
+              TextField(
+                controller: _msgController,
+                decoration: InputDecoration(
+                  // decoration settings...
+                ),
+                onChanged: (message) {
+                  context.read<PaymentBloc>().add(UpdateMessageEvent(message));
+                },
+              ),
+              // other widgets...
+              TextButton(
+                onPressed: () {
+                  context.read<PaymentBloc>().add(ProceedPaymentEvent());
+                },
+                child: const Text(
+                  'Tiếp tục',
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 20,
+                    fontWeight: FontWeight.w200,
+                  ),
+                ),
+              ),
+              // other widgets...
+            ],
+          ),
+        );
+      },
+    );
+  }
 }
+
 
 class _PaymentScreenState extends State<PaymentScreen> {
   final _controller = TextEditingController();
