@@ -8,13 +8,13 @@ abstract class LoginEvent extends Equatable {
   List<Object> get props => [];
 }
 
-class EmailChanged extends LoginEvent {
-  final String email;
+class PhoneNumberChanged extends LoginEvent {
+  final String phoneNumber;
 
-  const EmailChanged(this.email);
+  const PhoneNumberChanged(this.phoneNumber);
 
   @override
-  List<Object> get props => [email];
+  List<Object> get props => [phoneNumber];
 }
 
 class PasswordChanged extends LoginEvent {
@@ -27,13 +27,13 @@ class PasswordChanged extends LoginEvent {
 }
 
 class Submitted extends LoginEvent {
-  final String email;
+  final String phoneNumber;
   final String password;
 
-  const Submitted(this.email, this.password);
+  const Submitted(this.phoneNumber, this.password);
 
   @override
-  List<Object> get props => [email, password];
+  List<Object> get props => [phoneNumber, password];
 }
 
 class SwitchSignInMethod extends LoginEvent {} // Newly added
