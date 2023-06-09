@@ -1,6 +1,6 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:nfc_e_wallet/ui/screen/payment/payment_confirm_event.dart';
-import 'package:nfc_e_wallet/ui/screen/payment/payment_confirm_state.dart';
+import 'package:nfc_e_wallet/ui/screen/payment/payment_confirm/payment_confirm_event.dart';
+import 'package:nfc_e_wallet/ui/screen/payment/payment_confirm/payment_confirm_state.dart';
 
 class PaymentBloc extends Bloc<PaymentEvent, PaymentState> {
   PaymentBloc() : super(PaymentInitialState());

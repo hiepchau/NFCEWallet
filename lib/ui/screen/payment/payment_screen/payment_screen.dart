@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import '../../style/color.dart';
-import '../app_navigator.dart';
-import 'payment_confirm.dart';
+import '../../../style/color.dart';
+import '../../app_navigator.dart';
+import '../payment_confirm/payment_confirm.dart';
 import 'payment_screen_bloc.dart';
 import 'payment_screen_event.dart';
 import 'payment_screen_state.dart';

@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:flutter/foundation.dart' show kIsWeb;
 
-import 'screen/payment/payment_screen.dart';
+import 'screen/payment/payment_screen/payment_screen.dart';
 import 'screen/qr/qr_page.dart';
 import 'style/color.dart';
 import 'widgets/profile_widget.dart';

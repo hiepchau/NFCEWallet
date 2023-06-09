@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:nfc_e_wallet/ui/screen/payment/payment_success_screen.dart';
+import 'package:nfc_e_wallet/ui/screen/payment/payment_success/payment_success_screen.dart';
 
 import '../app_navigator.dart';
 
@@ -210,7 +210,7 @@ class _PaymentScreenState extends State<PaymentScreen> {
                                         context,
                                         MaterialPageRoute(
                                             builder: (context) =>
-                                            const PaymentSuccessScreen()));
+                                            const PaymentSuccessScreen(sender: 'Hip', recipient: 'Khoi', phoneNumber: '0827989868', message: '', paymentTime: '',)));
                                   },
                                   child: const Text(
                                     'Tiếp tục',

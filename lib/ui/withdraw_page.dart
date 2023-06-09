@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
-import 'screen/payment/payment_confirm.dart';
+import 'screen/payment/payment_confirm/payment_confirm.dart';
 import 'style/color.dart';
 import 'widgets/profile_widget.dart';
 import 'widgets/toggle_widget.dart';

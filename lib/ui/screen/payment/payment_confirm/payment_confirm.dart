@@ -4,12 +4,12 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
-import '../../style/color.dart';
-import '../../widgets/dashed_line.dart';
+import '../../../style/color.dart';
+import '../../../widgets/dashed_line.dart';
 import 'payment_confirm_bloc.dart';
 import 'payment_confirm_event.dart';
 import 'payment_confirm_state.dart';
-import 'payment_success_screen.dart';
+import '../payment_success/payment_success_screen.dart';
 
 class PaymentConfirm extends StatelessWidget {
   final String receiver;
@@ -242,7 +242,10 @@ class _paymentConfirmPage extends StatelessWidget {
                                   onPressed: () {
                                     Navigator.of(context).push(
                                         MaterialPageRoute(builder: (
-                                            context) => const PaymentSuccessScreen()));
+                                            context) => const PaymentSuccessScreen(sender: '', recipient: receiver,
+                                          phoneNumber: phoneNumber,
+                                          message: message,
+                                          paymentTime: '',)));
                                   },
                                   child: Text(
                                     'Xác nhận giao dịch',

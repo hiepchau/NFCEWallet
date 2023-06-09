@@ -4,7 +4,7 @@ import 'package:barcode_scan2/barcode_scan2.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import '../app_navigator.dart';
-import '../payment/payment_screen.dart';
+import '../payment/payment_screen/payment_screen.dart';
 
 class QRScannerScreen extends StatefulWidget {
   @override
