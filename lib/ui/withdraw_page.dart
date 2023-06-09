@@ -376,6 +376,6 @@ class _WithdrawPage extends State<WithdrawPage> {
       shape: const RoundedRectangleBorder(
           borderRadius: BorderRadius.vertical(top: Radius.circular(30))),
       builder: (BuildContext context) {
-        return const PaymentConfirm(); //const PaymentConfirm();
+        return const PaymentConfirm(receiver: "Hiep", phoneNumber: "0827989868", amount: "1.000.000",); //const PaymentConfirm();
       });
 }
