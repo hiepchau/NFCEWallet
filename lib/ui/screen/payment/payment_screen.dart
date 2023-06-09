@@ -18,79 +18,259 @@ class PaymentScreen extends StatelessWidget {
   }
 }
 
-class PaymentPage extends StatefulWidget {
-  @override
-  _PaymentPageState createState() => _PaymentPageState();
-}
-
-class _PaymentPageState extends State<PaymentPage> {
-  final _controller = TextEditingController();
-  final _msgController = TextEditingController();
+class PaymentPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<PaymentBloc, PaymentState>(
       builder: (context, state) {
-        return Scaffold(
-          resizeToAvoidBottomInset: false,
-          appBar: AppBar(
-            leading: BackButton(color: onPrimary),
-            backgroundColor: primary,
-          ),
-          body: Column(
-            children: [
-              // other widgets...
-              TextFormField(
-                controller: _controller,
-                decoration: InputDecoration(
-                  // decoration settings...
-                ),
-                onChanged: (value) {
-                  context.read<PaymentBloc>().add(UpdateValueEvent(value));
-                },
-              ),
-              // other widgets...
-              TextField(
-                controller: _msgController,
-                decoration: InputDecoration(
-                  // decoration settings...
-                ),
-                onChanged: (message) {
-                  context.read<PaymentBloc>().add(UpdateMessageEvent(message));
-                },
-              ),
-              // other widgets...
-              TextButton(
-                onPressed: () {
-                  context.read<PaymentBloc>().add(ProceedPaymentEvent());
-                },
-                child: const Text(
-                  'Tiếp tục',
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 20,
-                    fontWeight: FontWeight.w200,
+        int themeIndex = 0;
+        String message = '';
+        String amount = '';
+        if (state is ThemeState) {
+          themeIndex = state.themeIndex;
+        } else if (state is MessageState) {
+          message = state.message;
+        } else if (state is AmountState) {
+          amount = state.amount;
+        }
+        Container buildSuggestButton(context, double suggestIconHeight, String text) {
+          text = '$textđ';
+          return buildRoundButton(suggestIconHeight, text, () {
+            context.read<PaymentBloc>().add(ChangeAmountEvent(text));
+          });
+        }
+
+        Decoration themeDecoration = _buildThemeDecoration(themeIndex);
+
+        return SafeArea(
+          child: Scaffold(
+            resizeToAvoidBottomInset: false,
+            appBar: AppBar(
+              leading: BackButton(color: onPrimary),
+              backgroundColor: primary,
+            ),
+            body: Column(
+              children: [
+                AspectRatio(
+                  aspectRatio: MediaQuery.of(context).size.height > 600 ? 390 / 600 : 350/455,
+                  child: Container(
+                    padding: EdgeInsets.fromLTRB(15, 10, 15, 10),
+                    decoration: themeDecoration,
+                    child: LayoutBuilder(
+                      builder: (context, constraints) {
+                        final height = constraints.maxHeight;
+                        final suggestIconHeight = MediaQuery.of(context).size.height > 600 ? height * 14 / 250 : height * 14 / 275;
+
+                        return Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              AspectRatio(
+                                aspectRatio: 26 / 5,
+                                child: Row(
+                                    crossAxisAlignment: CrossAxisAlignment.center,
+                                    children: [
+                                      Padding(
+                                        padding: const EdgeInsets.only(right: 10.0),
+                                        child: SizedBox(
+                                          width: 50,
+                                          height: 50,
+                                          child: CircleAvatar(
+                                            child: Image.asset(
+                                                'assets/images/icons/avatar.png'),
+                                          ),
+                                        ),
+                                      ),
+                                      Column(
+                                        crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                        mainAxisSize: MainAxisSize.min,
+                                        children: const [
+                                          Text('Nguyễn Văn A',
+                                              style: TextStyle(
+                                                fontSize: 20,
+                                                fontWeight: FontWeight.w500,
+                                              )),
+                                          Text('Số dư: 900.000đ')
+                                        ],
+                                      )
+                                    ]),
+                              ),
+                              AspectRatio(
+                                aspectRatio: 69 / 10,
+                                child: TextFormField(
+                                  onChanged: (value) {
+                                    context.read<PaymentBloc>().add(ChangeAmountEvent(value));
+                                  },
+                                  decoration: InputDecoration(
+                                    hoverColor: primaryContainer,
+                                    focusColor: primary,
+                                    filled: true,
+                                    fillColor: Colors.white,
+                                    prefixIcon: const Icon(Icons.search),
+                                    border: UnderlineInputBorder(),
+                                    contentPadding: const EdgeInsets.symmetric(
+                                        vertical: 10, horizontal: 15),
+                                    hintText: "Nhập mệnh giá",
+                                    suffixIcon: IconButton(
+                                      onPressed: () {
+                                        context.read<PaymentBloc>().add(ChangeAmountEvent(''));
+                                      },
+                                      icon: const Icon(Icons.clear),
+                                    ),
+                                  ),
+                                ),
+                              ),
+                              SizedBox(
+                                height: 10,
+                              ),
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                children: [
+                                  buildSuggestButton(context, suggestIconHeight, '100.000'),
+                                  buildSuggestButton(context,
+                                      suggestIconHeight, '1.000.000'),
+                                  buildSuggestButton(context,
+                                      suggestIconHeight, '10.000.000')
+                                ],
+                              ),
+                              SizedBox(
+                                height: 20,
+                              ),
+                              AspectRatio(
+                                aspectRatio: 344 / 35,
+                                child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.start,
+                                  children: [
+                                    Expanded(
+                                      child: TextField(
+                                        onChanged: (value) {
+                                          context.read<PaymentBloc>().add(ChangeMessageEvent(value));
+                                        },
+                                        decoration: InputDecoration(
+                                          hoverColor: primaryContainer,
+                                          focusColor: primary,
+                                          filled: true,
+                                          fillColor: Colors.white,
+                                          prefixIcon: const Icon(Icons.message),
+                                          contentPadding:
+                                          const EdgeInsets.symmetric(
+                                              vertical: 10, horizontal: 15),
+                                          hintText: 'Bạn nhớ nhập lời nhắn nhé',
+                                        ),
+                                      ),
+                                    )
+                                  ],
+                                ),
+                              ),
+                              SizedBox(
+                                height: 20,
+                              ),
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                                children: [
+                                  buildRoundButton(suggestIconHeight, 'Chuyển tiền', () {
+                                    context.read<PaymentBloc>().add(ChangeMessageEvent('Chuyển tiền'));
+                                  }),
+                                  buildRoundButton(suggestIconHeight, 'Chúc zui', () {
+                                    context.read<PaymentBloc>().add(ChangeMessageEvent('Chúc zui'));
+                                  }),
+                                  buildRoundButton(suggestIconHeight, 'Hết nợ hết nghĩa!', () {
+                                    context.read<PaymentBloc>().add(ChangeMessageEvent('Hết nợ hết nghĩa!'));
+                                  }),
+                                ],
+                              ),
+                            ]);
+                      },
+                    ),
                   ),
                 ),
-              ),
-              // other widgets...
-            ],
+
+                Expanded(
+                  child: LayoutBuilder(builder: (context, constraints) {
+                    final height = constraints.maxHeight;
+
+                    final themeButtonHeight = (height - 35) / 2;
+
+                    return Column(
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.symmetric(vertical: 10.0),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              buildThemeButton(Colors.grey.shade300, themeButtonHeight, Visibility(
+                                  visible: themeIndex == 0,
+                                  child: const Icon(
+                                    Icons.check_circle_outline_rounded,
+                                    color: green,
+                                  )), () {
+                                context.read<PaymentBloc>().add(ChangeThemeEvent(0));
+                              }),
+                              const SizedBox(width: 5),
+                              buildThemeButton(Colors.blue, themeButtonHeight,
+                                  Visibility(
+                                      visible: themeIndex == 1,
+                                      child: const Icon(
+                                        Icons.check_circle_outline_rounded,
+                                        color: green,
+                                      )), () {
+                                    context.read<PaymentBloc>().add(ChangeThemeEvent(1));
+                                  }),
+                            ],
+                          ),
+                        ),
+                        SizedBox(
+                          height: themeButtonHeight,
+                          child: AspectRatio(
+                              aspectRatio: 270 / 48,
+                              child: Container(
+                                  margin: const EdgeInsets.all(0),
+                                  decoration: const BoxDecoration(
+                                      color: green,
+                                      borderRadius:
+                                      BorderRadius.all(Radius.circular(10))),
+                                  child: FittedBox(
+                                    fit: BoxFit.contain,
+                                    child: TextButton(
+                                      onPressed: () {
+                                        showModalBottomSheet(
+                                            context: context,
+                                            shape: const RoundedRectangleBorder(
+                                                borderRadius: BorderRadius.vertical(
+                                                    top: Radius.circular(30))),
+                                            builder: (BuildContext context) {
+                                              return const PaymentConfirm(); //const PaymentConfirm();
+                                            });
+                                      },
+                                      child: const Text(
+                                        'Tiếp tục',
+                                        style: TextStyle(
+                                          color: Colors.white,
+                                          fontSize: 20,
+                                          fontWeight: FontWeight.w200,
+                                        ),
+                                      ),
+                                    ),
+                                  ))),
+                        ),
+                        SizedBox(
+                          height: 10,
+                        )
+                      ],
+                    );
+                  }),
+                ),
+              ],
+            ),
           ),
         );
       },
     );
   }
-}
 
-
-class _PaymentScreenState extends State<PaymentScreen> {
-  final _controller = TextEditingController();
-  final _msgController = TextEditingController();
-
-  int _themeIndex = 0;
-
-  Decoration _buildThemeDecoration() {
-    switch (_themeIndex) {
+  Decoration _buildThemeDecoration(int themeIndex) {
+    switch (themeIndex) {
       case 0:
         return BoxDecoration(
           gradient: LinearGradient(
@@ -127,234 +307,6 @@ class _PaymentScreenState extends State<PaymentScreen> {
     }
   }
 
-  @override
-  Widget build(BuildContext context) {
-    return SafeArea(
-      child: Scaffold(
-        resizeToAvoidBottomInset: false,
-        appBar: AppBar(
-          leading: BackButton(color: onPrimary),
-          backgroundColor: primary,
-        ),
-        body: Column(
-          children: [
-            AspectRatio(
-              aspectRatio: MediaQuery.of(context).size.height > 600 ? 390 / 600 : 350/455,
-              child: Container(
-                padding: EdgeInsets.fromLTRB(15, 10, 15, 10),
-                //TODO: Add background image decoration
-                decoration: _buildThemeDecoration(),
-                child: LayoutBuilder(
-                  builder: (context, constraints) {
-                    final height = constraints.maxHeight;
-
-                    final suggestIconHeight = MediaQuery.of(context).size.height > 600 ? height * 14 / 250 : height * 14 / 275;
-
-                    return Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          AspectRatio(
-                            aspectRatio: 26 / 5,
-                            child: Row(
-                                crossAxisAlignment: CrossAxisAlignment.center,
-                                children: [
-                                  Padding(
-                                    padding: const EdgeInsets.only(right: 10.0),
-                                    child: SizedBox(
-                                      width: 50,
-                                      height: 50,
-                                      child: CircleAvatar(
-                                        child: Image.asset(
-                                            'assets/images/icons/avatar.png'),
-                                      ),
-                                    ),
-                                  ),
-                                  Column(
-                                    crossAxisAlignment:
-                                    CrossAxisAlignment.start,
-                                    mainAxisSize: MainAxisSize.min,
-                                    children: const [
-                                      Text('Nguyễn Văn A',
-                                          style: TextStyle(
-                                            fontSize: 20,
-                                            fontWeight: FontWeight.w500,
-                                          )),
-                                      Text('Số dư: 900.000đ')
-                                    ],
-                                  )
-                                ]),
-                          ),
-                          AspectRatio(
-                            aspectRatio: 69 / 10,
-                            child: TextFormField(
-                              controller: _controller,
-                              decoration: InputDecoration(
-                                hoverColor: primaryContainer,
-                                focusColor: primary,
-                                filled: true,
-                                fillColor: Colors.white,
-                                prefixIcon: const Icon(Icons.search),
-                                border: UnderlineInputBorder(),
-                                contentPadding: const EdgeInsets.symmetric(
-                                    vertical: 10, horizontal: 15),
-                                hintText: "Nhập mệnh giá",
-                                suffixIcon: IconButton(
-                                  onPressed: _controller.clear,
-                                  icon: const Icon(Icons.clear),
-                                ),
-                              ),
-                            ),
-                          ),
-                          SizedBox(
-                            height: 10,
-                          ),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              buildSuggestButton(suggestIconHeight, '100.000'),
-                              buildSuggestButton(
-                                  suggestIconHeight, '1.000.000'),
-                              buildSuggestButton(
-                                  suggestIconHeight, '10.000.000')
-                            ],
-                          ),
-                          SizedBox(
-                            height: 20,
-                          ),
-                          AspectRatio(
-                            aspectRatio: 344 / 35,
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.start,
-                              children: [
-                                Expanded(
-                                  child: TextField(
-                                    controller: _msgController,
-                                    decoration: InputDecoration(
-                                      hoverColor: primaryContainer,
-                                      focusColor: primary,
-                                      filled: true,
-                                      fillColor: Colors.white,
-                                      prefixIcon: const Icon(Icons.message),
-                                      contentPadding:
-                                      const EdgeInsets.symmetric(
-                                          vertical: 10, horizontal: 15),
-                                      hintText: 'Bạn nhớ nhập lời nhắn nhé',
-                                    ),
-                                  ),
-                                )
-                              ],
-                            ),
-                          ),
-                          SizedBox(
-                            height: 20,
-                          ),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                            children: [
-                              buildRoundButton(suggestIconHeight, 'Chuyển tiền',
-                                      () {
-                                    _msgController.text = 'Chuyển tiền';
-                                  }),
-                              buildRoundButton(suggestIconHeight, 'Chúc zui',
-                                      () {
-                                    _msgController.text = 'Chúc zui';
-                                  }),
-                              buildRoundButton(
-                                  suggestIconHeight, 'Hết nợ hết nghĩa!', () {
-                                _msgController.text = 'Hết nợ hết nghĩa!';
-                              })
-                            ],
-                          ),
-                        ]);
-                  },
-                ),
-              ),
-            ),
-            Expanded(
-              child: LayoutBuilder(builder: (context, constraints) {
-                final height = constraints.maxHeight;
-
-                final themeButtonHeight = (height - 35) / 2;
-
-                return Column(
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.symmetric(vertical: 10.0),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          buildThemeButton(Colors.grey.shade300, themeButtonHeight, Visibility(
-                              visible: _themeIndex == 0,
-                              child: const Icon(
-                                Icons.check_circle_outline_rounded,
-                                color: green,
-                              )), () {
-                            setState(() {
-                              _themeIndex = 0;
-                            });
-                          }),
-                          const SizedBox(width: 5),
-                          buildThemeButton(Colors.blue, themeButtonHeight,
-                              Visibility(
-                                  visible: _themeIndex == 1,
-                                  child: const Icon(
-                                    Icons.check_circle_outline_rounded,
-                                    color: green,
-                                  )), () {
-                                setState(() {
-                                  _themeIndex = 1;
-                                });
-                              }),
-                        ],
-                      ),
-                    ),
-                    SizedBox(
-                      height: themeButtonHeight,
-                      child: AspectRatio(
-                          aspectRatio: 270 / 48,
-                          child: Container(
-                              margin: const EdgeInsets.all(0),
-                              decoration: const BoxDecoration(
-                                  color: green,
-                                  borderRadius:
-                                  BorderRadius.all(Radius.circular(10))),
-                              child: FittedBox(
-                                fit: BoxFit.contain,
-                                child: TextButton(
-                                  onPressed: () {
-                                    showModalBottomSheet(
-                                        context: context,
-                                        shape: const RoundedRectangleBorder(
-                                            borderRadius: BorderRadius.vertical(
-                                                top: Radius.circular(30))),
-                                        builder: (BuildContext context) {
-                                          return const PaymentConfirm(); //const PaymentConfirm();
-                                        });
-                                  },
-                                  child: const Text(
-                                    'Tiếp tục',
-                                    style: TextStyle(
-                                      color: Colors.white,
-                                      fontSize: 20,
-                                      fontWeight: FontWeight.w200,
-                                    ),
-                                  ),
-                                ),
-                              ))),
-                    ),
-                    SizedBox(
-                      height: 10,
-                    )
-                  ],
-                );
-              }),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-
   Widget buildThemeButton(
       Color color,
       double height,
@@ -375,10 +327,10 @@ class _PaymentScreenState extends State<PaymentScreen> {
     );
   }
 
-  Container buildSuggestButton(double suggestIconHeight, String text) {
+  Container buildSuggestButton(BuildContext context, double suggestIconHeight, String text) {
     text = '$textđ';
     return buildRoundButton(suggestIconHeight, text, () {
-      _controller.text = text;
+      context.read<PaymentBloc>().add(ChangeAmountEvent(text));
     });
   }
 

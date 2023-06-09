@@ -1,24 +1,22 @@
-enum ThemeIndex { theme0, theme1 }
-
-abstract class PaymentEvent {}
-
-class SetThemeEvent extends PaymentEvent {
-  final ThemeIndex themeIndex;
-
-  SetThemeEvent(this.themeIndex);
+abstract class PaymentEvent {
+  const PaymentEvent();
 }
 
-class UpdateValueEvent extends PaymentEvent {
-  final String value;
+class ChangeThemeEvent extends PaymentEvent {
+  final int themeIndex;
 
-  UpdateValueEvent(this.value);
+  const ChangeThemeEvent(this.themeIndex);
 }
 
-class UpdateMessageEvent extends PaymentEvent {
+class ChangeMessageEvent extends PaymentEvent {
   final String message;
 
-  UpdateMessageEvent(this.message);
+  const ChangeMessageEvent(this.message);
 }
 
-class ProceedPaymentEvent extends PaymentEvent {}
+class ChangeAmountEvent extends PaymentEvent {
+  final String amount;
+
+  const ChangeAmountEvent(this.amount);
+}
 

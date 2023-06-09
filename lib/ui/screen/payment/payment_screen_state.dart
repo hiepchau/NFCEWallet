@@ -1,23 +1,22 @@
-import 'payment_screen_event.dart';
-
-abstract class PaymentState {}
-
-class PaymentInitialState extends PaymentState {
-  final ThemeIndex themeIndex;
-  final String value;
-  final String message;
-
-  PaymentInitialState(
-      {this.themeIndex = ThemeIndex.theme0, this.value = "", this.message = ""});
+abstract class PaymentState {
+  const PaymentState();
 }
 
-class PaymentUpdatedState extends PaymentState {
-  final ThemeIndex themeIndex;
-  final String value;
-  final String message;
+class ThemeState extends PaymentState {
+  final int themeIndex;
 
-  PaymentUpdatedState(
-      {this.themeIndex = ThemeIndex.theme0, this.value = "", this.message = ""});
+  const ThemeState(this.themeIndex);
 }
 
-class PaymentProceededState extends PaymentState {}
+class MessageState extends PaymentState {
+  final String message;
+
+  const MessageState(this.message);
+}
+
+class AmountState extends PaymentState {
+  final String amount;
+
+  const AmountState(this.amount);
+}
+
