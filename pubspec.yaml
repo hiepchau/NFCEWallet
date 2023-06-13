@@ -25,11 +25,18 @@ dependencies:
   qr_code_scanner: ^1.0.1
   intl: ^0.17.0
   flutter_screenutil: ^5.6.1
+  synchronized: ^3.1.0
   provider: ^5.0.0
+  injectable: ^2.1.2
+  dio: ^5.1.2
+  logger: ^1.4.0
   flutter_bloc: ^7.1.0
   equatable: ^2.0.5
+  json_annotation: ^4.8.1
   pin_code_fields: ^7.4.0
+  event_bus: ^2.0.0
   fluttertoast: ^8.2.2
+  shared_preferences: ^2.1.1
   rxdart: ^0.27.7
   intl_translation: ^0.18.0
   flutter_localization: ^0.1.11
