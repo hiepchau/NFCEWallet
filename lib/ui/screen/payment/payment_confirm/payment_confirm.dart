@@ -241,12 +241,18 @@ class _paymentConfirmPage extends StatelessWidget {
                                 child: TextButton(
                                   onPressed: () {
                                     Navigator.of(context).push(
-                                        MaterialPageRoute(builder: (
-                                            context) => const PaymentSuccessScreen(sender: '', recipient: receiver,
+                                      MaterialPageRoute(
+                                        builder: (context) => PaymentSuccessScreen(
+                                          sender: '',
+                                          recipient: receiver,
                                           phoneNumber: phoneNumber,
-                                          message: message,
-                                          paymentTime: '',)));
+                                          message: message ?? '', // if message is null, assign empty string
+                                          paymentTime: '',
+                                        ),
+                                      ),
+                                    );
                                   },
+
                                   child: Text(
                                     'Xác nhận giao dịch',
                                     style: TextStyle(
