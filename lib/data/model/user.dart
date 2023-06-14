@@ -10,18 +10,20 @@ part 'user.g.dart';
 class User {
   @JsonKey(name: '_id')
   final String id;
-  final int gender;
-  final String email;
+  final DateTime birthday;
+  final String identifyId;
   final String fullname;
   final String phonenumber;
-  final String address;
+  String? city;
+  String? job;
   User(
       this.id,
-      this.gender,
-      this.email,
+      this.birthday,
+      this.identifyId,
       this.fullname,
       this.phonenumber,
-      this.address
+      this.city, 
+      this.job
       );
 
   factory User.fromJson(Map<String, dynamic> json) =>

@@ -7,12 +7,8 @@ import "package:shared_preferences/shared_preferences.dart";
 
 import '../data/remote/app_service.dart';
 import '../data/remote/request_factory.dart';
-import '../data/repositories/articale_repo.dart';
 import '../data/repositories/authenticator.dart';
-import '../data/repositories/hotel_repo.dart';
-import '../data/repositories/hotelroom_repo.dart';
 import '../data/repositories/user_repo.dart';
-import '../data/repositories/vehicle_repo.dart';
 
 @module
 abstract class RegisterModule {
@@ -53,27 +49,5 @@ abstract class RegisterModule {
       AppService appService, RequestFactory requestFactory, EventBus eventBus) =>
       UserRepo(logger, sharedPreferences, appService, requestFactory, eventBus);
 
-  @singleton
-  VehicleRepo vehicleRepo(Logger logger,
-      SharedPreferences sharedPreferences,
-      AppService appService, RequestFactory requestFactory, EventBus eventBus) =>
-      VehicleRepo(logger, sharedPreferences, appService, requestFactory, eventBus);
-
-  @singleton
-  HotelRepo hotelRepo(Logger logger,
-      SharedPreferences sharedPreferences,
-      AppService appService, RequestFactory requestFactory, EventBus eventBus) =>
-      HotelRepo(logger, sharedPreferences, appService, requestFactory, eventBus);
-
-  @singleton
-  HotelRoomRepo hotelRoomRepo(Logger logger,
-      SharedPreferences sharedPreferences,
-      AppService appService, RequestFactory requestFactory, EventBus eventBus) =>
-      HotelRoomRepo(logger, sharedPreferences, appService, requestFactory, eventBus);
-
-  @singleton
-  ArticleRepo articleRepo(Logger logger,
-      SharedPreferences sharedPreferences,
-      AppService appService, RequestFactory requestFactory, EventBus eventBus) =>
-      ArticleRepo(logger, sharedPreferences, appService, requestFactory, eventBus);
+  //TODO: ADD REPO
 }

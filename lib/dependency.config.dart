@@ -18,13 +18,9 @@ import 'package:shared_preferences/shared_preferences.dart' as _i6;
 
 import 'data/remote/app_service.dart' as _i8;
 import 'data/remote/request_factory.dart' as _i5;
-import 'data/repositories/articale_repo.dart' as _i9;
-import 'data/repositories/authenticator.dart' as _i10;
-import 'data/repositories/hotel_repo.dart' as _i11;
-import 'data/repositories/hotelroom_repo.dart' as _i12;
-import 'data/repositories/user_repo.dart' as _i13;
-import 'data/repositories/vehicle_repo.dart' as _i14;
-import 'DI/app_module.dart' as _i15;
+import 'data/repositories/authenticator.dart' as _i9;
+import 'data/repositories/user_repo.dart' as _i10;
+import 'DI/app_module.dart' as _i11;
 
 // ignore_for_file: unnecessary_lambdas
 // ignore_for_file: lines_longer_than_80_chars
@@ -56,42 +52,14 @@ Future<_i1.GetIt> $initGetIt(
         gh<_i4.Logger>(),
       ));
   gh.singleton<_i8.AppService>(registerModule.appService(gh<_i7.Dio>()));
-  gh.singleton<_i9.ArticleRepo>(registerModule.articleRepo(
+  gh.singleton<_i9.Authenticator>(registerModule.authenticator(
     gh<_i4.Logger>(),
     gh<_i6.SharedPreferences>(),
     gh<_i8.AppService>(),
     gh<_i5.RequestFactory>(),
     gh<_i3.EventBus>(),
   ));
-  gh.singleton<_i10.Authenticator>(registerModule.authenticator(
-    gh<_i4.Logger>(),
-    gh<_i6.SharedPreferences>(),
-    gh<_i8.AppService>(),
-    gh<_i5.RequestFactory>(),
-    gh<_i3.EventBus>(),
-  ));
-  gh.singleton<_i11.HotelRepo>(registerModule.hotelRepo(
-    gh<_i4.Logger>(),
-    gh<_i6.SharedPreferences>(),
-    gh<_i8.AppService>(),
-    gh<_i5.RequestFactory>(),
-    gh<_i3.EventBus>(),
-  ));
-  gh.singleton<_i12.HotelRoomRepo>(registerModule.hotelRoomRepo(
-    gh<_i4.Logger>(),
-    gh<_i6.SharedPreferences>(),
-    gh<_i8.AppService>(),
-    gh<_i5.RequestFactory>(),
-    gh<_i3.EventBus>(),
-  ));
-  gh.singleton<_i13.UserRepo>(registerModule.userRepo(
-    gh<_i4.Logger>(),
-    gh<_i6.SharedPreferences>(),
-    gh<_i8.AppService>(),
-    gh<_i5.RequestFactory>(),
-    gh<_i3.EventBus>(),
-  ));
-  gh.singleton<_i14.VehicleRepo>(registerModule.vehicleRepo(
+  gh.singleton<_i10.UserRepo>(registerModule.userRepo(
     gh<_i4.Logger>(),
     gh<_i6.SharedPreferences>(),
     gh<_i8.AppService>(),
@@ -101,4 +69,4 @@ Future<_i1.GetIt> $initGetIt(
   return getIt;
 }
 
-class _$RegisterModule extends _i15.RegisterModule {}
+class _$RegisterModule extends _i11.RegisterModule {}

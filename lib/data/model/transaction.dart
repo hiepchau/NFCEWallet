@@ -10,27 +10,30 @@ part 'transaction.g.dart';
 @JsonSerializable()
 class Transaction{
   @JsonKey(name: "_id")
-  String? id;
-  User? fromUser;
-  User? toUser;
-  String? amount;
+  final String id;
+  final User fromUser;
+  final User toUser;
+  final String type;
+  final String amount;
   String? message;
-  String? referenceName;
+  String? status;
   DateTime? time;
 
   Transaction({
-    this.id,
-    this.fromUser,
-    this.toUser,
-    this.amount,
+    required this.id,
+    required this.fromUser,
+    required this.toUser,
+    required this.type,
+    required this.amount,
     this.message,
+    this.status,
     this.time,
   });
 
   factory Transaction.fromJson(Map<String, dynamic> json) => _$TransactionFromJson(json);
   Map<String, dynamic> toJson() => _$TransactionToJson(this);
 }
-extension ArticleExtension on BaseResponse{
+extension TransactionExtension on BaseResponse{
   Transaction? toTransaction(){
     if(this.data == null)
       return null;
@@ -39,7 +42,7 @@ extension ArticleExtension on BaseResponse{
 }
 
 extension TransactionListIdExtension on ListModelResponse{
-  List<String>? toListIdArticle(){
+  List<String>? toListIdTransaction(){
     if(this.data.length == 0)
       return null;
     List<String> rs = [];
