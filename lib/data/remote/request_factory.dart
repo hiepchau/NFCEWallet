@@ -9,21 +9,31 @@ class RequestFactory {
   createLogin(String username, String password) {
     return {
       "username": username,
-      "password": password,
-      "device": "mobile"
+      "password": password
     };
   }
 
-  createRegister(String username, String password,String email, String firstname, String lastname,String phone, String address,int gender) {
+  createRegister(String fullName, String password, String phone, String identifyID, DateTime dob) {
     return {
-      "username": username,
+      "full_name": fullName,
       "password": password,
-      "email": email,
-      "firstname": firstname,
-      "lastname": lastname,
-      "phonenumber": phone,
-      "address": address,
-      "gender": gender
+      "phone_number": phone,
+      "identify_ID": identifyID,
+      "birthday": dob
+    };
+  }
+
+  createOtp(String otp, String phone) {
+    return {
+      "otp": otp,
+      "phone_number": phone
+    };
+  }
+
+  changePassword(String oldPassword, String newPassword) {
+    return {
+      "old_password": oldPassword,
+      "new_password": newPassword
     };
   }
 
@@ -36,6 +46,15 @@ class RequestFactory {
       "phonenumber": phone,
       "address": address,
       "gender": gender
+    };
+  }
+
+  createTransferTransaction(String fromUser, String toUser, String amount, String message){
+    return {
+      "from_User": fromUser,
+      "to_User": toUser,
+      "amount": amount,
+      "message": message
     };
   }
 

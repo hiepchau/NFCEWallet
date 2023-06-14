@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:event_bus/event_bus.dart';
 import 'package:logger/logger.dart';
+import 'package:nfc_e_wallet/event_bus/events/authen_event.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:synchronized/synchronized.dart';
 
@@ -51,15 +52,14 @@ class Authenticator {
       if (http.response.statusCode != 200) {
         return false;
       }
-      _eventBus.fire(EBAuthenEvent(false));
       await _sharedPreferences.remove(Preferences.token);
       return true;
     });
   }
 
-  Future<bool> register(String username, String password, String email, String firstname, String lastname,String phone, String address,int gender) async {
+  Future<bool> register(String fullName, String password, String phone, String identifyID, DateTime dob) async {
     return _appService
-        .register(_requestFactory.createRegister(username, password, email, firstname, lastname, phone, address, gender))
+        .register(_requestFactory.createRegister(fullName, password, phone, identifyID, dob))
         .then((http) async {
       print(http.response.statusCode);
       if (http.response.statusCode != 200) {
@@ -75,6 +75,36 @@ class Authenticator {
         _logger.i("New token received: $token");
       }
       return isSuccess;
+    });
+  }
+
+  Future<bool> verify() async {
+    return _appService.verify('Bearer '+_sharedPreferences.getString(Preferences.token)!).then((http) async {
+      if (http.response.statusCode != 200) {
+        return false;
+      }
+      final authenticationStatus = http.response.data["AUTHENTICATION_STATUS"];
+      bool isSuccess = authenticationStatus is bool ? authenticationStatus : authenticationStatus.toLowerCase() == 'true';
+
+      return isSuccess;
+    });
+  }
+
+  Future<bool> verifyOtp(String otp, String phoneNumber) async {
+    return _appService
+        .verifyOtp(_requestFactory.createOtp(otp, phoneNumber))
+        .then((http) async {
+      print("VERIFY OTP: ${http.response.statusCode}");
+      return (http.response.statusCode != 200);
+    });
+  }
+
+  Future<bool> changePassword(String id, String oldPassword, String newPassword) async {
+    return _appService
+        .changePassword(id, _requestFactory.changePassword(oldPassword, newPassword))
+        .then((http) async {
+      final msg = http.response.data["message"];
+      return (http.response.statusCode != 200);
     });
   }
 }

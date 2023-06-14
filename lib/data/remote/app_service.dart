@@ -1,9 +1,11 @@
 import 'dart:io';
 
 import 'package:dio/dio.dart';
-
-import '../model/remote/base_response.dart';
+import 'package:nfc_e_wallet/data/model/response/base_response.dart';
+import 'package:nfc_e_wallet/data/model/response/list_model_response.dart';
 import 'package:retrofit/retrofit.dart';
+import '../model/response/avatar_file_response.dart';
+import '../model/response/login_response.dart';
 
 part 'app_service.g.dart';
 
@@ -20,8 +22,20 @@ abstract class AppService {
   @POST("/register")
   Future<HttpResponse> register(@Body() Map<String, dynamic> request);
 
-  @GET("/user/full")
-  Future<HttpResponse<BaseResponse>> getUser(@Header('Authorization') String token);
+  @GET("/verify")
+  Future<HttpResponse> verify(@Header('Authorization') String token);
+
+  @POST("/verify_otp")
+  Future<HttpResponse> verifyOtp(@Body() Map<String, dynamic> request);
+
+  @POST("/user/change_password/{id}")
+  Future<HttpResponse> changePassword(@Path('id') String id, @Body() Map<String, dynamic> request);
+
+  @GET("/user/{id}}")
+  Future<HttpResponse<BaseResponse>> getUser(@Path('id') String id, @Header('Authorization') String token);
+
+  @POST("/verify_otp")
+  Future<HttpResponse> createTransferTransaction(@Header('Authorization') String token, @Body() Map<String, dynamic> request);
 
   @PUT("/user/update")
   Future<HttpResponse> updateUser(@Header('Authorization') String token, @Body() Map<String, dynamic> request);

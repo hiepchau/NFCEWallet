@@ -6,8 +6,11 @@ import 'package:nfc_e_wallet/l10n/l10n.dart';
 import 'package:nfc_e_wallet/ui/screen/app_navigator.dart';
 import 'package:nfc_e_wallet/ui/screen/authenticate/login/login_page.dart';
 
-void main() {
+import 'dependency.dart';
+
+void main() async {
   AppNav.init();
+  await configureDependencies();
   runApp(ScreenUtilInit(
       designSize: kIsWeb ? const Size(790, 620) : const Size(390, 800),
       builder: (context, child) {
