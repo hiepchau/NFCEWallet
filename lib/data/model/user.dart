@@ -16,6 +16,8 @@ class User {
   final String phonenumber;
   String? city;
   String? job;
+  String? device;
+  String? devicetoken;
   User(
       this.id,
       this.birthday,
@@ -23,7 +25,9 @@ class User {
       this.fullname,
       this.phonenumber,
       this.city, 
-      this.job
+      this.job,
+      this.device,
+      this.devicetoken
       );
 
   factory User.fromJson(Map<String, dynamic> json) =>
