@@ -1,18 +1,17 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'transaction_response.dart';
+part of 'wallet_response.dart';
 
 // **************************************************************************
 // JsonSerializableGenerator
 // **************************************************************************
 
-TransactionResponse _$TransactionResponseFromJson(Map<String, dynamic> json) =>
-    TransactionResponse(
+WalletResponse _$WalletResponseFromJson(Map<String, dynamic> json) =>
+    WalletResponse(
       data: (json['data'] as List<dynamic>?)?.map((e) => e as String).toList(),
     );
 
-Map<String, dynamic> _$TransactionResponseToJson(
-        TransactionResponse instance) =>
+Map<String, dynamic> _$WalletResponseToJson(WalletResponse instance) =>
     <String, dynamic>{
       'data': instance.data,
     };

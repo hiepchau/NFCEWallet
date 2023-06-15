@@ -4,13 +4,14 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:nfc_e_wallet/l10n/l10n.dart';
 import 'package:nfc_e_wallet/ui/screen/app_navigator.dart';
+import 'package:nfc_e_wallet/ui/screen/authenticate/login/authenticate_page.dart';
 import 'package:nfc_e_wallet/ui/screen/authenticate/login/login_page.dart';
 
 import 'dependency.dart';
 
 void main() async {
   AppNav.init();
-  await configureDependencies();
+  // await configureDependencies();
   runApp(ScreenUtilInit(
       designSize: kIsWeb ? const Size(790, 620) : const Size(390, 800),
       builder: (context, child) {
@@ -38,5 +39,5 @@ void main() async {
           home: child, //TODO: change back to login page
         );
       },
-      child: LoginPage()));
+      child: AuthenticationPage()));
 }

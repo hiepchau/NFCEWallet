@@ -255,7 +255,7 @@ class _AccountPage extends State<AccountPage> {
             onTap: () {
               Navigator.pushAndRemoveUntil(
                   context,
-                  MaterialPageRoute(builder: (context) => LoginPage()),
+                  MaterialPageRoute(builder: (context) => LoginScreen()),
                       (_) => false);
             },
             child: Container(

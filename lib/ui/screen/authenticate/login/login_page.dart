@@ -5,15 +5,15 @@ import '../../../../l10n/l10n.dart';
 import '../../../style/color.dart';
 import '../../root_screen.dart';
 import '../signup/signup_screen.dart';
-import '../login_bloc.dart';
+import 'authenticate_bloc.dart';
 
 
-class LoginPage extends StatelessWidget {
+class LoginScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: BlocProvider(
-        create: (context) => LoginBloc(),
+        create: (context) => AuthenticationBloc(),
         child: LoginForm(),
       ),
     );
@@ -31,13 +31,13 @@ class _LoginFormState extends State<LoginForm> {
 
   @override
   Widget build(BuildContext context) {
-    return BlocListener<LoginBloc, LoginState>(
+    return BlocListener<AuthenticationBloc, AuthenticationInfoState>(
         listener: (context, state) {
-          if (state.submissionSuccess) {
+          if (state.isloggedin == authenticateStatus.Authorized) {
             ToastHelper.showToast(L10n.of(context).signInSuccess, status: ToastStatus.success);
-            Navigator.push(
+            Navigator.pushReplacement(
               context,
-              MaterialPageRoute(builder: (context) => RootApp()),
+              MaterialPageRoute(builder: (context) => const RootApp()),
             );
           }
         },
@@ -96,7 +96,7 @@ class _LoginFormState extends State<LoginForm> {
                               border: OutlineInputBorder(borderRadius: BorderRadius.circular(8.0)),
                             ),
                             onChanged: (value) {
-                              context.read<LoginBloc>().add(PhoneNumberChanged(value));
+
                             },
                           ),
                           SizedBox(height: 24.0),
@@ -109,7 +109,7 @@ class _LoginFormState extends State<LoginForm> {
                               suffixIcon: Icon(Icons.visibility_off), // Eye icon
                             ),
                             onChanged: (value) {
-                              context.read<LoginBloc>().add(PasswordChanged(value));
+
                             },
                           ),
                           SizedBox(height: 16),
@@ -118,8 +118,9 @@ class _LoginFormState extends State<LoginForm> {
                             child: ElevatedButton(
                               onPressed: () {
                                 if (_phoneNumberController.text.isNotEmpty && _passwordController.text.isNotEmpty) {
-                                  context.read<LoginBloc>().add(
-                                    Submitted(
+                                  print("ACTIONN");
+                                  context.read<AuthenticationBloc>().add(
+                                    LoginEvent(
                                       _phoneNumberController.text,
                                       _passwordController.text,
                                     ),

@@ -219,12 +219,125 @@ class _AppService implements AppService {
     )
             .compose(
               _dio.options,
-              '/verify_otp',
+              '/transaction/create_transfer',
               queryParameters: queryParameters,
               data: _data,
             )
             .copyWith(baseUrl: baseUrl ?? _dio.options.baseUrl)));
     final value = _result.data;
+    final httpResponse = HttpResponse(value, _result);
+    return httpResponse;
+  }
+
+  @override
+  Future<HttpResponse<dynamic>> createTransaction(
+    String token,
+    Map<String, dynamic> request,
+  ) async {
+    const _extra = <String, dynamic>{};
+    final queryParameters = <String, dynamic>{};
+    final _headers = <String, dynamic>{r'Authorization': token};
+    _headers.removeWhere((k, v) => v == null);
+    final _data = <String, dynamic>{};
+    _data.addAll(request);
+    final _result =
+        await _dio.fetch(_setStreamType<HttpResponse<dynamic>>(Options(
+      method: 'POST',
+      headers: _headers,
+      extra: _extra,
+    )
+            .compose(
+              _dio.options,
+              '/transaction/create_transaction',
+              queryParameters: queryParameters,
+              data: _data,
+            )
+            .copyWith(baseUrl: baseUrl ?? _dio.options.baseUrl)));
+    final value = _result.data;
+    final httpResponse = HttpResponse(value, _result);
+    return httpResponse;
+  }
+
+  @override
+  Future<HttpResponse<ListModelResponse>> getListTransaction(
+    String id,
+    String token,
+  ) async {
+    const _extra = <String, dynamic>{};
+    final queryParameters = <String, dynamic>{};
+    final _headers = <String, dynamic>{r'Authorization': token};
+    _headers.removeWhere((k, v) => v == null);
+    final Map<String, dynamic>? _data = null;
+    final _result = await _dio.fetch<Map<String, dynamic>>(
+        _setStreamType<HttpResponse<ListModelResponse>>(Options(
+      method: 'POST',
+      headers: _headers,
+      extra: _extra,
+    )
+            .compose(
+              _dio.options,
+              '/transaction/{user_id}',
+              queryParameters: queryParameters,
+              data: _data,
+            )
+            .copyWith(baseUrl: baseUrl ?? _dio.options.baseUrl)));
+    final value = ListModelResponse.fromJson(_result.data!);
+    final httpResponse = HttpResponse(value, _result);
+    return httpResponse;
+  }
+
+  @override
+  Future<HttpResponse<dynamic>> createWallet(
+    String id,
+    Map<String, dynamic> request,
+  ) async {
+    const _extra = <String, dynamic>{};
+    final queryParameters = <String, dynamic>{};
+    final _headers = <String, dynamic>{};
+    final _data = <String, dynamic>{};
+    _data.addAll(request);
+    final _result =
+        await _dio.fetch(_setStreamType<HttpResponse<dynamic>>(Options(
+      method: 'POST',
+      headers: _headers,
+      extra: _extra,
+    )
+            .compose(
+              _dio.options,
+              '/wallet/{user_id}',
+              queryParameters: queryParameters,
+              data: _data,
+            )
+            .copyWith(baseUrl: baseUrl ?? _dio.options.baseUrl)));
+    final value = _result.data;
+    final httpResponse = HttpResponse(value, _result);
+    return httpResponse;
+  }
+
+  @override
+  Future<HttpResponse<ListModelResponse>> getListWallet(
+    String id,
+    String token,
+  ) async {
+    const _extra = <String, dynamic>{};
+    final queryParameters = <String, dynamic>{};
+    final _headers = <String, dynamic>{r'Authorization': token};
+    _headers.removeWhere((k, v) => v == null);
+    final Map<String, dynamic>? _data = null;
+    final _result = await _dio.fetch<Map<String, dynamic>>(
+        _setStreamType<HttpResponse<ListModelResponse>>(Options(
+      method: 'POST',
+      headers: _headers,
+      extra: _extra,
+    )
+            .compose(
+              _dio.options,
+              '/transaction/{user_id}',
+              queryParameters: queryParameters,
+              data: _data,
+            )
+            .copyWith(baseUrl: baseUrl ?? _dio.options.baseUrl)));
+    final value = ListModelResponse.fromJson(_result.data!);
     final httpResponse = HttpResponse(value, _result);
     return httpResponse;
   }
@@ -573,71 +686,6 @@ class _AppService implements AppService {
             )
             .copyWith(baseUrl: baseUrl ?? _dio.options.baseUrl)));
     final value = _result.data!;
-    final httpResponse = HttpResponse(value, _result);
-    return httpResponse;
-  }
-
-  @override
-  Future<HttpResponse<dynamic>> createArticle({
-    required String token,
-    required String title,
-    required String description,
-    required String address,
-    required String province,
-    required String district,
-    required String referenceName,
-    required List<File> files,
-  }) async {
-    const _extra = <String, dynamic>{};
-    final queryParameters = <String, dynamic>{};
-    final _headers = <String, dynamic>{r'Authorization': token};
-    _headers.removeWhere((k, v) => v == null);
-    final _data = FormData();
-    _data.fields.add(MapEntry(
-      'title',
-      title,
-    ));
-    _data.fields.add(MapEntry(
-      'description',
-      description,
-    ));
-    _data.fields.add(MapEntry(
-      'address',
-      address,
-    ));
-    _data.fields.add(MapEntry(
-      'province',
-      province,
-    ));
-    _data.fields.add(MapEntry(
-      'city',
-      district,
-    ));
-    _data.fields.add(MapEntry(
-      'referenceName',
-      referenceName,
-    ));
-    _data.files.addAll(files.map((i) => MapEntry(
-        'files',
-        MultipartFile.fromFileSync(
-          i.path,
-          filename: i.path.split(Platform.pathSeparator).last,
-        ))));
-    final _result =
-        await _dio.fetch(_setStreamType<HttpResponse<dynamic>>(Options(
-      method: 'POST',
-      headers: _headers,
-      extra: _extra,
-      contentType: 'multipart/form-data',
-    )
-            .compose(
-              _dio.options,
-              '/article/',
-              queryParameters: queryParameters,
-              data: _data,
-            )
-            .copyWith(baseUrl: baseUrl ?? _dio.options.baseUrl)));
-    final value = _result.data;
     final httpResponse = HttpResponse(value, _result);
     return httpResponse;
   }
