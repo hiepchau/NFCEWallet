@@ -1,7 +1,5 @@
-import 'dart:io';
 
 import 'package:json_annotation/json_annotation.dart';
-import 'package:nfc_e_wallet/data/model/response/avatar_file_response.dart';
 import 'package:nfc_e_wallet/data/model/response/base_response.dart';
 import 'package:nfc_e_wallet/data/model/response/transaction_response.dart';
 

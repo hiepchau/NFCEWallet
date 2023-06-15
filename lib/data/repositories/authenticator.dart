@@ -9,7 +9,6 @@ import 'package:synchronized/synchronized.dart';
 import '../Preferences.dart';
 import '../remote/app_service.dart';
 import '../remote/request_factory.dart';
-import '../model/response/login_response.dart';
 
 class Authenticator {
   final EventBus _eventBus;

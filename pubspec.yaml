@@ -15,6 +15,9 @@ dependencies:
     sdk: flutter
   font_awesome_flutter:
   cupertino_icons: ^1.0.2
+  get_it: any
+  meta: any
+  bloc: any
   animated_bottom_navigation_bar: ^1.1.0
   circular_reveal_animation: ^2.0.1
   barcode_scan2: ^4.2.3

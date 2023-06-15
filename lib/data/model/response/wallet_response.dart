@@ -11,7 +11,7 @@ class WalletResponse{
 
   WalletResponse(
       {
-        required this.data});
+        required this.data}); 
 
   factory WalletResponse.fromJson(Map<String, dynamic> json) =>
       _$WalletResponseFromJson(json);

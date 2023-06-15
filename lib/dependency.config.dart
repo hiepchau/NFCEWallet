@@ -19,8 +19,10 @@ import 'package:shared_preferences/shared_preferences.dart' as _i6;
 import 'data/remote/app_service.dart' as _i8;
 import 'data/remote/request_factory.dart' as _i5;
 import 'data/repositories/authenticator.dart' as _i9;
-import 'data/repositories/user_repo.dart' as _i10;
-import 'DI/app_module.dart' as _i11;
+import 'data/repositories/transaction_repo.dart' as _i10;
+import 'data/repositories/user_repo.dart' as _i11;
+import 'data/repositories/wallet_repo.dart' as _i12;
+import 'DI/app_module.dart' as _i13;
 
 // ignore_for_file: unnecessary_lambdas
 // ignore_for_file: lines_longer_than_80_chars
@@ -59,14 +61,28 @@ Future<_i1.GetIt> $initGetIt(
     gh<_i5.RequestFactory>(),
     gh<_i3.EventBus>(),
   ));
-  gh.singleton<_i10.UserRepo>(registerModule.userRepo(
+  gh.factory<_i10.TransactionRepo>(() => registerModule.transactionRepo(
+        gh<_i4.Logger>(),
+        gh<_i6.SharedPreferences>(),
+        gh<_i8.AppService>(),
+        gh<_i5.RequestFactory>(),
+        gh<_i3.EventBus>(),
+      ));
+  gh.singleton<_i11.UserRepo>(registerModule.userRepo(
     gh<_i4.Logger>(),
     gh<_i6.SharedPreferences>(),
     gh<_i8.AppService>(),
     gh<_i5.RequestFactory>(),
     gh<_i3.EventBus>(),
   ));
+  gh.factory<_i12.WalletRepo>(() => registerModule.walletRepo(
+        gh<_i4.Logger>(),
+        gh<_i6.SharedPreferences>(),
+        gh<_i8.AppService>(),
+        gh<_i5.RequestFactory>(),
+        gh<_i3.EventBus>(),
+      ));
   return getIt;
 }
 
-class _$RegisterModule extends _i11.RegisterModule {}
+class _$RegisterModule extends _i13.RegisterModule {}

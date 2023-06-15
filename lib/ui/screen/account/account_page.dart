@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:nfc_e_wallet/data/model/wallet.dart';
+import 'package:nfc_e_wallet/ui/screen/wallet/bloc/wallet_bloc.dart';
 import '../../../wallet_list.dart';
 import '../../style/color.dart';
 import '../../style/constants.dart';
 import '../../widgets/profile_widget.dart';
 import '../authenticate/login/login_page.dart';
-
 
 class AccountPage extends StatefulWidget {
   AccountPage({super.key});
@@ -14,7 +16,16 @@ class AccountPage extends StatefulWidget {
 }
 
 class _AccountPage extends State<AccountPage> {
+  late WalletBloc walletBloc;
   bool isVisible = false;
+
+  @override
+  void initState() {
+    super.initState();
+    walletBloc = WalletBloc();
+    //PASS USER ID
+    walletBloc.add(InitWalletEvent("1"));
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -27,7 +38,10 @@ class _AccountPage extends State<AccountPage> {
         ),
         automaticallyImplyLeading: false,
       ),
-      body: getBody(context),
+      body: BlocProvider(
+        create: (context) => WalletBloc(),
+        child: getBody(context),
+      ),
     );
   }
 
@@ -145,8 +159,8 @@ class _AccountPage extends State<AccountPage> {
                 fontSize: MediaQuery.of(context).size.width > 900
                     ? 18
                     : MediaQuery.of(context).size.width > 350
-                    ? 16
-                    : 13,
+                        ? 16
+                        : 13,
                 fontWeight: FontWeight.w700,
                 color: primary),
           ),
@@ -165,42 +179,48 @@ class _AccountPage extends State<AccountPage> {
                       blurRadius: 5,
                       offset: const Offset(0, 2))
                 ]),
-            child: Column(children: [
-              Theme(
-                  data: Theme.of(context)
-                      .copyWith(dividerColor: Colors.transparent),
-                  child: ExpansionTile(
-                    onExpansionChanged: (temp) {
-                      setState(() {
-                        isVisible = temp;
-                      });
-                    },
-                    childrenPadding: const EdgeInsets.all(5),
-                    title: const Text("Tài khoản/Ví"),
-                    children: _buildExpandableContent(walletList),
-                  )),
-              Visibility(
-                visible: isVisible,
-                child: Text(
-                  "Xem tất cả (3)",
-                  style: TextStyle(color: primary),
-                ),
-              ),
-              ProfileWidget(
-                icon: Icons.receipt_long,
-                iconColor: Colors.yellow,
-                title: 'Quản lý thanh toán',
-                subtitle: "",
-                onTap: () {},
-              ),
-              ProfileWidget(
-                icon: Icons.shield,
-                iconColor: Colors.green,
-                title: 'Bảo mật',
-                subtitle: "",
-                onTap: () {},
-              ),
-            ]),
+            child: BlocBuilder<WalletBloc, WalletState>(
+              builder: (context, state) {
+                return Column(children: [
+                  Theme(
+                      data: Theme.of(context)
+                          .copyWith(dividerColor: Colors.transparent),
+                      child: ExpansionTile(
+                        onExpansionChanged: (temp) {
+                          setState(() {
+                            isVisible = temp;
+                          });
+                        },
+                        childrenPadding: const EdgeInsets.all(5),
+                        title: const Text("Tài khoản/Ví"),
+                        children: state is WalletInitialState
+                            ? _buildExpandableContent(state.listWallet)
+                            : _buildNoWallet(),
+                      )),
+                  Visibility(
+                    visible: isVisible,
+                    child: Text(
+                      "Xem tất cả (3)",
+                      style: TextStyle(color: primary),
+                    ),
+                  ),
+                  ProfileWidget(
+                    icon: Icons.receipt_long,
+                    iconColor: Colors.yellow,
+                    title: 'Quản lý thanh toán',
+                    subtitle: "",
+                    onTap: () {},
+                  ),
+                  ProfileWidget(
+                    icon: Icons.shield,
+                    iconColor: Colors.green,
+                    title: 'Bảo mật',
+                    subtitle: "",
+                    onTap: () {},
+                  ),
+                ]);
+              },
+            ),
           ),
           const SizedBox(
             height: 10,
@@ -211,8 +231,8 @@ class _AccountPage extends State<AccountPage> {
                 fontSize: MediaQuery.of(context).size.width > 900
                     ? 18
                     : MediaQuery.of(context).size.width > 350
-                    ? 16
-                    : 13,
+                        ? 16
+                        : 13,
                 fontWeight: FontWeight.w700,
                 color: primary),
           ),
@@ -256,7 +276,7 @@ class _AccountPage extends State<AccountPage> {
               Navigator.pushAndRemoveUntil(
                   context,
                   MaterialPageRoute(builder: (context) => LoginScreen()),
-                      (_) => false);
+                  (_) => false);
             },
             child: Container(
                 width: MediaQuery.of(context).size.width,
@@ -279,8 +299,8 @@ class _AccountPage extends State<AccountPage> {
                       fontSize: MediaQuery.of(context).size.width > 900
                           ? 18
                           : MediaQuery.of(context).size.width > 350
-                          ? 16
-                          : 13,
+                              ? 16
+                              : 13,
                       color: onPrimary),
                 )),
           ),
@@ -292,11 +312,16 @@ class _AccountPage extends State<AccountPage> {
     );
   }
 
+  List<Widget> _buildNoWallet() {
+    List<Widget> columnContent = [];
+    return columnContent;
+  }
+
   // ignore: non_constant_identifier_names
-  List<Widget> _buildExpandableContent(List wallet_lists) {
+  List<Widget> _buildExpandableContent(List? wallet_lists) {
     List<Widget> columnContent = [];
 
-    for (var content in wallet_lists) {
+    for (var content in wallet_lists!) {
       if (content["name"] == "TPBank") {
         columnContent.add(
           ListTile(
@@ -306,8 +331,8 @@ class _AccountPage extends State<AccountPage> {
                 fontSize: MediaQuery.of(context).size.width > 900
                     ? 15
                     : MediaQuery.of(context).size.width > 350
-                    ? 15
-                    : 13,
+                        ? 15
+                        : 13,
               ),
             ),
             trailing: Text(
@@ -316,8 +341,8 @@ class _AccountPage extends State<AccountPage> {
                 fontSize: MediaQuery.of(context).size.width > 900
                     ? 15
                     : MediaQuery.of(context).size.width > 350
-                    ? 15
-                    : 13,
+                        ? 15
+                        : 13,
               ),
             ),
             leading: CircleAvatar(
@@ -339,8 +364,8 @@ class _AccountPage extends State<AccountPage> {
                 fontSize: MediaQuery.of(context).size.width > 900
                     ? 15
                     : MediaQuery.of(context).size.width > 350
-                    ? 15
-                    : 13,
+                        ? 15
+                        : 13,
               ),
             ),
             trailing: Text(
@@ -349,8 +374,8 @@ class _AccountPage extends State<AccountPage> {
                 fontSize: MediaQuery.of(context).size.width > 900
                     ? 15
                     : MediaQuery.of(context).size.width > 350
-                    ? 15
-                    : 13,
+                        ? 15
+                        : 13,
               ),
             ),
             leading: CircleAvatar(
@@ -372,8 +397,8 @@ class _AccountPage extends State<AccountPage> {
                 fontSize: MediaQuery.of(context).size.width > 900
                     ? 15
                     : MediaQuery.of(context).size.width > 350
-                    ? 15
-                    : 13,
+                        ? 15
+                        : 13,
               ),
             ),
             trailing: Text(
@@ -382,8 +407,8 @@ class _AccountPage extends State<AccountPage> {
                 fontSize: MediaQuery.of(context).size.width > 900
                     ? 15
                     : MediaQuery.of(context).size.width > 350
-                    ? 15
-                    : 13,
+                        ? 15
+                        : 13,
               ),
             ),
             leading: CircleAvatar(

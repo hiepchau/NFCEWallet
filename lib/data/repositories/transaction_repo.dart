@@ -1,7 +1,5 @@
 import 'package:event_bus/event_bus.dart';
 import 'package:logger/logger.dart';
-import 'package:nfc_e_wallet/data/model/response/transaction_response.dart';
-import 'package:nfc_e_wallet/data/model/user.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../model/transaction.dart';
