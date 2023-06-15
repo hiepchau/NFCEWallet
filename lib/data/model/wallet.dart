@@ -33,15 +33,16 @@ extension WalletExtension on BaseResponse{
   }
 }
 
-extension WalletListIdExtension on ListModelResponse{
-  List<String>? toListIdWallet(){
+extension WalletListExtension on ListModelResponse{
+  List<Wallet>? toListWallet(){
     if(this.data.length == 0)
       return null;
-    List<String> rs = [];
+    List<Wallet> rs = [];
     for(Map<String, dynamic> item in this.data){
-      rs.add(item['_id']);
+      rs.add(Wallet.fromJson(item));
     }
-    print("List Wallet_item_bloc.dart id: $rs");
+    print("List wallet: $rs");
     return rs;
   }
+
 }

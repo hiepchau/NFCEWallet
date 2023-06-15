@@ -7,13 +7,11 @@ part 'transaction_response.g.dart';
 
 @JsonSerializable()
 class TransactionResponse{
-  @JsonKey(name: 'from_Transaction')
-  Transaction fromTransaction;
-  @JsonKey(name: 'from_User')
-  User fromUser;
-  @JsonKey(name: 'to_User')
-  User toUser;
-  TransactionResponse({required this.fromTransaction, required this.fromUser, required this.toUser});
+  final List<String>? data;
+
+  TransactionResponse(
+      {
+        required this.data});
 
   factory TransactionResponse.fromJson(Map<String, dynamic> json) =>
       _$TransactionResponseFromJson(json);

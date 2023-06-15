@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:dio/dio.dart';
 import 'package:nfc_e_wallet/data/model/response/base_response.dart';
 import 'package:nfc_e_wallet/data/model/response/list_model_response.dart';
+import 'package:nfc_e_wallet/data/model/response/transaction_response.dart';
 import 'package:retrofit/retrofit.dart';
 import '../model/response/avatar_file_response.dart';
 import '../model/response/login_response.dart';
@@ -34,8 +35,20 @@ abstract class AppService {
   @GET("/user/{id}}")
   Future<HttpResponse<BaseResponse>> getUser(@Path('id') String id, @Header('Authorization') String token);
 
-  @POST("/verify_otp")
+  @POST("/transaction/create_transfer")
   Future<HttpResponse> createTransferTransaction(@Header('Authorization') String token, @Body() Map<String, dynamic> request);
+
+  @POST("/transaction/create_transaction")
+  Future<HttpResponse> createTransaction(@Header('Authorization') String token, @Body() Map<String, dynamic> request);
+
+  @POST("/transaction/{user_id}")
+  Future<HttpResponse<ListModelResponse>> getListTransaction(@Path('id') String id, @Header('Authorization') String token);
+
+  @POST("/wallet/{user_id}")
+  Future<HttpResponse> createWallet(@Path('id') String id, @Body() Map<String, dynamic> request);
+
+  @POST("/transaction/{user_id}")
+  Future<HttpResponse<ListModelResponse>> getListWallet(@Path('id') String id, @Header('Authorization') String token);
 
   @PUT("/user/update")
   Future<HttpResponse> updateUser(@Header('Authorization') String token, @Body() Map<String, dynamic> request);
@@ -46,7 +59,6 @@ abstract class AppService {
   @POST("/avatar/")
   @MultiPart()
   Future<HttpResponse> updateAvatar(@Header('Authorization') String token, @Part(name: "avatar") File file);
-
 
   @GET("/car?page={page}")
   Future<HttpResponse<ListModelResponse>> getListCarFromPage(@Path("page") int page);
@@ -93,20 +105,6 @@ abstract class AppService {
 
   @GET("/article/page/")
   Future<HttpResponse<int>> getArticleMaxPage();
-
-  @POST("/article/")
-  @MultiPart()
-  Future<HttpResponse> createArticle(
-      {
-        @Header('Authorization') required String token,
-        @Part(name: "title") required String title,
-        @Part(name: "description") required String description,
-        @Part(name: "address") required String address,
-        @Part(name: "province") required String province,
-        @Part(name: "city") required String district,
-        @Part(name: "referenceName") required String referenceName,
-        @Part(name: "files") required List<File> files
-      });
 
   @POST("/hotel/")
   @MultiPart()

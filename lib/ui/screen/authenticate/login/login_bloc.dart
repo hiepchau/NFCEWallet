@@ -1,26 +1,30 @@
-// login_bloc.dart
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'login_event.dart';
-import 'login_state.dart';
+import 'dart:async';
+
+import 'package:bloc/bloc.dart';
+import 'package:meta/meta.dart';
+
+part 'login_event.dart';
+part 'login_state.dart';
 
 class LoginBloc extends Bloc<LoginEvent, LoginState> {
-  LoginBloc() : super(LoginState());
+  LoginBloc() : super(LoginState()) {
+    on<PhoneNumberChanged>(_onPhoneNumberChanged);
+    on<Submitted>(_onSubmitted);
+  }
 
-  @override
-  Stream<LoginState> mapEventToState(LoginEvent event) async* {
-    if (event is PhoneNumberChanged) {
-      yield state.copyWith(phoneNumber: event.phoneNumber);
-    } else if (event is Submitted) {
-      yield state.copyWith(submissionInProgress: true);
-      try {
-        // Call your authentication logic
-        await signInWithCredentials(event.phoneNumber, event.password);
-        yield state.copyWith(submissionSuccess: true);
-      } catch (e) {
-        yield state.copyWith(errorMessage: e.toString());
-      } finally {
-        yield state.copyWith(submissionInProgress: false);
-      }
+  void _onPhoneNumberChanged(PhoneNumberChanged event, Emitter<LoginState> emit) {
+    emit(state.copyWith(phoneNumber: event.phoneNumber));
+  }
+
+  Future<void> _onSubmitted(Submitted event, Emitter<LoginState> emit) async {
+    emit(state.copyWith(submissionInProgress: true));
+    try {
+      await signInWithCredentials(event.phoneNumber, event.password);
+      emit(state.copyWith(submissionSuccess: true));
+    } catch (e) {
+      emit(state.copyWith(errorMessage: e.toString()));
+    } finally {
+      emit(state.copyWith(submissionInProgress: false));
     }
   }
 

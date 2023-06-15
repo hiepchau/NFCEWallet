@@ -5,9 +5,8 @@ import '../../../../l10n/l10n.dart';
 import '../../../style/color.dart';
 import '../../root_screen.dart';
 import '../signup/signup_screen.dart';
-import 'login_bloc.dart';
-import 'login_event.dart';
-import 'login_state.dart';
+import '../login_bloc.dart';
+
 
 class LoginPage extends StatelessWidget {
   @override

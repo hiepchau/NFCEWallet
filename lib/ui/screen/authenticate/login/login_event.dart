@@ -1,7 +1,7 @@
-// login_event.dart
-import 'package:equatable/equatable.dart';
+part of 'login_bloc.dart';
 
-abstract class LoginEvent extends Equatable {
+@immutable
+abstract class LoginEvent {
   const LoginEvent();
 
   @override
@@ -37,4 +37,3 @@ class Submitted extends LoginEvent {
 }
 
 class SwitchSignInMethod extends LoginEvent {} // Newly added
-

@@ -41,15 +41,15 @@ extension TransactionExtension on BaseResponse{
   }
 }
 
-extension TransactionListIdExtension on ListModelResponse{
-  List<String>? toListIdTransaction(){
+extension TransactionListExtension on ListModelResponse{
+  List<Transaction>? toListTransaction(){
     if(this.data.length == 0)
       return null;
-    List<String> rs = [];
+    List<Transaction> rs = [];
     for(Map<String, dynamic> item in this.data){
-      rs.add(item['_id']);
+      rs.add(Transaction.fromJson(item));
     }
-    print("List transaction_item_bloc.dart id: $rs");
+    print("List transaction: $rs");
     return rs;
   }
 }

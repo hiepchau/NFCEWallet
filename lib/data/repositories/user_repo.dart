@@ -58,12 +58,7 @@ class UserRepo{
           ,_requestFactory.updateUserPassWord(password))
         .then((http) async {
       print(http.response.statusCode);
-      if (http.response.statusCode != 200) {
-        return false;
-      }
-      else{
-        return true;
-      }
+      return (http.response.statusCode != 200);
     });
   }
 

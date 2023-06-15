@@ -1,5 +1,7 @@
 import 'package:event_bus/event_bus.dart';
 import 'package:logger/logger.dart';
+import 'package:nfc_e_wallet/data/model/response/transaction_response.dart';
+import 'package:nfc_e_wallet/data/model/user.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../model/transaction.dart';
@@ -16,16 +18,34 @@ class TransactionRepo{
   TransactionRepo(this._logger, this._sharedPreferences, this._appService,
       this._requestFactory, this._eventBus);
 
-  Future<Transaction?> getUser(String fromUser, String toUser, String amount, String message) async {
+  Future<bool> createTransferTransaction(String fromUser, String toUser, String amount, String message) async {
     return _appService
-        .createTransferTransaction('Bearer '+_sharedPreferences.getString('token')!, _requestFactory.createTransaction(fromUser, toUser, amount, message))
+        .createTransferTransaction('Bearer '+_sharedPreferences.getString('token')!, _requestFactory.createTransferTransaction(fromUser, toUser, amount, message))
+        .then((http) async {
+      print(http.response.statusCode);
+      return (http.response.statusCode != 200);
+    });
+  }
+
+  Future<bool> createTransaction(String fromUser, String toUser, String amount, String message, String type) async {
+    return _appService
+        .createTransaction('Bearer '+_sharedPreferences.getString('token')!, _requestFactory.createTransaction(fromUser, toUser, amount, message, type))
+        .then((http) async {
+      print(http.response.statusCode);
+      return (http.response.statusCode != 200);
+    });
+  }
+
+  Future<List<Transaction>?> getListTransaction(String id) async {
+    return _appService
+        .getListTransaction(id, 'Bearer '+_sharedPreferences.getString('token')!)
         .then((http) async {
       print(http.response.statusCode);
       if (http.response.statusCode != 200) {
-        return null;
+        return [];
       }
       else{
-        return http.data.toTransaction();
+        return http.data.toListTransaction();
       }
     });
   }

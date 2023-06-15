@@ -58,6 +58,24 @@ class RequestFactory {
     };
   }
 
+  createTransaction(String fromUser, String toUser, String amount, String message, String type){
+    return {
+      "from_User": fromUser,
+      "to_User": toUser,
+      "amount": amount,
+      "message": message,
+      "type": type
+    };
+  }
+
+  createWallet(String name, String type, String cardNumber){
+    return {
+      "name": name,
+      "type": type,
+      "card_number": cardNumber,
+    };
+  }
+
   updateUserPassWord(String password){
     return {
       "password": password,

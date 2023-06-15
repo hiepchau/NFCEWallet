@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:json_annotation/json_annotation.dart';
 import 'package:nfc_e_wallet/data/model/response/avatar_file_response.dart';
 import 'package:nfc_e_wallet/data/model/response/base_response.dart';
+import 'package:nfc_e_wallet/data/model/response/transaction_response.dart';
 
 part 'user.g.dart';
 
@@ -44,7 +45,7 @@ extension UserExtension on BaseResponse {
   }
 }
 
-extension UserFileExtension on AvatarResponse{
+extension UserFileExtension on TransactionResponse{
   List<String>? toListString(){
     var list = this.data!;
     if(list == null)
