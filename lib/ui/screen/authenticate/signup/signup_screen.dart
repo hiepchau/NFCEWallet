@@ -12,7 +12,7 @@ class SignUpPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       body: BlocProvider(
-        create: (context) => SignUpBloc(),
+        create: (context) => SignupBloc(),
         child: SignUpForm(),
       ),
     );
@@ -28,123 +28,140 @@ class _SignUpFormState extends State<SignUpForm> {
   final _phoneNumberController = TextEditingController();
   final _passwordController = TextEditingController();
   final _repeatPasswordController = TextEditingController();
+  final _fullNameController = TextEditingController();
+  final _identifyIDController = TextEditingController();
+  DateTime _dob = DateTime.now();
 
   @override
   Widget build(BuildContext context) {
-    return Stack(
-      children: [
-        Container(
-          height: 250,
-          width: double.infinity,
-          color: Color(0xFF3F63F6),
-        ),
-        SafeArea(
-          child: Padding(
-            padding: EdgeInsets.only(left: 24),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                SizedBox(height: 24),
-                Container(
-                  width: 44,
-                  height: 44,
-                  decoration: BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.circular(24),
+    return BlocListener<SignupBloc, SignupInfoState>(
+      listener: (context, state) {
+        if (state.signupStatus == SignupStatus.Success) {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => OTPScreen(phoneNumber: _phoneNumberController.text),
+            ),
+          );
+        } else if (state.signupStatus == SignupStatus.InvalidInfo) {
+          ToastHelper.showToast("Register failed", status: ToastStatus.failure);
+        }
+      },
+      child: Stack(
+        children: [
+          Container(
+            height: 250,
+            width: double.infinity,
+            color: Color(0xFF3F63F6),
+          ),
+          SafeArea(
+            child: Padding(
+              padding: EdgeInsets.only(left: 24),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  SizedBox(height: 24),
+                  Container(
+                    width: 45,
+                    height: 45,
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.circular(24),
+                    ),
                   ),
-                ),
-                SizedBox(height: 24),
-                Text(
-                  'Create Account',
-                  style: TextStyle(color: Colors.white, fontSize: 24, fontWeight: FontWeight.w600),
-                ),
-                SizedBox(height: 8),
-                TextButton(
-                  onPressed: () {
-                    Navigator.of(context).pop();
-                  },
-                  child: Text(
-                    "Already have an account? Sign In",
-                    style: TextStyle(color: Colors.blue, fontSize: 16),
+                  SizedBox(height: 24),
+                  Text(
+                    'Create Account',
+                    style: TextStyle(color: Colors.white, fontSize: 24, fontWeight: FontWeight.w600),
                   ),
-                ),
-                SizedBox(height: 32),
-                Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 24),
-                  child: Column(
-                    children: [
-                      TextField(
-                        controller: _phoneNumberController,
-                        decoration: InputDecoration(
-                          hintText: 'Your phone number',
-                          border: OutlineInputBorder(borderRadius: BorderRadius.circular(8.0)),
-                        ),
-                        onChanged: (value) {
-                          context.read<SignUpBloc>().add(PhoneNumberChanged(value));
-                        },
-                      ),
-                      SizedBox(height: 24.0),
-                      TextField(
-                        controller: _passwordController,
-                        obscureText: true,
-                        decoration: InputDecoration(
-                          hintText: 'Password',
-                          border: OutlineInputBorder(borderRadius: BorderRadius.circular(8.0)),
-                          suffixIcon: Icon(Icons.visibility_off), // Eye icon
-                        ),
-                        onChanged: (value) {
-                          context.read<SignUpBloc>().add(PasswordChanged(value));
-                        },
-                      ),
-                      SizedBox(height: 24.0),
-                      TextField(
-                        controller: _repeatPasswordController,
-                        obscureText: true,
-                        decoration: InputDecoration(
-                          hintText: 'Repeat Password',
-                          border: OutlineInputBorder(borderRadius: BorderRadius.circular(8.0)),
-                          suffixIcon: Icon(Icons.visibility_off), // Eye icon
-                        ),
-                        onChanged: (value) {
-                          context.read<SignUpBloc>().add(RepeatPasswordChanged(value));
-                        },
-                      ),
-                      SizedBox(height: 16),
-                      Container(
-                        width: double.infinity,
-                        child: ElevatedButton(
-                          onPressed: () {
-                            if (_phoneNumberController.text.isNotEmpty &&
-                                _passwordController.text.isNotEmpty &&
-                                _repeatPasswordController.text.isNotEmpty) {
-                              context.read<SignUpBloc>().add(SignUpSubmitted());
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) => OTPScreen(phoneNumber: _phoneNumberController.text),
-                                ),
-                              );
-                            } else {
-                              ToastHelper.showToast("Vui lòng nhập đủ thông tin!", status: ToastStatus.failure);
-                            }
+                  SizedBox(height: 8),
+                  TextButton(
+                    onPressed: () {
+                      Navigator.of(context).pop();
+                    },
+                    child: Text(
+                      "Already have an account? Sign In",
+                      style: TextStyle(color: Colors.blue, fontSize: 16),
+                    ),
+                  ),
+                  SizedBox(height: 32),
+                  Padding(
+                    padding: EdgeInsets.symmetric(horizontal: 24),
+                    child: Column(
+                      children: [
+                        TextField(
+                          controller: _phoneNumberController,
+                          decoration: InputDecoration(
+                            hintText: 'Your phone number',
+                            border: OutlineInputBorder(borderRadius: BorderRadius.circular(8.0)),
+                          ),
+                          onChanged: (value) {
                           },
-                          child: Text('Sign Up'),
-                          style: ElevatedButton.styleFrom(
-                            primary: green1, // Button's fill color
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(8),
+                        ),
+                        SizedBox(height: 24.0),
+                        TextField(
+                          controller: _passwordController,
+                          obscureText: true,
+                          decoration: InputDecoration(
+                            hintText: 'Password',
+                            border: OutlineInputBorder(borderRadius: BorderRadius.circular(8.0)),
+                            suffixIcon: Icon(Icons.visibility_off), // Eye icon
+                          ),
+                          onChanged: (value) {
+                          },
+                        ),
+                        SizedBox(height: 24.0),
+                        TextField(
+                          controller: _repeatPasswordController,
+                          obscureText: true,
+                          decoration: InputDecoration(
+                            hintText: 'Repeat Password',
+                            border: OutlineInputBorder(borderRadius: BorderRadius.circular(8.0)),
+                            suffixIcon: Icon(Icons.visibility_off), // Eye icon
+                          ),
+                          onChanged: (value) {
+                          },
+                        ),
+                        SizedBox(height: 16),
+                        Container(
+                          width: double.infinity,
+                          child: ElevatedButton(
+                            onPressed: () {
+                              if (_phoneNumberController.text.isNotEmpty &&
+                                  _passwordController.text.isNotEmpty &&
+                                  _repeatPasswordController.text.isNotEmpty) {
+                                context.read<SignupBloc>().add(
+                                    SignupEvent(
+                                        fullName: _fullNameController.text,
+                                        phone: _phoneNumberController.text,
+                                        password: _passwordController.text,
+                                        identifyID: _identifyIDController.text,
+                                        dob: _dob //you might want to convert the dob to DateTime
+                                    )
+                                );
+                              } else {
+                                ToastHelper.showToast("Vui lòng nhập đủ thông tin!", status: ToastStatus.failure);
+                              }
+                            },
+                            child: Text('Sign Up'),
+                            style: ElevatedButton.styleFrom(
+                              primary: green1,
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(8),
+                              ),
                             ),
                           ),
+
                         ),
-                      ),
-                    ],
+                      ],
+                    ),
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
           ),
-        ),
-      ],
+        ],
+      ),
     );
   }
 }

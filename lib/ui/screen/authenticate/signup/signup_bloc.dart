@@ -1,24 +1,36 @@
 import 'dart:async';
+
 import 'package:bloc/bloc.dart';
-import 'package:equatable/equatable.dart';
+import 'package:get_it/get_it.dart';
+import 'package:meta/meta.dart';
+
+import '../../../../data/repositories/authenticator.dart';
 
 part 'signup_event.dart';
 part 'signup_state.dart';
 
-class SignUpBloc extends Bloc<SignUpEvent, SignUpState> {
-  SignUpBloc() : super(SignUpInitial());
-
-  @override
-  Stream<SignUpState> mapEventToState(SignUpEvent event) async* {
-    // TODO: implement signup logic
-    if (event is PhoneNumberChanged) {
-      // validate phone number and yield new state
-    } else if (event is PasswordChanged) {
-      // validate password and yield new state
-    } else if (event is RepeatPasswordChanged) {
-      // validate repeated password and yield new state
-    } else if (event is SignUpSubmitted) {
-      // submit signup and yield new state
-    }
+class SignupBloc extends Bloc<SignupEvent,SignupInfoState>{
+  SignupBloc(): super(SignupInfoState()){
+    on<SignupEvent>((event,emit) async {
+      var authenticator = GetIt.instance.get<Authenticator>();
+      try {
+        bool registerstate = await authenticator.register(
+            event.fullName as String,
+            event.password as String,
+            event.phone as String,
+            event.identifyID as String,
+            event.dob as DateTime,);
+        if(registerstate) {
+          print("Register success");
+          emit(SignupInfoState(signupStatus: SignupStatus.Success));
+        }
+      } catch (e)
+      {
+        print("Register failed");
+        emit(SignupInfoState(
+            signupStatus: SignupStatus.InvalidInfo));
+        // timer!.cancel();
+      }
+    });
   }
 }

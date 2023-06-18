@@ -10,16 +10,3 @@ class LoginEvent extends AuthenticationEvent{
 }
 
 class LogoutEvent extends AuthenticationEvent{}
-
-class RegisterEvent extends AuthenticationEvent{
-  String? Username, Password, Email, FirstName, LastName, Phone;
-  int? Gender;
-  RegisterEvent({
-    required this.Username,
-    required this.Password,
-    required this.Email,
-    required this.FirstName,
-    required this.LastName,
-    required this.Phone,
-    required this.Gender});
-}
