@@ -7,10 +7,13 @@ import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:nfc_e_wallet/l10n/l10n.dart';
 import 'package:nfc_e_wallet/ui/screen/app_navigator.dart';
 import 'package:nfc_e_wallet/ui/screen/authenticate/login/authenticate_page.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'dependency.dart';
 
 final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
 FlutterLocalNotificationsPlugin();
+
+late SharedPreferences prefs;
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -21,6 +24,10 @@ void main() async {
   final InitializationSettings initializationSettings =
   InitializationSettings(android: initializationSettingsAndroid);
   await flutterLocalNotificationsPlugin.initialize(initializationSettings);
+
+  //INIT PREFERENCES
+  prefs = await SharedPreferences.getInstance();
+
   runApp(ScreenUtilInit(
       designSize: kIsWeb ? const Size(790, 620) : const Size(390, 800),
       builder: (context, child) {

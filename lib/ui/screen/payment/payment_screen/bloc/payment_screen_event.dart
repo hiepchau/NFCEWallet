@@ -4,6 +4,9 @@ abstract class PaymentScreenEvent {
   const PaymentScreenEvent();
 }
 
+class InitPaymentScreenEvent extends PaymentScreenEvent{
+}
+
 class ChangeThemeEvent extends PaymentScreenEvent {
   final int themeIndex;
 

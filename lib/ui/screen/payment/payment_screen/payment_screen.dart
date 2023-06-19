@@ -2,7 +2,9 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:nfc_e_wallet/data/preferences.dart';
+import 'package:nfc_e_wallet/main.dart';
 import 'package:nfc_e_wallet/ui/screen/payment/payment_screen/bloc/payment_screen_bloc.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -28,21 +30,16 @@ class PaymentPage extends StatefulWidget{
 }
 
 class PaymentPageState extends State<PaymentPage> {
-
+  late PaymentScreenBloc paymentScreenBloc;
   final TextEditingController amountController = TextEditingController();
   final TextEditingController messageController = TextEditingController();
 
-  late SharedPreferences prefs;
   late Map<String, dynamic> user;
-  Future<void> loadUser() async {
-    prefs = await SharedPreferences.getInstance();
-    user = jsonDecode(prefs.getString(Preferences.user)!);
-  }
 
   @override
   void initState() {
     super.initState();
-    loadUser();
+    user = jsonDecode(prefs.getString(Preferences.user)!);
   }
 
   @override
@@ -54,6 +51,7 @@ class PaymentPageState extends State<PaymentPage> {
         String amount = state.amount;
         amountController.text = amount;
         messageController.text = message;
+
         Decoration themeDecoration = _buildThemeDecoration(themeIndex);
 
         return SafeArea(
