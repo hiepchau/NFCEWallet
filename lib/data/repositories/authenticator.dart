@@ -33,10 +33,10 @@ class Authenticator {
       }
       bool isSuccess = false;
 
-      isSuccess = http.data.token.isNotEmpty;
+      isSuccess = (http.data.accessToken['token'] as String).isNotEmpty;
 
       if (isSuccess) {
-        var token = http.data.token;
+        var token = http.data.accessToken['token'] as String;
         await _sharedPreferences.remove(Preferences.token);
         await _sharedPreferences.setString(Preferences.token, token);
         _eventBus.fire(EBAuthenEvent(true));
