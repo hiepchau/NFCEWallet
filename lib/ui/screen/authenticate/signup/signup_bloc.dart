@@ -1,8 +1,10 @@
 import 'dart:async';
 
 import 'package:bloc/bloc.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:get_it/get_it.dart';
 import 'package:meta/meta.dart';
+import 'package:nfc_e_wallet/main.dart';
 
 import '../../../../data/repositories/authenticator.dart';
 
@@ -24,6 +26,24 @@ class SignupBloc extends Bloc<SignupEvent,SignupInfoState>{
         if(otp != null) {
           print("Register success. OTP: $otp");
           emit(SignupInfoState(signupStatus: SignupStatus.Success));
+
+          // Show notification
+          const AndroidNotificationDetails androidPlatformChannelSpecifics =
+          AndroidNotificationDetails(
+            'your channel id',
+            'your channel name',
+            importance: Importance.max,
+            priority: Priority.high,
+            showWhen: false,
+          );
+          const NotificationDetails platformChannelSpecifics =
+          NotificationDetails(android: androidPlatformChannelSpecifics);
+          await flutterLocalNotificationsPlugin.show(
+            0,
+            'OTP Received',
+            'Your OTP is $otp',
+            platformChannelSpecifics,
+          );
         }
       } catch (e)
       {
@@ -32,6 +52,7 @@ class SignupBloc extends Bloc<SignupEvent,SignupInfoState>{
             signupStatus: SignupStatus.InvalidInfo));
       }
     });
+
   }
 }
 
