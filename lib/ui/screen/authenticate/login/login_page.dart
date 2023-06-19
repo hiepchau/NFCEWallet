@@ -5,9 +5,9 @@ import 'package:nfc_e_wallet/utils/toast_helper.dart';
 import '../../../../l10n/l10n.dart';
 import '../../../style/color.dart';
 import '../../root_screen.dart';
+import '../forgot_password/forgot_password_screen.dart';
 import '../signup/signup_screen.dart';
 import 'authenticate_bloc.dart';
-
 
 class LoginScreen extends StatelessWidget {
   @override
@@ -29,7 +29,13 @@ class LoginForm extends StatefulWidget {
 class _LoginFormState extends State<LoginForm> {
   final _phoneNumberController = TextEditingController();
   final _passwordController = TextEditingController();
+  bool _obscureText = true;
 
+  void _togglePasswordVisibility() {
+    setState(() {
+      _obscureText = !_obscureText;
+    });
+  }
   @override
   Widget build(BuildContext context) {
     return BlocListener<AuthenticationBloc, AuthenticationInfoState>(
@@ -113,11 +119,17 @@ class _LoginFormState extends State<LoginForm> {
                           SizedBox(height: 24.0),
                           TextField(
                             controller: _passwordController,
-                            obscureText: true,
+                            obscureText: _obscureText,
                             decoration: InputDecoration(
                               hintText: 'Password',
                               border: OutlineInputBorder(borderRadius: BorderRadius.circular(8.0)),
-                              suffixIcon: Icon(Icons.visibility_off), // Eye icon
+                              suffixIcon: IconButton(
+                                icon: Icon(
+                                  // Based on passwordVisible state choose the icon
+                                  _obscureText ? Icons.visibility_off : Icons.visibility,
+                                ),
+                                onPressed: _togglePasswordVisibility,
+                              ),
                             ),
                             onChanged: (value) {
 
@@ -129,7 +141,6 @@ class _LoginFormState extends State<LoginForm> {
                             child: ElevatedButton(
                               onPressed: () {
                                 if (_phoneNumberController.text.isNotEmpty && _passwordController.text.isNotEmpty) {
-                                  print("ACTIONN");
                                   context.read<AuthenticationBloc>().add(
                                     LoginEvent(
                                       _phoneNumberController.text,
@@ -149,6 +160,23 @@ class _LoginFormState extends State<LoginForm> {
                               ),
                             ),
                           ),
+                          SizedBox(height: 16),
+                          Container(
+                            width: double.infinity,
+                            child: TextButton(
+                              onPressed: () {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(builder: (context) => ForgotPasswordPage()),
+                                );
+                              },
+                              child: Text('Forgot password?'),
+                              style: TextButton.styleFrom(
+                                primary: primary, // This is the color of the text
+                              ),
+                            ),
+                          ),
+
                         ],
                       ),
                     ),
@@ -159,6 +187,5 @@ class _LoginFormState extends State<LoginForm> {
           ],
         )
     );
-
   }
 }

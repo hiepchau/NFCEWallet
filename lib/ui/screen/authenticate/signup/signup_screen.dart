@@ -31,6 +31,20 @@ class _SignUpFormState extends State<SignUpForm> {
   final _fullNameController = TextEditingController();
   final _identifyIDController = TextEditingController();
   final _dobController = TextEditingController();
+  bool _obscurePasswordText = true;
+  bool _obscureRePasswordText = true;
+
+  void _togglePasswordVisibility() {
+    setState(() {
+      _obscurePasswordText = !_obscurePasswordText;
+    });
+  }
+
+  void _toggleRePasswordVisibility() {
+    setState(() {
+      _obscureRePasswordText = !_obscureRePasswordText;
+    });
+  }
   DateTime _dob = DateTime.now();
 
   @override
@@ -82,7 +96,7 @@ class _SignUpFormState extends State<SignUpForm> {
                     },
                     child: Text(
                       "Already have an account? Sign In",
-                      style: TextStyle(color: Colors.blue, fontSize: 16),
+                      style: TextStyle(color: Colors.white, fontSize: 16),
                     ),
                   ),
                   SizedBox(height: 32),
@@ -102,11 +116,17 @@ class _SignUpFormState extends State<SignUpForm> {
                         SizedBox(height: 24.0),
                         TextField(
                           controller: _passwordController,
-                          obscureText: true,
+                          obscureText: _obscurePasswordText,
                           decoration: InputDecoration(
                             hintText: 'Password',
                             border: OutlineInputBorder(borderRadius: BorderRadius.circular(8.0)),
-                            suffixIcon: Icon(Icons.visibility_off), // Eye icon
+                            suffixIcon: IconButton(
+                              icon: Icon(
+                                // Based on passwordVisible state choose the icon
+                                _obscurePasswordText ? Icons.visibility_off : Icons.visibility,
+                              ),
+                              onPressed: _togglePasswordVisibility,
+                            ),
                           ),
                           onChanged: (value) {
                           },
@@ -114,11 +134,17 @@ class _SignUpFormState extends State<SignUpForm> {
                         SizedBox(height: 24.0),
                         TextField(
                           controller: _repeatPasswordController,
-                          obscureText: true,
+                          obscureText: _obscureRePasswordText,
                           decoration: InputDecoration(
                             hintText: 'Repeat Password',
                             border: OutlineInputBorder(borderRadius: BorderRadius.circular(8.0)),
-                            suffixIcon: Icon(Icons.visibility_off), // Eye icon
+                            suffixIcon: IconButton(
+                              icon: Icon(
+                                // Based on passwordVisible state choose the icon
+                                _obscureRePasswordText ? Icons.visibility_off : Icons.visibility,
+                              ),
+                              onPressed: _toggleRePasswordVisibility,
+                            ),
                           ),
                           onChanged: (value) {
                           },
@@ -155,14 +181,14 @@ class _SignUpFormState extends State<SignUpForm> {
                             if (pickedDate != null && pickedDate != _dob)
                               setState(() {
                                 _dob = pickedDate;
-                                _dobController.text = DateFormat.yMd().format(_dob);
+                                _dobController.text = DateFormat('yyyy-MM-dd').format(_dob);
                               });
                           },
                           child: AbsorbPointer(
                             child: TextField(
                               controller: _dobController,
                               decoration: InputDecoration(
-                                hintText: 'Date of Birth ${_dob.toLocal()}'.split(' ')[0],
+                                hintText: 'Date of birth',
                                 border: OutlineInputBorder(borderRadius: BorderRadius.circular(8.0)),
                               ),
                               readOnly: true,
@@ -176,18 +202,24 @@ class _SignUpFormState extends State<SignUpForm> {
                             onPressed: () {
                               if (_phoneNumberController.text.isNotEmpty &&
                                   _passwordController.text.isNotEmpty &&
-                                  _repeatPasswordController.text.isNotEmpty) {
-                                context.read<SignupBloc>().add(
-                                    SignupEvent(
-                                        fullName: _fullNameController.text,
-                                        phone: _phoneNumberController.text,
-                                        password: _passwordController.text,
-                                        identifyID: _identifyIDController.text,
-                                        dob: _dob //you might want to convert the dob to DateTime
-                                    )
-                                );
+                                  _repeatPasswordController.text.isNotEmpty &&
+                                  _identifyIDController.text.isNotEmpty &&
+                                  _dobController.text.isNotEmpty) {
+                                if (_passwordController.text == _repeatPasswordController.text) {
+                                  context.read<SignupBloc>().add(
+                                      SignupEvent(
+                                          fullName: _fullNameController.text,
+                                          phone: _phoneNumberController.text,
+                                          password: _passwordController.text,
+                                          identifyID: _identifyIDController.text,
+                                          dob: _dobController.text
+                                      )
+                                  );
+                                } else {
+                                  ToastHelper.showToast(L10n().enterConfirmPasswordSame, status: ToastStatus.failure);
+                                }
                               } else {
-                                ToastHelper.showToast("Vui lòng nhập đủ thông tin!", status: ToastStatus.failure);
+                                ToastHelper.showToast(L10n().enterFullInformation, status: ToastStatus.failure);
                               }
                             },
                             child: Text('Sign Up'),

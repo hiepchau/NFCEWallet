@@ -1,7 +1,7 @@
 import 'package:dio/dio.dart';
 import 'package:logger/logger.dart';
 
-import 'loading_manager.dart';
+import 'loading_interceptor.dart';
 import 'logging_interceptor.dart';
 
 class DioFactory {

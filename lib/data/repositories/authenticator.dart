@@ -56,24 +56,21 @@ class Authenticator {
     });
   }
 
-  Future<bool> register(String fullName, String password, String phone, String identifyID, DateTime dob) async {
+  Future<String?> register(String fullName, String password, String phone, String identifyID, String dob) async {
     return _appService
         .register(_requestFactory.createRegister(fullName, password, phone, identifyID, dob))
-        .then((http) async {
+        .then((http) {
       print(http.response.statusCode);
       if (http.response.statusCode != 200) {
-        return false;
+        return null;
       }
-      bool isSuccess = false;
+      String? otp;
 
-      isSuccess = http.data.token.isNotEmpty;
-
-      if (isSuccess) {
-        var token = http.data.token;
-        await _sharedPreferences.setString(Preferences.token, token);
-        _logger.i("New token received: $token");
+      if (http.data['message'] == 'OTP SENT') {
+        otp = http.data['otp'];
+        print("OTP received: $otp");
       }
-      return isSuccess;
+      return otp;
     });
   }
 

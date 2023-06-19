@@ -11,5 +11,7 @@
   "verifyCodeFailed": "Mã xác thực không đúng!",
   "signOut": "Đăng xuất"
   "signOutSuccess": "Đăng xuất thành công!",
-  "signOutFailed": "Đăng xuất thất bại!"
+  "signOutFailed": "Đăng xuất thất bại!",
+  "enterConfirmPasswordSame": "Vui lòng nhập lại mật khẩu khớp với mật khẩu!",
+  "enterFullInformation": "Vui lòng nhập đủ thông tin!",
 }

@@ -13,7 +13,7 @@ class RequestFactory {
     };
   }
 
-  createRegister(String fullName, String password, String phone, String identifyID, DateTime dob) {
+  createRegister(String fullName, String password, String phone, String identifyID, String dob) {
     return {
       "full_name": fullName,
       "password": password,

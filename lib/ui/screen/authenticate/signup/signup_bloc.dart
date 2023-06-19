@@ -14,23 +14,24 @@ class SignupBloc extends Bloc<SignupEvent,SignupInfoState>{
     on<SignupEvent>((event,emit) async {
       var authenticator = GetIt.instance.get<Authenticator>();
       try {
-        bool registerstate = await authenticator.register(
-            event.fullName as String,
-            event.password as String,
-            event.phone as String,
-            event.identifyID as String,
-            event.dob as DateTime,);
-        if(registerstate) {
-          print("Register success");
+        String? otp = await authenticator.register(
+          event.fullName as String,
+          event.password as String,
+          event.phone as String,
+          event.identifyID as String,
+          event.dob as String,
+        );
+        if(otp != null) {
+          print("Register success. OTP: $otp");
           emit(SignupInfoState(signupStatus: SignupStatus.Success));
         }
       } catch (e)
       {
-        print("Register failed");
+        print("Register failed due to exception: $e");
         emit(SignupInfoState(
             signupStatus: SignupStatus.InvalidInfo));
-        // timer!.cancel();
       }
     });
   }
 }
+

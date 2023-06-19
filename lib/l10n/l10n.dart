@@ -139,5 +139,20 @@ class L10n {
     );
   }
 
+  String get enterConfirmPasswordSame {
+    return Intl.message(
+      'Vui lòng nhập lại mật khẩu khớp với mật khẩu!',
+      name: 'enterConfirmPasswordSame',
+      desc: 'Vui lòng nhập lại mật khẩu khớp với mật khẩu!',
+    );
+  }
+
+  String get enterFullInformation {
+    return Intl.message(
+      'Vui lòng nhập đủ thông tin!',
+      name: 'enterFullInformation',
+      desc: 'Vui lòng nhập đủ thông tin!',
+    );
+  }
 }
 

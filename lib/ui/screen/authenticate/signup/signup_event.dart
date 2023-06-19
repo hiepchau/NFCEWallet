@@ -4,8 +4,7 @@ part of 'signup_bloc.dart';
 abstract class absSignupEvent {}
 
 class SignupEvent extends absSignupEvent{
-  String? fullName, password, phone, identifyID;
-  DateTime? dob;
+  String? fullName, password, phone, identifyID, dob;
   SignupEvent({
     required this.fullName,
     required this.password,
