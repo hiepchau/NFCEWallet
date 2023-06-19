@@ -28,9 +28,9 @@ class _ShortcutPanel extends State<ShortcutPanel> {
         decoration: BoxDecoration(
           color: Colors.white,
           borderRadius: MediaQuery.of(context).size.width > 900
-              ? BorderRadius.all(Radius.circular(30))
-              : BorderRadius.vertical(top: Radius.circular(30)),
-          boxShadow: [
+              ? const BorderRadius.all(Radius.circular(30))
+              : const BorderRadius.vertical(top: Radius.circular(30)),
+          boxShadow: const [
             BoxShadow(
               color: Colors.black45,
               blurRadius: 15,
@@ -50,10 +50,10 @@ class _ShortcutPanel extends State<ShortcutPanel> {
                   children: [
                     Expanded(
                       child: Container(
-                          padding: EdgeInsets.symmetric(horizontal: 10),
+                          padding: const EdgeInsets.symmetric(horizontal: 10),
                           decoration: BoxDecoration(
                             color: white,
-                            borderRadius: BorderRadius.all(Radius.circular(10)),
+                            borderRadius: const BorderRadius.all(Radius.circular(10)),
                             boxShadow: [
                               BoxShadow(
                                   color: grey.withOpacity(0.5),
@@ -85,15 +85,15 @@ class _ShortcutPanel extends State<ShortcutPanel> {
                             ),
                           )),
                     ),
-                    SizedBox(
+                    const SizedBox(
                       height: 10,
                     ),
                     Expanded(
                       child: Container(
-                        padding: EdgeInsets.symmetric(horizontal: 10),
+                        padding: const EdgeInsets.symmetric(horizontal: 10),
                         decoration: BoxDecoration(
                           color: white,
-                          borderRadius: BorderRadius.all(Radius.circular(10)),
+                          borderRadius: const BorderRadius.all(Radius.circular(10)),
                           boxShadow: [
                             BoxShadow(
                                 color: grey.withOpacity(0.5),
@@ -137,7 +137,7 @@ class _ShortcutPanel extends State<ShortcutPanel> {
                         ),
                       ),
                     ),
-                    SizedBox(
+                    const SizedBox(
                       height: 20,
                     ),
                     Row(

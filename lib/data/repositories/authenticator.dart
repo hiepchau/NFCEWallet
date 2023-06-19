@@ -1,12 +1,13 @@
 import 'dart:async';
+import 'dart:convert';
 
 import 'package:event_bus/event_bus.dart';
 import 'package:logger/logger.dart';
+import 'package:nfc_e_wallet/data/preferences.dart';
 import 'package:nfc_e_wallet/event_bus/events/authen_event.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:synchronized/synchronized.dart';
 
-import '../Preferences.dart';
 import '../remote/app_service.dart';
 import '../remote/request_factory.dart';
 
@@ -22,7 +23,6 @@ class Authenticator {
   Authenticator(this._logger, this._sharedPreferences, this._appService,
       this._requestFactory, this._eventBus);
 
-
   Future<bool> login(String username, String password) async {
     return _appService
         .login(_requestFactory.createLogin(username, password))
@@ -34,11 +34,16 @@ class Authenticator {
       bool isSuccess = false;
 
       isSuccess = (http.data.accessToken['token'] as String).isNotEmpty;
-
+      final user = http.data.user;
       if (isSuccess) {
         var token = http.data.accessToken['token'] as String;
+
         await _sharedPreferences.remove(Preferences.token);
         await _sharedPreferences.setString(Preferences.token, token);
+
+        await _sharedPreferences.remove(Preferences.user);
+        await _sharedPreferences.setString(Preferences.user, jsonEncode(user));
+
         _eventBus.fire(EBAuthenEvent(true));
         _logger.i("New token received: $token");
       }
@@ -47,7 +52,9 @@ class Authenticator {
   }
 
   Future<bool> logout() async {
-    return _appService.logout('Bearer '+_sharedPreferences.getString(Preferences.token)!).then((http) async {
+    return _appService
+        .logout('Bearer ' + _sharedPreferences.getString(Preferences.token)!)
+        .then((http) async {
       if (http.response.statusCode != 200) {
         return false;
       }
@@ -56,9 +63,11 @@ class Authenticator {
     });
   }
 
-  Future<String?> register(String fullName, String password, String phone, String identifyID, String dob) async {
+  Future<String?> register(String fullName, String password, String phone,
+      String identifyID, String dob) async {
     return _appService
-        .register(_requestFactory.createRegister(fullName, password, phone, identifyID, dob))
+        .register(_requestFactory.createRegister(
+            fullName, password, phone, identifyID, dob))
         .then((http) {
       print(http.response.statusCode);
       if (http.response.statusCode != 200) {
@@ -75,12 +84,16 @@ class Authenticator {
   }
 
   Future<bool> verify() async {
-    return _appService.verify('Bearer '+_sharedPreferences.getString(Preferences.token)!).then((http) async {
+    return _appService
+        .verify('Bearer ' + _sharedPreferences.getString(Preferences.token)!)
+        .then((http) async {
       if (http.response.statusCode != 200) {
         return false;
       }
       final authenticationStatus = http.response.data["AUTHENTICATION_STATUS"];
-      bool isSuccess = authenticationStatus is bool ? authenticationStatus : authenticationStatus.toLowerCase() == 'true';
+      bool isSuccess = authenticationStatus is bool
+          ? authenticationStatus
+          : authenticationStatus.toLowerCase() == 'true';
 
       return isSuccess;
     });
@@ -95,9 +108,11 @@ class Authenticator {
     });
   }
 
-  Future<bool> changePassword(String id, String oldPassword, String newPassword) async {
+  Future<bool> changePassword(
+      String id, String oldPassword, String newPassword) async {
     return _appService
-        .changePassword(id, _requestFactory.changePassword(oldPassword, newPassword))
+        .changePassword(
+            id, _requestFactory.changePassword(oldPassword, newPassword))
         .then((http) async {
       final msg = http.response.data["message"];
       return (http.response.statusCode != 200);

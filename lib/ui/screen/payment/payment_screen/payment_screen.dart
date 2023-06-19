@@ -1,18 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:nfc_e_wallet/ui/screen/payment/payment_screen/bloc/payment_screen_bloc.dart';
 
 import '../../../style/color.dart';
 import '../../app_navigator.dart';
 import '../payment_confirm/payment_confirm.dart';
-import 'payment_screen_bloc.dart';
-import 'payment_screen_event.dart';
-import 'payment_screen_state.dart';
 
 class PaymentScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (context) => PaymentBloc(),
+      create: (context) => PaymentScreenBloc(),
       child: PaymentPage(),
     );
   }
@@ -20,27 +18,18 @@ class PaymentScreen extends StatelessWidget {
 
 class PaymentPage extends StatelessWidget {
 
+  final TextEditingController amountController = TextEditingController();
+  final TextEditingController messageController = TextEditingController();
+
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<PaymentBloc, PaymentState>(
+    return BlocBuilder<PaymentScreenBloc, PaymentScreenState>(
       builder: (context, state) {
-        int themeIndex = 0;
-        String message = '';
-        String amount = '';
-        if (state is ThemeState) {
-          themeIndex = state.themeIndex;
-        } else if (state is MessageState) {
-          message = state.message;
-        } else if (state is AmountState) {
-          amount = state.amount;
-        }
-        Container buildSuggestButton(context, double suggestIconHeight, String text) {
-          text = '$textđ';
-          return buildRoundButton(suggestIconHeight, text, () {
-            context.read<PaymentBloc>().add(ChangeAmountEvent(text));
-          });
-        }
-
+        int themeIndex = state.themeIndex;
+        String message = state.message;
+        String amount = state.amount;
+        amountController.text = amount;
+        messageController.text = message;
         Decoration themeDecoration = _buildThemeDecoration(themeIndex);
 
         return SafeArea(
@@ -99,8 +88,9 @@ class PaymentPage extends StatelessWidget {
                               AspectRatio(
                                 aspectRatio: 69 / 10,
                                 child: TextFormField(
+                                  controller: amountController,
                                   onChanged: (value) {
-                                    context.read<PaymentBloc>().add(ChangeAmountEvent(value));
+                                    context.read<PaymentScreenBloc>().add(ChangeAmountEvent(value));
                                   },
                                   decoration: InputDecoration(
                                     hoverColor: primaryContainer,
@@ -108,13 +98,13 @@ class PaymentPage extends StatelessWidget {
                                     filled: true,
                                     fillColor: Colors.white,
                                     prefixIcon: const Icon(Icons.search),
-                                    border: UnderlineInputBorder(),
+                                    border: const UnderlineInputBorder(),
                                     contentPadding: const EdgeInsets.symmetric(
                                         vertical: 10, horizontal: 15),
                                     hintText: "Nhập mệnh giá",
                                     suffixIcon: IconButton(
                                       onPressed: () {
-                                        context.read<PaymentBloc>().add(ChangeAmountEvent(''));
+                                        context.read<PaymentScreenBloc>().add(const ChangeAmountEvent(''));
                                       },
                                       icon: const Icon(Icons.clear),
                                     ),
@@ -143,9 +133,10 @@ class PaymentPage extends StatelessWidget {
                                   mainAxisAlignment: MainAxisAlignment.start,
                                   children: [
                                     Expanded(
-                                      child: TextField(
+                                      child: TextFormField(
+                                        controller: messageController,
                                         onChanged: (value) {
-                                          context.read<PaymentBloc>().add(ChangeMessageEvent(value));
+                                          context.read<PaymentScreenBloc>().add(ChangeMessageEvent(value));
                                         },
                                         decoration: InputDecoration(
                                           hoverColor: primaryContainer,
@@ -170,13 +161,13 @@ class PaymentPage extends StatelessWidget {
                                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                                 children: [
                                   buildRoundButton(suggestIconHeight, 'Chuyển tiền', () {
-                                    context.read<PaymentBloc>().add(ChangeMessageEvent('Chuyển tiền'));
+                                    context.read<PaymentScreenBloc>().add(ChangeMessageEvent('Chuyển tiền'));
                                   }),
                                   buildRoundButton(suggestIconHeight, 'Chúc zui', () {
-                                    context.read<PaymentBloc>().add(ChangeMessageEvent('Chúc zui'));
+                                    context.read<PaymentScreenBloc>().add(ChangeMessageEvent('Chúc zui'));
                                   }),
                                   buildRoundButton(suggestIconHeight, 'Hết nợ hết nghĩa!', () {
-                                    context.read<PaymentBloc>().add(ChangeMessageEvent('Hết nợ hết nghĩa!'));
+                                    context.read<PaymentScreenBloc>().add(ChangeMessageEvent('Hết nợ hết nghĩa!'));
                                   }),
                                 ],
                               ),
@@ -205,7 +196,7 @@ class PaymentPage extends StatelessWidget {
                                     Icons.check_circle_outline_rounded,
                                     color: green,
                                   )), () {
-                                context.read<PaymentBloc>().add(ChangeThemeEvent(0));
+                                context.read<PaymentScreenBloc>().add(ChangeThemeEvent(0));
                               }),
                               const SizedBox(width: 5),
                               buildThemeButton(Colors.blue, themeButtonHeight,
@@ -215,7 +206,7 @@ class PaymentPage extends StatelessWidget {
                                         Icons.check_circle_outline_rounded,
                                         color: green,
                                       )), () {
-                                    context.read<PaymentBloc>().add(ChangeThemeEvent(1));
+                                    context.read<PaymentScreenBloc>().add(ChangeThemeEvent(1));
                                   }),
                             ],
                           ),
@@ -230,26 +221,23 @@ class PaymentPage extends StatelessWidget {
                                       color: green,
                                       borderRadius:
                                       BorderRadius.all(Radius.circular(10))),
-                                  child: FittedBox(
-                                    fit: BoxFit.contain,
-                                    child: TextButton(
-                                      onPressed: () {
-                                        showModalBottomSheet(
-                                            context: context,
-                                            shape: const RoundedRectangleBorder(
-                                                borderRadius: BorderRadius.vertical(
-                                                    top: Radius.circular(30))),
-                                            builder: (BuildContext context) {
-                                              return const PaymentConfirm(receiver: "Hiep", phoneNumber: "0827989868", amount: "1.000.000",); //const PaymentConfirm();
-                                            });
-                                      },
-                                      child: const Text(
-                                        'Tiếp tục',
-                                        style: TextStyle(
-                                          color: Colors.white,
-                                          fontSize: 20,
-                                          fontWeight: FontWeight.w200,
-                                        ),
+                                  child: TextButton(
+                                    onPressed: () {
+                                      showModalBottomSheet(
+                                          context: context,
+                                          shape: const RoundedRectangleBorder(
+                                              borderRadius: BorderRadius.vertical(
+                                                  top: Radius.circular(30))),
+                                          builder: (BuildContext context) {
+                                            return const PaymentConfirm(receiver: "Hiep", phoneNumber: "0827989868", amount: "1.000.000",); //const PaymentConfirm();
+                                          });
+                                    },
+                                    child: const Text(
+                                      'Tiếp tục',
+                                      style: TextStyle(
+                                        color: Colors.white,
+                                        fontSize: 20,
+                                        fontWeight: FontWeight.w200,
                                       ),
                                     ),
                                   ))),
@@ -330,7 +318,7 @@ class PaymentPage extends StatelessWidget {
   Container buildSuggestButton(BuildContext context, double suggestIconHeight, String text) {
     text = '$textđ';
     return buildRoundButton(suggestIconHeight, text, () {
-      context.read<PaymentBloc>().add(ChangeAmountEvent(text));
+      context.read<PaymentScreenBloc>().add(ChangeAmountEvent(text));
     });
   }
 

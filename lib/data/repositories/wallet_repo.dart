@@ -18,7 +18,7 @@ class WalletRepo{
 
   Future<Wallet?> createWallet(String name, String type, String cardNumber) async {
     return _appService
-        .createWallet('Bearer '+_sharedPreferences.getString('token')!, _requestFactory.createWallet(name, type, cardNumber))
+        .createWallet(_sharedPreferences.getString('token')!, _requestFactory.createWallet(name, type, cardNumber))
         .then((http) async {
       print(http.response.statusCode);
       print(http.response.data);
@@ -29,7 +29,7 @@ class WalletRepo{
 
   Future<List<Wallet>?> getListWallet(String userId) async {
     return _appService
-        .getWalletByUserId(userId, 'Bearer ' + _sharedPreferences.getString('token')!)
+        .getWalletByUserId(userId, _sharedPreferences.getString('token')!)
         .then((http) async {
       if (http.response.statusCode != 200) {
         return null;
