@@ -35,21 +35,17 @@ class _LoginFormState extends State<LoginForm> {
     return BlocListener<AuthenticationBloc, AuthenticationInfoState>(
         listener: (context, state) {
           if(state.isloggedin == authenticateStatus.Activate) {
-            SmartDialog.dismiss();
             print("listener triggered "+state.isloggedin.toString());
           }
           if (state.isloggedin == authenticateStatus.unAuthorized) {
             ToastHelper.showToast(L10n.of(context).signInFailed, status: ToastStatus.failure);
-            SmartDialog.dismiss();
             print("listener triggered "+state.isloggedin.toString());
           }
           if (state.isloggedin == authenticateStatus.Authorizing) {
-            SmartDialog.showLoading(msg: "Logging in...");
             print("listener triggered "+state.isloggedin.toString());
           }
           if (state.isloggedin == authenticateStatus.Authorized) {
             ToastHelper.showToast(L10n.of(context).signInSuccess, status: ToastStatus.success);
-            SmartDialog.dismiss();
             Navigator.pushReplacement(
               context,
               MaterialPageRoute(builder: (context) => const RootApp()),
@@ -61,7 +57,7 @@ class _LoginFormState extends State<LoginForm> {
             Container(
               height: 250,
               width: double.infinity,
-              color: Color(0xFF3F63F6),
+              color: primary,
             ),
             SafeArea(
               child: Padding(

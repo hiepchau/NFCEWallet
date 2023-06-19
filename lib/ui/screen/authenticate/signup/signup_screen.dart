@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:intl/intl.dart';
 import '../../../../l10n/l10n.dart';
 import '../../../../utils/toast_helper.dart';
 import '../../../style/color.dart';
@@ -29,6 +30,7 @@ class _SignUpFormState extends State<SignUpForm> {
   final _repeatPasswordController = TextEditingController();
   final _fullNameController = TextEditingController();
   final _identifyIDController = TextEditingController();
+  final _dobController = TextEditingController();
   DateTime _dob = DateTime.now();
 
   @override
@@ -51,7 +53,7 @@ class _SignUpFormState extends State<SignUpForm> {
           Container(
             height: 250,
             width: double.infinity,
-            color: Color(0xFF3F63F6),
+            color: primary,
           ),
           SafeArea(
             child: Padding(
@@ -153,14 +155,17 @@ class _SignUpFormState extends State<SignUpForm> {
                             if (pickedDate != null && pickedDate != _dob)
                               setState(() {
                                 _dob = pickedDate;
+                                _dobController.text = DateFormat.yMd().format(_dob);
                               });
                           },
                           child: AbsorbPointer(
                             child: TextField(
+                              controller: _dobController,
                               decoration: InputDecoration(
                                 hintText: 'Date of Birth ${_dob.toLocal()}'.split(' ')[0],
                                 border: OutlineInputBorder(borderRadius: BorderRadius.circular(8.0)),
                               ),
+                              readOnly: true,
                             ),
                           ),
                         ),

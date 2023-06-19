@@ -1,6 +1,7 @@
 import 'package:dio/dio.dart';
 import 'package:logger/logger.dart';
 
+import 'loading_manager.dart';
 import 'logging_interceptor.dart';
 
 class DioFactory {
@@ -21,5 +22,6 @@ class DioFactory {
   Dio create(Logger logger) => Dio(_createBaseOptions())
     ..interceptors.addAll([
       LoggerInterceptor(logger),
+      LoadingInterceptor(),
     ]);
 }
