@@ -10,12 +10,12 @@ part 'wallet_event.dart';
 part 'wallet_state.dart';
 
 class WalletBloc extends Bloc<WalletEvent, WalletState> {
-  WalletBloc() : super(WalletInitialState()) {
+  WalletBloc() : super(WalletState()) {
     on<InitWalletEvent>((event, emit) async {
       var walletRepo = GetIt.instance.get<WalletRepo>();
       try {
         final listWallet = await walletRepo.getListWallet(event.userId);
-        if (listWallet == null) {
+        if (listWallet != null) {
           emit(WalletReadyState(listWallet));
         }
       } catch (exception) {

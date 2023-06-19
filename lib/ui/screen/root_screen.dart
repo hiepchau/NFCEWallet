@@ -2,9 +2,9 @@ import 'package:animated_bottom_navigation_bar/animated_bottom_navigation_bar.da
 import 'package:flutter/material.dart';
 import 'package:flutter_font_icons/flutter_font_icons.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:nfc_e_wallet/ui/widgets/shortcut_widget/shortcut_panel.dart';
 
 import '../style/color.dart';
-import '../widgets/shortcut_panel.dart';
 import 'account/account_page.dart';
 import 'dashboard_page.dart';
 import 'history/history_page.dart';

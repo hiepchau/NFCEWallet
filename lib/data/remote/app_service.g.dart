@@ -304,7 +304,7 @@ class _AppService implements AppService {
     )
             .compose(
               _dio.options,
-              '/wallet/{user_id}',
+              '/wallet/${id}',
               queryParameters: queryParameters,
               data: _data,
             )
@@ -316,7 +316,7 @@ class _AppService implements AppService {
 
   @override
   Future<HttpResponse<ListModelResponse>> getWalletByUserId(
-    String id,
+    String userId,
     String token,
   ) async {
     const _extra = <String, dynamic>{};
@@ -332,7 +332,7 @@ class _AppService implements AppService {
     )
             .compose(
               _dio.options,
-              '/wallet/{user_id}',
+              '/wallet/${userId}',
               queryParameters: queryParameters,
               data: _data,
             )

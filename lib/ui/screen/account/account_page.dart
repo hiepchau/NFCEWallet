@@ -1,7 +1,11 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:nfc_e_wallet/data/model/wallet.dart';
 import 'package:nfc_e_wallet/ui/screen/wallet/bloc/wallet_bloc.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import '../../../data/preferences.dart';
 import '../../../wallet_list.dart';
 import '../../style/color.dart';
 import '../../style/constants.dart';
@@ -19,12 +23,21 @@ class _AccountPage extends State<AccountPage> {
   late WalletBloc walletBloc;
   bool isVisible = false;
 
+  late SharedPreferences prefs;
+  late Map<String, dynamic> user;
+  Future<void> loadUser() async {
+    walletBloc = WalletBloc();
+    prefs = await SharedPreferences.getInstance();
+    user = jsonDecode(prefs.getString(Preferences.user)!);
+    walletBloc.add(InitWalletEvent(user["id"].toString()));
+  }
+
+
   @override
   void initState() {
     super.initState();
-    walletBloc = WalletBloc();
+    loadUser();
     //PASS USER ID
-    walletBloc.add(InitWalletEvent("1"));
   }
 
   @override

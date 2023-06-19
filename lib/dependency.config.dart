@@ -61,13 +61,13 @@ Future<_i1.GetIt> $initGetIt(
     gh<_i5.RequestFactory>(),
     gh<_i3.EventBus>(),
   ));
-  gh.factory<_i10.TransactionRepo>(() => registerModule.transactionRepo(
-        gh<_i4.Logger>(),
-        gh<_i6.SharedPreferences>(),
-        gh<_i8.AppService>(),
-        gh<_i5.RequestFactory>(),
-        gh<_i3.EventBus>(),
-      ));
+  gh.singleton<_i10.TransactionRepo>(registerModule.transactionRepo(
+    gh<_i4.Logger>(),
+    gh<_i6.SharedPreferences>(),
+    gh<_i8.AppService>(),
+    gh<_i5.RequestFactory>(),
+    gh<_i3.EventBus>(),
+  ));
   gh.singleton<_i11.UserRepo>(registerModule.userRepo(
     gh<_i4.Logger>(),
     gh<_i6.SharedPreferences>(),
@@ -75,13 +75,13 @@ Future<_i1.GetIt> $initGetIt(
     gh<_i5.RequestFactory>(),
     gh<_i3.EventBus>(),
   ));
-  gh.factory<_i12.WalletRepo>(() => registerModule.walletRepo(
-        gh<_i4.Logger>(),
-        gh<_i6.SharedPreferences>(),
-        gh<_i8.AppService>(),
-        gh<_i5.RequestFactory>(),
-        gh<_i3.EventBus>(),
-      ));
+  gh.singleton<_i12.WalletRepo>(registerModule.walletRepo(
+    gh<_i4.Logger>(),
+    gh<_i6.SharedPreferences>(),
+    gh<_i8.AppService>(),
+    gh<_i5.RequestFactory>(),
+    gh<_i3.EventBus>(),
+  ));
   return getIt;
 }
 

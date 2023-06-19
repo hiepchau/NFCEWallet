@@ -35,6 +35,7 @@ class WalletRepo{
         return null;
       }
       else{
+        print(http.data.toJson());
         return http.data.toListWallet();
       }
     });
