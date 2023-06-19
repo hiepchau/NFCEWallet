@@ -1,8 +1,8 @@
-import 'package:ewallet/pages/payment_success_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import '../../style/color.dart';
 import 'package:flutter/foundation.dart' show kIsWeb;
+import '../payment/payment_success/payment_success_screen.dart';
 
 class HistoryWidget extends StatefulWidget {
   const HistoryWidget({
@@ -31,7 +31,11 @@ class _HistoryWidget extends State<HistoryWidget> {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: () {Navigator.of(context).push(MaterialPageRoute(builder: (context)=> PaymentSuccessScreen()));},
+      onTap: () {Navigator.of(context).push(MaterialPageRoute(builder: (context)=> PaymentSuccessScreen(sender: '',
+        recipient: '',
+        phoneNumber: '',
+        message: '',
+        paymentTime: '',)));},
       child: Container(
         width: MediaQuery.of(context).size.width,
         decoration: BoxDecoration(

@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_font_icons/flutter_font_icons.dart';
-import '../../style/color.dart';
+import '../style/color.dart';
 
-class AccountWidget extends StatelessWidget {
+class ProfileWidget extends StatelessWidget {
   final IconData icon;
   final Color iconColor;
   final String title;
@@ -11,7 +11,7 @@ class AccountWidget extends StatelessWidget {
   final Color color;
   final Function onTap;
 
-  const AccountWidget({
+  const ProfileWidget({
     Key? key,
     required this.icon,
     required this.iconColor,

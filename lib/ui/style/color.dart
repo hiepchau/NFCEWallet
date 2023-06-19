@@ -21,6 +21,7 @@ const Color blue = Color(0xFF2094FF);
 const Color yellow = Color(0xFFFED200);
 const Color neon = Color(0xFF0FFdc1);
 const Color red = Color(0xFFff3b30);
+const Color green1 = Color(0xFF99e86c);
 const Color green = Color.fromRGBO(4, 201, 121, 1);
 const Color teal = Color(0xFF009688);
 const Color purple = Color(0xFF9c27b0);
