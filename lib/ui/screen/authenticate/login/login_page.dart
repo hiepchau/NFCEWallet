@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:nfc_e_wallet/utils/toast_helper.dart';
 import '../../../../l10n/l10n.dart';
 import '../../../style/color.dart';
@@ -33,8 +34,22 @@ class _LoginFormState extends State<LoginForm> {
   Widget build(BuildContext context) {
     return BlocListener<AuthenticationBloc, AuthenticationInfoState>(
         listener: (context, state) {
+          if(state.isloggedin == authenticateStatus.Activate) {
+            SmartDialog.dismiss();
+            print("listener triggered "+state.isloggedin.toString());
+          }
+          if (state.isloggedin == authenticateStatus.unAuthorized) {
+            ToastHelper.showToast(L10n.of(context).signInFailed, status: ToastStatus.failure);
+            SmartDialog.dismiss();
+            print("listener triggered "+state.isloggedin.toString());
+          }
+          if (state.isloggedin == authenticateStatus.Authorizing) {
+            SmartDialog.showLoading(msg: "Logging in...");
+            print("listener triggered "+state.isloggedin.toString());
+          }
           if (state.isloggedin == authenticateStatus.Authorized) {
             ToastHelper.showToast(L10n.of(context).signInSuccess, status: ToastStatus.success);
+            SmartDialog.dismiss();
             Navigator.pushReplacement(
               context,
               MaterialPageRoute(builder: (context) => const RootApp()),

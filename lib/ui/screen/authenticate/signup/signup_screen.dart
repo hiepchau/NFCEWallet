@@ -6,7 +6,6 @@ import '../../../style/color.dart';
 import '../../otp/otp_screen.dart';
 import 'signup_bloc.dart';
 
-
 class SignUpPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
@@ -121,6 +120,49 @@ class _SignUpFormState extends State<SignUpForm> {
                           ),
                           onChanged: (value) {
                           },
+                        ),
+                        SizedBox(height: 24.0),
+                        TextField(
+                          controller: _fullNameController,
+                          decoration: InputDecoration(
+                            hintText: 'Your full name',
+                            border: OutlineInputBorder(borderRadius: BorderRadius.circular(8.0)),
+                          ),
+                          onChanged: (value) {
+                          },
+                        ),
+                        SizedBox(height: 24.0),
+                        TextField(
+                          controller: _identifyIDController,
+                          decoration: InputDecoration(
+                            hintText: 'Your identify ID',
+                            border: OutlineInputBorder(borderRadius: BorderRadius.circular(8.0)),
+                          ),
+                          onChanged: (value) {
+                          },
+                        ),
+                        SizedBox(height: 24.0),
+                        GestureDetector(
+                          onTap: () async {
+                            final DateTime? pickedDate = await showDatePicker(
+                              context: context,
+                              initialDate: _dob,
+                              firstDate: DateTime(1900),
+                              lastDate: DateTime.now(),
+                            );
+                            if (pickedDate != null && pickedDate != _dob)
+                              setState(() {
+                                _dob = pickedDate;
+                              });
+                          },
+                          child: AbsorbPointer(
+                            child: TextField(
+                              decoration: InputDecoration(
+                                hintText: 'Date of Birth ${_dob.toLocal()}'.split(' ')[0],
+                                border: OutlineInputBorder(borderRadius: BorderRadius.circular(8.0)),
+                              ),
+                            ),
+                          ),
                         ),
                         SizedBox(height: 16),
                         Container(

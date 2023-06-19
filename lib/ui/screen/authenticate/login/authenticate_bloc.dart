@@ -12,18 +12,20 @@ part 'authenticate_state.dart';
 class AuthenticationBloc extends Bloc<AuthenticationEvent, AuthenticationInfoState> {
   AuthenticationBloc() : super(AuthenticationInfoState()) {
     on<LoginEvent>((event, emit) async {
-      // var authenticator = GetIt.instance.get<Authenticator>();
+      var authenticator = GetIt.instance.get<Authenticator>();
+      emit(AuthenticationInfoState(authenStatus: authenticateStatus.Authorizing));
       try
       {
-        emit(AuthenticationInfoState(authenStatus: authenticateStatus.Authorized));
-        //FAKE DATA LOGIN
-        // bool loginstate = await authenticator.login(
-        //     event.phoneNumber as String, event.password as String);
-        // emit(AuthenticationInfoState(authenStatus: authenticateStatus.Authorizing));
-        // if(loginstate) {
-        //   print("Login success");
-        //   emit(AuthenticationInfoState(authenStatus: authenticateStatus.Authorized));
-        // }
+        bool loginstate = await authenticator.login(
+            event.phoneNumber as String, event.password as String);
+
+        if(loginstate) {
+          print("Login success");
+          emit(AuthenticationInfoState(authenStatus: authenticateStatus.Authorized));
+        } else {
+          print("Log in failed");
+          emit(AuthenticationInfoState(authenStatus: authenticateStatus.unAuthorized));
+        }
       }
       catch(e)
       {
@@ -31,6 +33,7 @@ class AuthenticationBloc extends Bloc<AuthenticationEvent, AuthenticationInfoSta
           print(e.response!.data);
         }
         print("Log in failed");
+
         emit(AuthenticationInfoState(authenStatus: authenticateStatus.unAuthorized));
       }
     });
