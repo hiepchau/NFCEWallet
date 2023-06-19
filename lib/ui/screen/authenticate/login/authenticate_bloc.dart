@@ -32,7 +32,7 @@ class AuthenticationBloc extends Bloc<AuthenticationEvent, AuthenticationInfoSta
         if(e is DioError){
           print(e.response!.data);
         }
-        print("Log in failed due to exception: $e");
+        print("Log in failed");
 
         emit(AuthenticationInfoState(authenStatus: authenticateStatus.unAuthorized));
       }
