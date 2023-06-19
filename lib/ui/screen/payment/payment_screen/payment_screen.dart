@@ -1,12 +1,17 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:nfc_e_wallet/data/preferences.dart';
 import 'package:nfc_e_wallet/ui/screen/payment/payment_screen/bloc/payment_screen_bloc.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../../style/color.dart';
-import '../../app_navigator.dart';
 import '../payment_confirm/payment_confirm.dart';
 
 class PaymentScreen extends StatelessWidget {
+  const PaymentScreen({super.key});
+
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
@@ -16,10 +21,29 @@ class PaymentScreen extends StatelessWidget {
   }
 }
 
-class PaymentPage extends StatelessWidget {
+class PaymentPage extends StatefulWidget{
+  const PaymentPage({super.key});
+  @override
+  State<PaymentPage> createState() => PaymentPageState();
+}
+
+class PaymentPageState extends State<PaymentPage> {
 
   final TextEditingController amountController = TextEditingController();
   final TextEditingController messageController = TextEditingController();
+
+  late SharedPreferences prefs;
+  late Map<String, dynamic> user;
+  Future<void> loadUser() async {
+    prefs = await SharedPreferences.getInstance();
+    user = jsonDecode(prefs.getString(Preferences.user)!);
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    loadUser();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -74,13 +98,12 @@ class PaymentPage extends StatelessWidget {
                                         crossAxisAlignment:
                                         CrossAxisAlignment.start,
                                         mainAxisSize: MainAxisSize.min,
-                                        children: const [
-                                          Text('Nguyễn Văn A',
-                                              style: TextStyle(
+                                        children: [
+                                          Text(user["full_name"],
+                                              style: const TextStyle(
                                                 fontSize: 20,
                                                 fontWeight: FontWeight.w500,
                                               )),
-                                          Text('Số dư: 900.000đ')
                                         ],
                                       )
                                     ]),

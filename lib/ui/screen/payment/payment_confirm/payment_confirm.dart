@@ -3,12 +3,10 @@ import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:nfc_e_wallet/ui/screen/payment/payment_confirm/bloc/payment_confirm_bloc.dart';
 
 import '../../../style/color.dart';
 import '../../../widgets/dashed_line.dart';
-import 'payment_confirm_bloc.dart';
-import 'payment_confirm_event.dart';
-import 'payment_confirm_state.dart';
 import '../payment_success/payment_success_screen.dart';
 
 class PaymentConfirm extends StatelessWidget {
@@ -28,7 +26,7 @@ class PaymentConfirm extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (context) => PaymentBloc()
+      create: (context) => PaymentConfirmBloc()
         ..add(InitializePaymentEvent(
             amount: this.amount,
             receiver: this.receiver,
@@ -46,20 +44,13 @@ class _paymentConfirmPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<PaymentBloc, PaymentState>(builder: (context, state) {
+    return BlocBuilder<PaymentConfirmBloc, PaymentConfirmState>(builder: (context, state) {
       // Placeholder values to be replaced by actual data from the state
-      String amount = '';
-      String receiver = '';
-      String phoneNumber = '';
-      String? message = '';
+      String amount = state.amount;
+      String receiver = state.receiver;
+      String phoneNumber = state.phoneNumber;
+      String? message = state.message;
 
-      if (state is PaymentUpdatedState) {
-        // Replace the placeholder values with the actual data from the state
-        amount = state.amount;
-        receiver = state.receiver;
-        phoneNumber = state.phoneNumber;
-        message = state.message;
-      }
       return Column(
         children: [
           Expanded(
