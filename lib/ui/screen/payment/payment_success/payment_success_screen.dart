@@ -9,17 +9,11 @@ import '../../../style/color.dart';
 import '../../app_navigator.dart';
 
 class PaymentSuccessScreen extends StatelessWidget {
-  final String sender;
-  final String recipient;
-  final String message;
-  final String paymentTime;
+  final Map<String, dynamic> transaction;
 
   const PaymentSuccessScreen({
     Key? key,
-    required this.sender,
-    required this.recipient,
-    required this.message,
-    required this.paymentTime,
+    required this.transaction
   }) : super(key: key);
 
   List<Widget> buildLines(List<List<String>> lines, BuildContext context) {
@@ -57,7 +51,7 @@ class PaymentSuccessScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-        create: (context) => PaymentSuccessBloc(),
+        create: (context) => PaymentSuccessBloc()..add(InitPaymentSuccessEvent(transaction)),
         child: BlocBuilder<PaymentSuccessBloc, PaymentSuccessState>(
           builder: (context, state) {
               return SafeArea(

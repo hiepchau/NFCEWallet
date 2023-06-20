@@ -36,7 +36,7 @@ class OTPScreen extends StatelessWidget {
                   status: ToastStatus.success);
               Navigator.push(
                 context,
-                MaterialPageRoute(builder: (context) => PaymentSuccessScreen(sender: state.data["from_User"], recipient: state.data["to_User"], message: state.data["message"], paymentTime: state.data["time"],)),
+                MaterialPageRoute(builder: (context) => PaymentSuccessScreen(transaction: state.data,)),
               );
             }
           } else if (state is OtpFailure) {

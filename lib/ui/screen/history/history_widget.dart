@@ -31,11 +31,11 @@ class _HistoryWidget extends State<HistoryWidget> {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: () {Navigator.of(context).push(MaterialPageRoute(builder: (context)=> PaymentSuccessScreen(sender: '',
-        recipient: '',
-        phoneNumber: '',
-        message: '',
-        paymentTime: '',)));},
+      // onTap: () {Navigator.of(context).push(MaterialPageRoute(builder: (context)=> PaymentSuccessScreen(sender: '',
+      //   recipient: '',
+      //   phoneNumber: '',
+      //   message: '',
+      //   paymentTime: '',)));},
       child: Container(
         width: MediaQuery.of(context).size.width,
         decoration: BoxDecoration(
