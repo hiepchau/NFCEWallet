@@ -32,8 +32,12 @@ abstract class AppService {
   @POST("/user/change_password/{id}")
   Future<HttpResponse> changePassword(@Path('id') String id, @Body() Map<String, dynamic> request);
 
-  @GET("/user/{id}}")
+  @GET("/user/{id}")
   Future<HttpResponse<BaseResponse>> getUser(@Path('id') String id, @Header('Authorization') String token);
+
+  @GET("/user/get_user_by_phone_number/{phone_number}")
+  Future<HttpResponse<BaseResponse>> getUserByPhoneNumber(
+      @Path('phone_number') String phoneNumber, @Header('Authorization') String token);
 
   @POST("/transaction/create_transfer")
   Future<HttpResponse> createTransferTransaction(@Header('Authorization') String token, @Body() Map<String, dynamic> request);

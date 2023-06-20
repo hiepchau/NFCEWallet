@@ -19,6 +19,12 @@ class ChangeMessageEvent extends PaymentScreenEvent {
   const ChangeMessageEvent(this.message);
 }
 
+class ChangePhoneNumberEvent extends PaymentScreenEvent {
+  final String phoneNumber;
+
+  const ChangePhoneNumberEvent(this.phoneNumber);
+}
+
 class ChangeAmountEvent extends PaymentScreenEvent {
   final String amount;
 

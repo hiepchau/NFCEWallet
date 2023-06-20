@@ -30,9 +30,9 @@ class PaymentPage extends StatefulWidget{
 }
 
 class PaymentPageState extends State<PaymentPage> {
-  late PaymentScreenBloc paymentScreenBloc;
   final TextEditingController amountController = TextEditingController();
   final TextEditingController messageController = TextEditingController();
+  final TextEditingController phoneNumberController = TextEditingController();
 
   late Map<String, dynamic> user;
 
@@ -49,8 +49,10 @@ class PaymentPageState extends State<PaymentPage> {
         int themeIndex = state.themeIndex;
         String message = state.message;
         String amount = state.amount;
+        String phoneNumber = state.phoneNumber;
         amountController.text = amount;
         messageController.text = message;
+        phoneNumberController.text = phoneNumber;
 
         Decoration themeDecoration = _buildThemeDecoration(themeIndex);
 
@@ -76,64 +78,87 @@ class PaymentPageState extends State<PaymentPage> {
                         return Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              AspectRatio(
-                                aspectRatio: 26 / 5,
-                                child: Row(
-                                    crossAxisAlignment: CrossAxisAlignment.center,
-                                    children: [
-                                      Padding(
-                                        padding: const EdgeInsets.only(right: 10.0),
-                                        child: SizedBox(
-                                          width: 50,
-                                          height: 50,
-                                          child: CircleAvatar(
-                                            child: Image.asset(
-                                                'assets/images/icons/avatar.png'),
-                                          ),
+                              Row(
+                                  crossAxisAlignment: CrossAxisAlignment.center,
+                                  children: [
+                                    Padding(
+                                      padding: const EdgeInsets.only(right: 10.0),
+                                      child: SizedBox(
+                                        width: 50,
+                                        height: 50,
+                                        child: CircleAvatar(
+                                          child: Image.asset(
+                                              'assets/images/icons/avatar.png'),
                                         ),
                                       ),
-                                      Column(
-                                        crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                        mainAxisSize: MainAxisSize.min,
-                                        children: [
-                                          Text(user["full_name"],
-                                              style: const TextStyle(
-                                                fontSize: 20,
-                                                fontWeight: FontWeight.w500,
-                                              )),
-                                        ],
-                                      )
-                                    ]),
-                              ),
-                              AspectRatio(
-                                aspectRatio: 69 / 10,
-                                child: TextFormField(
-                                  controller: amountController,
-                                  onChanged: (value) {
-                                    context.read<PaymentScreenBloc>().add(ChangeAmountEvent(value));
-                                  },
-                                  decoration: InputDecoration(
-                                    hoverColor: primaryContainer,
-                                    focusColor: primary,
-                                    filled: true,
-                                    fillColor: Colors.white,
-                                    prefixIcon: const Icon(Icons.search),
-                                    border: const UnderlineInputBorder(),
-                                    contentPadding: const EdgeInsets.symmetric(
-                                        vertical: 10, horizontal: 15),
-                                    hintText: "Nhập mệnh giá",
-                                    suffixIcon: IconButton(
-                                      onPressed: () {
-                                        context.read<PaymentScreenBloc>().add(const ChangeAmountEvent(''));
-                                      },
-                                      icon: const Icon(Icons.clear),
                                     ),
+                                    Column(
+                                      crossAxisAlignment:
+                                      CrossAxisAlignment.start,
+                                      mainAxisSize: MainAxisSize.min,
+                                      children: [
+                                        Text(user["full_name"],
+                                            style: const TextStyle(
+                                              fontSize: 20,
+                                              fontWeight: FontWeight.w500,
+                                            )),
+                                      ],
+                                    )
+                                  ]),
+                              SizedBox(height: 15,),
+                              TextFormField(
+                                controller: phoneNumberController,
+                                onFieldSubmitted: (value) {
+                                  context
+                                      .read<PaymentScreenBloc>()
+                                      .add(ChangePhoneNumberEvent(value));
+                                },
+                                decoration: InputDecoration(
+                                  hoverColor: primaryContainer,
+                                  focusColor: primary,
+                                  filled: true,
+                                  fillColor: Colors.white,
+                                  prefixIcon: const Icon(Icons.search),
+                                  border: const UnderlineInputBorder(),
+                                  contentPadding: const EdgeInsets.symmetric(
+                                      vertical: 10, horizontal: 15),
+                                  hintText: "Nhập số điện thoại người nhận",
+                                  suffixIcon: IconButton(
+                                    onPressed: () {
+                                      context
+                                          .read<PaymentScreenBloc>()
+                                          .add(const ChangePhoneNumberEvent(''));
+                                    },
+                                    icon: const Icon(Icons.clear),
+                                  ),
+                                ),
+                              ),
+                              SizedBox(height: 15,),
+                              TextFormField(
+                                controller: amountController,
+                                onFieldSubmitted: (value) {
+                                  context.read<PaymentScreenBloc>().add(ChangeAmountEvent(value));
+                                },
+                                decoration: InputDecoration(
+                                  hoverColor: primaryContainer,
+                                  focusColor: primary,
+                                  filled: true,
+                                  fillColor: Colors.white,
+                                  prefixIcon: const Icon(Icons.monetization_on_outlined),
+                                  border: const UnderlineInputBorder(),
+                                  contentPadding: const EdgeInsets.symmetric(
+                                      vertical: 10, horizontal: 15),
+                                  hintText: "Nhập mệnh giá",
+                                  suffixIcon: IconButton(
+                                    onPressed: () {
+                                      context.read<PaymentScreenBloc>().add(const ChangeAmountEvent(''));
+                                    },
+                                    icon: const Icon(Icons.clear),
                                   ),
                                 ),
                               ),
                               SizedBox(
-                                height: 10,
+                                height: 15,
                               ),
                               Row(
                                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -146,37 +171,34 @@ class PaymentPageState extends State<PaymentPage> {
                                 ],
                               ),
                               SizedBox(
-                                height: 20,
+                                height: 15,
                               ),
-                              AspectRatio(
-                                aspectRatio: 344 / 35,
-                                child: Row(
-                                  mainAxisAlignment: MainAxisAlignment.start,
-                                  children: [
-                                    Expanded(
-                                      child: TextFormField(
-                                        controller: messageController,
-                                        onChanged: (value) {
-                                          context.read<PaymentScreenBloc>().add(ChangeMessageEvent(value));
-                                        },
-                                        decoration: InputDecoration(
-                                          hoverColor: primaryContainer,
-                                          focusColor: primary,
-                                          filled: true,
-                                          fillColor: Colors.white,
-                                          prefixIcon: const Icon(Icons.message),
-                                          contentPadding:
-                                          const EdgeInsets.symmetric(
-                                              vertical: 10, horizontal: 15),
-                                          hintText: 'Bạn nhớ nhập lời nhắn nhé',
-                                        ),
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                children: [
+                                  Expanded(
+                                    child: TextFormField(
+                                      controller: messageController,
+                                      onFieldSubmitted: (value) {
+                                        context.read<PaymentScreenBloc>().add(ChangeMessageEvent(value));
+                                      },
+                                      decoration: InputDecoration(
+                                        hoverColor: primaryContainer,
+                                        focusColor: primary,
+                                        filled: true,
+                                        fillColor: Colors.white,
+                                        prefixIcon: const Icon(Icons.message),
+                                        contentPadding:
+                                        const EdgeInsets.symmetric(
+                                            vertical: 10, horizontal: 15),
+                                        hintText: 'Bạn nhớ nhập lời nhắn nhé',
                                       ),
-                                    )
-                                  ],
-                                ),
+                                    ),
+                                  )
+                                ],
                               ),
                               SizedBox(
-                                height: 20,
+                                height: 15,
                               ),
                               Row(
                                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -250,7 +272,7 @@ class PaymentPageState extends State<PaymentPage> {
                                               borderRadius: BorderRadius.vertical(
                                                   top: Radius.circular(30))),
                                           builder: (BuildContext context) {
-                                            return const PaymentConfirm(receiver: "Hiep", phoneNumber: "0827989868", amount: "1.000.000",); //const PaymentConfirm();
+                                            return PaymentConfirm(phoneNumber: phoneNumber, amount: amount, message: message); //const PaymentConfirm();
                                           });
                                     },
                                     child: const Text(

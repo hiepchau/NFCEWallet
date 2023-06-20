@@ -76,7 +76,7 @@ class _SelectTransferPage extends State<SelectTransferPage> {
                           icon: FontAwesomeIcons.creditCard,
                           iconColor: black,
                           title: 'Đến tài khoản ngân hàng',
-                          subtitle: "Chuyển đến số tài khoản hoặc số thẻ",
+                          subtitle: "Chuyển đến số tài khoản",
                           onTap: () => Navigator.of(context).push(
                             MaterialPageRoute(
                                 builder: ((context) => PaymentScreen())),
@@ -103,14 +103,29 @@ class _SelectTransferPage extends State<SelectTransferPage> {
                             indicatorColor: primary,
                             labelColor: primary,
                             tabs: const [
-                              Text(
-                                "Gần đây",
+                              SizedBox(
+                                width: 100,
+                                child: Center(
+                                  child: Text(
+                                    "Gần đây",
+                                  ),
+                                ),
                               ),
-                              Text(
-                                "Ví",
+                              SizedBox(
+                                width: 50,
+                                child: Center(
+                                  child: Text(
+                                    "Ví",
+                                  ),
+                                ),
                               ),
-                              Text(
-                                "Ngân hàng",
+                              SizedBox(
+                                width: 100,
+                                child: Center(
+                                  child: Text(
+                                    "Ngân hàng",
+                                  ),
+                                ),
                               ),
                             ]),
                       ),

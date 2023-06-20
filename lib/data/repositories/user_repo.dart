@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:convert';
 import 'dart:io';
 
 import 'package:dio/dio.dart';
@@ -23,7 +24,7 @@ class UserRepo{
 
   Future<User?> getUser(String id) async {
     return _appService
-        .getUser(id ,'Bearer '+_sharedPreferences.getString('token')!)
+        .getUser(id ,_sharedPreferences.getString('token')!)
         .then((http) async {
       print(http.response.statusCode);
       if (http.response.statusCode != 200) {
@@ -31,6 +32,19 @@ class UserRepo{
       }
       else{
         return http.data.toUser();
+      }
+    });
+  }
+
+  Future<String?> getUserByPhoneNumber(String phoneNumber) async {
+    return _appService
+        .getUserByPhoneNumber(phoneNumber, _sharedPreferences.getString('token')!)
+        .then((http) async {
+      print(http.response.statusCode);
+      if (http.response.statusCode != 200) {
+        return null;
+      } else {
+        return jsonEncode(http.response.data);
       }
     });
   }

@@ -11,6 +11,9 @@ class PaymentScreenBloc extends Bloc<PaymentScreenEvent, PaymentScreenState> {
     on<ChangeThemeEvent>((event, emit) {
       emit(state.copyWith(themeIndex: event.themeIndex));
     });
+    on<ChangePhoneNumberEvent>((event, emit) {
+      emit(state.copyWith(phoneNumber: event.phoneNumber));
+    });
     on<ChangeMessageEvent>((event, emit) {
       emit(state.copyWith(message: event.message));
     });

@@ -22,13 +22,13 @@ class UpdatePhoneNumberEvent extends PaymentConfirmEvent {
 
 class InitializePaymentEvent extends PaymentConfirmEvent {
   final String amount;
-  final String receiver;
   final String phoneNumber;
   final String? message;
 
   InitializePaymentEvent(
       {required this.amount,
-      required this.receiver,
       required this.phoneNumber,
       this.message});
 }
+
+class SendPaymentEvent extends PaymentConfirmEvent {}

@@ -1,36 +1,47 @@
 part of 'payment_confirm_bloc.dart';
 
-class PaymentConfirmState{
+class PaymentConfirmState {
   final String amount;
-  final String receiver;
+  final String receiverName;
+  final String receiverWalletId;
   final String phoneNumber;
   final String? message;
+  final bool? isSuccess;
   PaymentConfirmState(
-      {this.amount="",
-       this.receiver="",
-       this.phoneNumber="",
-      this.message=""});
+      {this.amount = "",
+      this.receiverName = "",
+      this.phoneNumber = "",
+      this.receiverWalletId = "",
+      this.message = "",
+      this.isSuccess});
   PaymentConfirmState copyWith(
-      {String? amount, String? receiver, String? phoneNumber, String? message}) {
+      {String? amount,
+      String? receiverName,
+      String? phoneNumber,
+      String? message,
+      String? receiverWalletId,
+      bool? isSuccess}) {
     return PaymentConfirmState(
         amount: amount ?? this.amount,
-        receiver: receiver ?? this.receiver,
+        receiverName: receiverName ?? this.receiverName,
         phoneNumber: phoneNumber ?? this.phoneNumber,
-        message: message ?? this.message);
+        message: message ?? this.message,
+        receiverWalletId: receiverWalletId ?? this.receiverWalletId,
+        isSuccess: isSuccess ?? this.isSuccess);
   }
 }
 
 class PaymentConfirmInitial extends PaymentConfirmState {}
+
 class PaymentLoadingState extends PaymentConfirmState {}
+
 class PaymentUpdatedState extends PaymentConfirmState {
   PaymentUpdatedState(
-      {required amount,
-      required receiver,
-      required phoneNumber,
-      message});
+      {required amount, required receiver, required phoneNumber, message});
 }
-class PaymentErrorState extends PaymentConfirmState {
 
+class PaymentSentState extends PaymentConfirmState {}
+
+class PaymentErrorState extends PaymentConfirmState {
   PaymentErrorState(message);
 }
-

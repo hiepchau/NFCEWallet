@@ -1,7 +1,11 @@
+import 'dart:convert';
+
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:nfc_e_wallet/data/preferences.dart';
+import 'package:nfc_e_wallet/main.dart';
 import 'package:nfc_e_wallet/ui/screen/app_navigator.dart';
 import 'package:nfc_e_wallet/ui/screen/qr/qr_page.dart';
 import 'package:nfc_e_wallet/ui/select_transfer_page.dart';
@@ -19,6 +23,7 @@ class ShortcutPanel extends StatefulWidget {
 }
 
 class _ShortcutPanel extends State<ShortcutPanel> {
+  Map<String, dynamic> user = jsonDecode(prefs.getString(Preferences.user)!);
   bool isVisible = false;
   @override
   Widget build(BuildContext context) {
@@ -109,7 +114,7 @@ class _ShortcutPanel extends State<ShortcutPanel> {
                             children: [
                               Text(
                                 isVisible
-                                    ? "Số dư ví: 900.000.000đ"
+                                    ? "Số dư ví: ${user["wallets"][0]["balance"]}đ"
                                     : "Số dư ví: ************",
                                 style: TextStyle(
                                     color: primary,
