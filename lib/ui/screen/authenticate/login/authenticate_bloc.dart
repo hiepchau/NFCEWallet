@@ -37,25 +37,10 @@ class AuthenticationBloc extends Bloc<AuthenticationEvent, AuthenticationInfoSta
         emit(AuthenticationInfoState(authenStatus: authenticateStatus.unAuthorized));
       }
     });
-    on<LogoutEvent>((event, emit) async {
-      var authenticator = GetIt.instance.get<Authenticator>();
-
-      try{
-        bool logoutstate = await authenticator.logout();
-        if(logoutstate) {
-          print("Logout success");
-          emit(AuthenticationInfoState(authenStatus: authenticateStatus.Activate));
-        }
-      }
-      catch(e){
-        if(e is DioError){
-          print(e.response!.data);
-        }
-        print("Log out failed");
-        emit(AuthenticationInfoState(
-            authenStatus: authenticateStatus.Authorized));
-      }
-    });
+    // on<LogoutEvent>((event, emit) async {
+    //   var authenticator = GetIt.instance.get<Authenticator>();
+    //   await authenticator.logout();
+    // });
   }
 }
 
