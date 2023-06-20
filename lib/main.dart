@@ -7,6 +7,7 @@ import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:nfc_e_wallet/l10n/l10n.dart';
 import 'package:nfc_e_wallet/ui/screen/app_navigator.dart';
 import 'package:nfc_e_wallet/ui/screen/authenticate/login/authenticate_page.dart';
+import 'package:nfc_e_wallet/utils/notification_manager.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'dependency.dart';
 
@@ -17,14 +18,11 @@ late SharedPreferences prefs;
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+
+  await NotificationManager.initialize();
+
   AppNav.init();
   await configureDependencies();
-  const AndroidInitializationSettings initializationSettingsAndroid =
-  AndroidInitializationSettings('@mipmap/ic_launcher');
-  final InitializationSettings initializationSettings =
-  InitializationSettings(android: initializationSettingsAndroid);
-  await flutterLocalNotificationsPlugin.initialize(initializationSettings);
-
   //INIT PREFERENCES
   prefs = await SharedPreferences.getInstance();
 
@@ -58,4 +56,3 @@ void main() async {
       },
       child: AuthenticationPage()));
 }
-
