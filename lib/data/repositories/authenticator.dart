@@ -106,12 +106,20 @@ class Authenticator {
     });
   }
 
-  Future<bool> verifyOtp(String otp, String phoneNumber) async {
+  Future<Map<String, dynamic>?> verifyOtp(
+    String phoneNumber,
+    String otp,
+  ) async {
     return _appService
-        .verifyOtp(_requestFactory.createOtp(otp, phoneNumber))
+        .verifyOtp(_sharedPreferences.getString('token')!,
+            _requestFactory.createOTP(phoneNumber, otp))
         .then((http) async {
-      print("VERIFY OTP: ${http.response.statusCode}");
-      return (http.response.statusCode != 200);
+      print(http.response.statusCode);
+      if (http.response.statusCode != 200) {
+        return null;
+      }
+      
+      return http.response.data;
     });
   }
 

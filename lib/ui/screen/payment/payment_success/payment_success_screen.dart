@@ -4,15 +4,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:nfc_e_wallet/data/preferences.dart';
 import 'package:nfc_e_wallet/main.dart';
+import 'package:nfc_e_wallet/ui/screen/payment/payment_success/bloc/payment_success_bloc.dart';
 import '../../../style/color.dart';
 import '../../app_navigator.dart';
-import 'payment_success_sreen_bloc.dart';
-import 'payment_success_sreen_state.dart';
 
 class PaymentSuccessScreen extends StatelessWidget {
   final String sender;
   final String recipient;
-  final String phoneNumber;
   final String message;
   final String paymentTime;
 
@@ -20,7 +18,6 @@ class PaymentSuccessScreen extends StatelessWidget {
     Key? key,
     required this.sender,
     required this.recipient,
-    required this.phoneNumber,
     required this.message,
     required this.paymentTime,
   }) : super(key: key);
@@ -60,19 +57,9 @@ class PaymentSuccessScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-        create: (context) => PaymentSuccessBloc(
-              sender: sender,
-              recipient: recipient,
-              phoneNumber: phoneNumber,
-              message: message,
-              paymentTime: paymentTime,
-            ),
+        create: (context) => PaymentSuccessBloc(),
         child: BlocBuilder<PaymentSuccessBloc, PaymentSuccessState>(
           builder: (context, state) {
-            if (state is PaymentSuccessLoadingState) {
-              // Render your loading UI
-              return const CircularProgressIndicator();
-            } else if (state is PaymentSuccessLoadedState) {
               return SafeArea(
                   child: Scaffold(
                       body: Stack(children: [
@@ -179,7 +166,7 @@ class PaymentSuccessScreen extends StatelessWidget {
                                         children: buildLines([
                                       ['Người gửi', state.sender],
                                       ['Người nhận', state.recipient],
-                                      ['SĐT', state.phoneNumber],
+                                      ['SĐT', '12345'],
                                       ['Lời nhắn', state.message],
                                       [
                                         'Thời gian thanh toán',
@@ -319,10 +306,6 @@ class PaymentSuccessScreen extends StatelessWidget {
                 ]),
               ])));
               // Handle closure
-            } else if (state is PaymentSuccessFailedState) {
-              return const CircularProgressIndicator();
-            }
-            return Text('Unknown state');
           },
         ));
   }

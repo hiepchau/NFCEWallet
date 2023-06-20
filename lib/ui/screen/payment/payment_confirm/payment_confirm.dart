@@ -17,13 +17,13 @@ import '../payment_success/payment_success_screen.dart';
 
 class PaymentConfirm extends StatelessWidget {
   final String amount;
-  final String phoneNumber;
+  final String receiverPhoneNumber;
   final String? message;
 
   const PaymentConfirm({
     Key? key,
     required this.amount,
-    required this.phoneNumber,
+    required this.receiverPhoneNumber,
     this.message,
   }) : super(key: key);
 
@@ -33,7 +33,7 @@ class PaymentConfirm extends StatelessWidget {
       create: (context) => PaymentConfirmBloc()
         ..add(InitializePaymentEvent(
             amount: this.amount,
-            phoneNumber: this.phoneNumber,
+            phoneNumber: this.receiverPhoneNumber,
             message: this.message)),
       child: Scaffold(
         body: _paymentConfirmPage(),
@@ -56,7 +56,7 @@ class _paymentConfirmPage extends StatelessWidget {
             context,
             MaterialPageRoute(
               builder: (context) =>
-                  OTPScreen(phoneNumber: state.phoneNumber),
+                  OTPScreen(phoneNumber: user["phone_number"]),
             ),
           );
         }

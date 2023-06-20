@@ -272,7 +272,8 @@ class PaymentPageState extends State<PaymentPage> {
                                               borderRadius: BorderRadius.vertical(
                                                   top: Radius.circular(30))),
                                           builder: (BuildContext context) {
-                                            return PaymentConfirm(phoneNumber: phoneNumber, amount: amount, message: message); //const PaymentConfirm();
+                                            return PaymentConfirm(
+                                                receiverPhoneNumber: phoneNumber, amount: amount, message: message); //const PaymentConfirm();
                                           });
                                     },
                                     child: const Text(

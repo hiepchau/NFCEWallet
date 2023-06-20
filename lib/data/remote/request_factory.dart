@@ -6,6 +6,14 @@ import 'package:injectable/injectable.dart';
 @injectable
 class RequestFactory {
   RequestFactory();
+
+  createOTP(String phoneNumber, String otp){
+    return {
+      "otp": otp,
+      "phone_number": phoneNumber,
+    };
+  }
+
   createLogin(String username, String password) {
     return {
       "username": username,

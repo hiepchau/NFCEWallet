@@ -27,7 +27,7 @@ abstract class AppService {
   Future<HttpResponse> verify(@Header('Authorization') String token);
 
   @POST("/verify_otp")
-  Future<HttpResponse> verifyOtp(@Body() Map<String, dynamic> request);
+  Future<HttpResponse> verifyOtp( @Header('Authorization') String token, @Body() Map<String, dynamic> request);
 
   @POST("/user/change_password/{id}")
   Future<HttpResponse> changePassword(@Path('id') String id, @Body() Map<String, dynamic> request);

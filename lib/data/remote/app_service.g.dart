@@ -120,10 +120,14 @@ class _AppService implements AppService {
   }
 
   @override
-  Future<HttpResponse<dynamic>> verifyOtp(Map<String, dynamic> request) async {
+  Future<HttpResponse<dynamic>> verifyOtp(
+    String token,
+    Map<String, dynamic> request,
+  ) async {
     const _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
-    final _headers = <String, dynamic>{};
+    final _headers = <String, dynamic>{r'Authorization': token};
+    _headers.removeWhere((k, v) => v == null);
     final _data = <String, dynamic>{};
     _data.addAll(request);
     final _result =
