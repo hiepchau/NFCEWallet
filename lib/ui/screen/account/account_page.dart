@@ -2,63 +2,67 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:nfc_e_wallet/data/model/wallet.dart';
+import 'package:nfc_e_wallet/ui/screen/authenticate/login/authenticate_bloc.dart';
 import 'package:nfc_e_wallet/ui/screen/wallet/bloc/wallet_bloc.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import '../../../data/preferences.dart';
-import '../../../wallet_list.dart';
 import '../../style/color.dart';
 import '../../style/constants.dart';
 import '../../widgets/profile_widget.dart';
 import '../authenticate/login/login_page.dart';
+import 'account_page_bloc.dart';
 
-class AccountPage extends StatefulWidget {
-  AccountPage({super.key});
+class AccountPage extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      body: MultiBlocProvider(
+        providers: [
+          BlocProvider<AccountPageBloc>(
+            create: (context) => AccountPageBloc(),
+          ),
+          BlocProvider<WalletBloc>(
+            create: (context) => WalletBloc(),
+          ),
+        ],
+        child: AccountScreen(),
+      ),
+    );
+  }
+}
 
+class AccountScreen extends StatefulWidget {
   @override
   _AccountPage createState() => _AccountPage();
 }
 
-class _AccountPage extends State<AccountPage> {
-  late WalletBloc walletBloc;
+class _AccountPage extends State<AccountScreen> {
   bool isVisible = false;
 
   late SharedPreferences prefs;
-  late Map<String, dynamic> user;
-  Future<void> loadUser() async {
-    walletBloc = WalletBloc();
-    prefs = await SharedPreferences.getInstance();
-    user = jsonDecode(prefs.getString(Preferences.user)!);
-    walletBloc.add(InitWalletEvent(user["id"].toString()));
-  }
-
-
-  @override
-  void initState() {
-    super.initState();
-    loadUser();
-    //PASS USER ID
-  }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        backgroundColor: primary,
-        title: Text(
-          'Tài khoản',
-          style: TextStyle(color: onPrimary),
-        ),
-        automaticallyImplyLeading: false,
-      ),
-      body: BlocProvider(
-        create: (context) => WalletBloc(),
-        child: getBody(context),
-      ),
+    final accountBloc = BlocProvider.of<AccountPageBloc>(context);
+    final walletBloc = BlocProvider.of<WalletBloc>(context);
+    return BlocBuilder<AccountPageBloc, AccountPageState>(
+      bloc: accountBloc,
+      builder: (context, state) {
+        return Scaffold(
+          appBar: AppBar(
+            backgroundColor: primary,
+            title: Text(
+              'Tài khoản',
+              style: TextStyle(color: onPrimary),
+            ),
+            automaticallyImplyLeading: false,
+          ),
+          body: getBody(context, walletBloc),
+        );
+      },
     );
   }
 
-  Widget getBody(BuildContext context) {
+  Widget getBody(BuildContext context, WalletBloc walletBloc) {
     return Column(
       children: [
         Expanded(
@@ -72,7 +76,7 @@ class _AccountPage extends State<AccountPage> {
                     maxWidth: MediaQuery.of(context).size.width >= 900
                         ? MediaQuery.of(context).size.width / 2
                         : MediaQuery.of(context).size.width),
-                child: getAccountSection(context),
+                child: getAccountSection(context, walletBloc),
               ),
             ),
           ),
@@ -81,7 +85,8 @@ class _AccountPage extends State<AccountPage> {
     );
   }
 
-  Widget getAccountSection(BuildContext context) {
+  Widget getAccountSection(BuildContext context, WalletBloc wallet) {
+    final isVisible = ValueNotifier(false);
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
       child: Column(
@@ -193,6 +198,7 @@ class _AccountPage extends State<AccountPage> {
                       offset: const Offset(0, 2))
                 ]),
             child: BlocBuilder<WalletBloc, WalletState>(
+              bloc: wallet,
               builder: (context, state) {
                 return Column(children: [
                   Theme(
@@ -200,9 +206,7 @@ class _AccountPage extends State<AccountPage> {
                           .copyWith(dividerColor: Colors.transparent),
                       child: ExpansionTile(
                         onExpansionChanged: (temp) {
-                          setState(() {
-                            isVisible = temp;
-                          });
+                          isVisible.value = temp;
                         },
                         childrenPadding: const EdgeInsets.all(5),
                         title: const Text("Tài khoản/Ví"),
@@ -211,7 +215,7 @@ class _AccountPage extends State<AccountPage> {
                             : _buildNoWallet(),
                       )),
                   Visibility(
-                    visible: isVisible,
+                    visible: isVisible.value,
                     child: Text(
                       "Xem tất cả (3)",
                       style: TextStyle(color: primary),
@@ -286,6 +290,7 @@ class _AccountPage extends State<AccountPage> {
           ),
           GestureDetector(
             onTap: () {
+              context.read<AccountPageBloc>().add(LogoutEvent());
               Navigator.pushAndRemoveUntil(
                   context,
                   MaterialPageRoute(builder: (context) => LoginScreen()),

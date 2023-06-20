@@ -51,16 +51,23 @@ class Authenticator {
     });
   }
 
-  Future<bool> logout() async {
-    return _appService
-        .logout('Bearer ' + _sharedPreferences.getString(Preferences.token)!)
-        .then((http) async {
-      if (http.response.statusCode != 200) {
-        return false;
-      }
-      await _sharedPreferences.remove(Preferences.token);
-      return true;
-    });
+  // Future<bool> logout() async {
+  //   return _appService
+  //       .logout('Bearer ' + _sharedPreferences.getString(Preferences.token)!)
+  //       .then((http) async {
+  //     if (http.response.statusCode != 200) {
+  //       return false;
+  //     }
+  //     await _sharedPreferences.remove(Preferences.token);
+  //     return true;
+  //   });
+  // }
+
+  Future<void> logout() async {
+    await _sharedPreferences.remove(Preferences.token);
+    await _sharedPreferences.remove(Preferences.user);
+    _eventBus.fire(EBAuthenEvent(false));
+    _logger.i("User logged out");
   }
 
   Future<String?> register(String fullName, String password, String phone,
