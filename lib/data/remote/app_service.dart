@@ -55,6 +55,10 @@ abstract class AppService {
   Future<HttpResponse<ListModelResponse>> getWalletByUserId(
       @Path('user_id') String userId, @Header('Authorization') String token);
 
+  @GET("/wallet/get_user_by_wallet/{wallet_id}")
+  Future<HttpResponse> getUserByWallet(
+      @Path('wallet_id') String walletId, @Header('Authorization') String token);
+
   @POST("/transaction/{user_id}")
   Future<HttpResponse<ListModelResponse>> getListWallet(@Path('id') String id, @Header('Authorization') String token);
 

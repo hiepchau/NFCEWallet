@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:intl/intl.dart';
 import 'package:nfc_e_wallet/data/preferences.dart';
 import 'package:nfc_e_wallet/main.dart';
 import 'package:nfc_e_wallet/ui/screen/payment/payment_success/bloc/payment_success_bloc.dart';
@@ -110,7 +111,7 @@ class PaymentSuccessScreen extends StatelessWidget {
                                               ? 20
                                               : 15,
                                       fontWeight: FontWeight.bold)),
-                              Text('500.000đ',
+                              Text(state.amount,
                                   style: TextStyle(
                                       fontSize:
                                           MediaQuery.of(context).size.width >
@@ -160,10 +161,10 @@ class PaymentSuccessScreen extends StatelessWidget {
                                         children: buildLines([
                                       ['Người gửi', state.sender],
                                       ['Người nhận', state.recipient],
-                                      ['SĐT', '12345'],
+                                      ['SĐT', state.phoneNumber],
                                       ['Lời nhắn', state.message],
                                       [
-                                        'Thời gian thanh toán',
+                                        'Thời gian',
                                         state.paymentTime
                                       ],
                                     ], context)),

@@ -18,9 +18,9 @@ class OtpBloc extends Bloc<OtpEvent, OtpState> {
           if (data["type"] == "register") {
             emit(OtpSuccess(type: "register", data: data));
           } else if (data["type"] == "transfer_transaction") {
-            emit(OtpSuccess(type: "transfer_transaction", data: data));
+            emit(OtpSuccess(type: "transfer_transaction", data: data["from_Transaction"]));
           } else if (data["type"] == "transaction") {
-            emit(OtpSuccess(type: "transaction", data: data));
+            emit(OtpSuccess(type: "transaction", data: data["transaction"]));
           }
         } else {
           emit(OtpFailure("Invalid OTP"));

@@ -1,12 +1,13 @@
 import 'package:event_bus/event_bus.dart';
 import 'package:logger/logger.dart';
+import 'package:nfc_e_wallet/data/model/user.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../model/wallet.dart';
 import '../remote/app_service.dart';
 import '../remote/request_factory.dart';
 
-class WalletRepo{
+class WalletRepo {
   final EventBus _eventBus;
   final Logger _logger;
   final SharedPreferences _sharedPreferences;
@@ -16,14 +17,26 @@ class WalletRepo{
   WalletRepo(this._logger, this._sharedPreferences, this._appService,
       this._requestFactory, this._eventBus);
 
-  Future<Wallet?> createWallet(String name, String type, String cardNumber) async {
+  Future<Wallet?> createWallet(
+      String name, String type, String cardNumber) async {
     return _appService
-        .createWallet(_sharedPreferences.getString('token')!, _requestFactory.createWallet(name, type, cardNumber))
+        .createWallet(_sharedPreferences.getString('token')!,
+            _requestFactory.createWallet(name, type, cardNumber))
         .then((http) async {
       print(http.response.statusCode);
       print(http.response.data);
-      if(http.response.statusCode!=200) return null;
+      if (http.response.statusCode != 200) return null;
       return http.response.data.wallet;
+    });
+  }
+
+  Future<Map<String, dynamic>?> getUserByWallet(String walletId) async {
+    return _appService
+        .getUserByWallet(walletId, _sharedPreferences.getString('token')!)
+        .then((http) async {
+      print(http.response.statusCode);
+      if (http.response.statusCode != 200) return null;
+      return http.response.data;
     });
   }
 
@@ -33,8 +46,7 @@ class WalletRepo{
         .then((http) async {
       if (http.response.statusCode != 200) {
         return null;
-      }
-      else{
+      } else {
         print(http.data.toJson());
         return http.data.toListWallet();
       }
