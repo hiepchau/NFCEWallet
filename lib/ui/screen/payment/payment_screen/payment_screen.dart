@@ -51,8 +51,8 @@ class PaymentPageState extends State<PaymentPage> {
       },
       child: BlocBuilder<PaymentScreenBloc, PaymentScreenState>(
         builder: (context, state) {
-          TextEditingController _typeAheadController = TextEditingController(
-              text: context.read<PaymentScreenBloc>().phoneNumberInput);
+          TextEditingController _typeAheadController =
+              TextEditingController(text: state.phoneNumber);
           String message = state.message;
           String amount = state.amount;
           String phoneNumber = state.phoneNumber;
@@ -74,7 +74,7 @@ class PaymentPageState extends State<PaymentPage> {
               children: [
                 AspectRatio(
                   aspectRatio: MediaQuery.of(context).size.height > 600
-                      ? 390 / 600
+                      ? 390 / 675
                       : 350 / 455,
                   child: Container(
                     padding: EdgeInsets.fromLTRB(15, 10, 15, 10),
@@ -93,7 +93,7 @@ class PaymentPageState extends State<PaymentPage> {
                         final height = constraints.maxHeight;
                         final suggestIconHeight =
                             MediaQuery.of(context).size.height > 600
-                                ? height * 14 / 250
+                                ? height * 14 / 265
                                 : height * 14 / 275;
 
                         return Column(
@@ -132,6 +132,11 @@ class PaymentPageState extends State<PaymentPage> {
                               ),
                               TypeAheadField(
                                 textFieldConfiguration: TextFieldConfiguration(
+                                  onSubmitted: (value) {
+                                    context
+                                        .read<PaymentScreenBloc>()
+                                        .add(ChangePhoneNumberEvent(value));
+                                  },
                                   autofocus: false,
                                   controller: _typeAheadController,
                                   decoration: InputDecoration(
@@ -158,10 +163,9 @@ class PaymentPageState extends State<PaymentPage> {
                                 onSuggestionSelected: (suggestion) {
                                   Map<String, dynamic> userSuggestion =
                                       suggestion as Map<String, dynamic>;
-                                  context
-                                          .read<PaymentScreenBloc>()
-                                          .phoneNumberInput =
-                                      userSuggestion["phone"];
+                                  context.read<PaymentScreenBloc>().add(
+                                      ChangePhoneNumberEvent(
+                                          userSuggestion["phone"]));
                                   _typeAheadController.text =
                                       userSuggestion["phone"];
                                 },
@@ -270,65 +274,51 @@ class PaymentPageState extends State<PaymentPage> {
                   ),
                 ),
                 Expanded(
-                  child: LayoutBuilder(builder: (context, constraints) {
-                    final height = constraints.maxHeight;
-
-                    final themeButtonHeight = (height - 35) / 2;
-
-                    return Column(
-                      children: [
-                        SizedBox(
-                          height: themeButtonHeight,
-                          child: AspectRatio(
-                              aspectRatio: 270 / 48,
-                              child: Container(
-                                margin: const EdgeInsets.all(0),
-                                decoration: const BoxDecoration(
-                                    color: green,
-                                    borderRadius:
-                                        BorderRadius.all(Radius.circular(10))),
-                                child: ElevatedButton(
-                                  style: ElevatedButton.styleFrom(
-                                    primary: green, // Màu nền
-                                    onPrimary: Colors.white, // Màu chữ
-                                    shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(10.0),
-                                    ),
-                                  ),
-                                  onPressed: () {
-                                    showModalBottomSheet(
-                                      context: context,
-                                      shape: const RoundedRectangleBorder(
-                                        borderRadius: BorderRadius.vertical(
-                                          top: Radius.circular(30),
-                                        ),
-                                      ),
-                                      builder: (BuildContext context) {
-                                        return PaymentConfirm(
-                                          receiverPhoneNumber: phoneNumber,
-                                          amount: amount,
-                                          message: message,
-                                        );
-                                      },
-                                    );
-                                  },
-                                  child: const Text(
-                                    'Tiếp tục',
-                                    style: TextStyle(
-                                      fontSize: 20,
-                                      fontWeight: FontWeight.w200,
-                                    ),
+                    child: Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 10),
+                  child: Column(
+                    children: [
+                      AspectRatio(
+                          aspectRatio: 270 / 48,
+                          child: ElevatedButton(
+                            style: ElevatedButton.styleFrom(
+                              backgroundColor: green,
+                              foregroundColor: white,
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(10.0),
+                              ),
+                            ),
+                            onPressed: () {
+                              showModalBottomSheet(
+                                context: context,
+                                shape: const RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.vertical(
+                                    top: Radius.circular(30),
                                   ),
                                 ),
-                              )),
-                        ),
-                        SizedBox(
-                          height: 10,
-                        )
-                      ],
-                    );
-                  }),
-                ),
+                                builder: (BuildContext context) {
+                                  return PaymentConfirm(
+                                    receiverPhoneNumber: phoneNumber,
+                                    amount: amount,
+                                    message: message,
+                                  );
+                                },
+                              );
+                            },
+                            child: const Text(
+                              'Tiếp tục',
+                              style: TextStyle(
+                                fontSize: 20,
+                                fontWeight: FontWeight.w200,
+                              ),
+                            ),
+                          )),
+                      SizedBox(
+                        height: 10,
+                      )
+                    ],
+                  ),
+                )),
               ],
             ),
           );
