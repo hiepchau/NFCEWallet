@@ -8,7 +8,7 @@ part 'wallet.g.dart';
 
 @JsonSerializable()
 class Wallet{
-  @JsonKey(name: "_id")
+  @JsonKey(name: "id")
   final String? id;
   final int? balance;
   final String? name;

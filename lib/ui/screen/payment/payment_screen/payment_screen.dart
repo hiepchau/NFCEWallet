@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:flutter_typeahead/flutter_typeahead.dart';
+import 'package:nfc_e_wallet/data/model/user.dart';
 import 'package:nfc_e_wallet/data/preferences.dart';
 import 'package:nfc_e_wallet/main.dart';
 import 'package:nfc_e_wallet/ui/screen/payment/payment_screen/bloc/payment_screen_bloc.dart';
@@ -35,12 +36,12 @@ class PaymentPageState extends State<PaymentPage> {
   final TextEditingController messageController = TextEditingController();
   final TextEditingController phoneNumberController = TextEditingController();
 
-  late Map<String, dynamic> user;
+  late User user;
 
   @override
   void initState() {
     super.initState();
-    user = jsonDecode(prefs.getString(Preferences.user)!);
+    user = User.fromJson(jsonDecode(prefs.getString(Preferences.user)!));
   }
 
   @override
@@ -119,7 +120,7 @@ class PaymentPageState extends State<PaymentPage> {
                                           CrossAxisAlignment.start,
                                       mainAxisSize: MainAxisSize.min,
                                       children: [
-                                        Text(user["full_name"],
+                                        Text(user.full_name,
                                             style: const TextStyle(
                                               fontSize: 20,
                                               fontWeight: FontWeight.w500,

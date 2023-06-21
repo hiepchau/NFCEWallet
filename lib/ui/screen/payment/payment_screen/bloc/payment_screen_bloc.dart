@@ -7,7 +7,6 @@ part 'payment_screen_event.dart';
 part 'payment_screen_state.dart';
 
 class PaymentScreenBloc extends Bloc<PaymentScreenEvent, PaymentScreenState> {
-  String phoneNumberInput = "";
   PaymentScreenBloc() : super(const PaymentScreenState()) {
     on<ChangeThemeEvent>((event, emit) {
       emit(state.copyWith(themeIndex: event.themeIndex));

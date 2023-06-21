@@ -4,6 +4,8 @@ import 'package:bloc/bloc.dart';
 import 'package:dio/dio.dart';
 import 'package:equatable/equatable.dart';
 import 'package:get_it/get_it.dart';
+import 'package:nfc_e_wallet/data/model/user.dart';
+import 'package:nfc_e_wallet/data/model/wallet.dart';
 import 'package:nfc_e_wallet/data/preferences.dart';
 import 'package:nfc_e_wallet/data/repositories/transaction_repo.dart';
 import 'package:nfc_e_wallet/data/repositories/user_repo.dart';
@@ -19,16 +21,19 @@ class PaymentConfirmBloc
     on<InitializePaymentEvent>((event, emit) async {
       final userRepo = GetIt.instance.get<UserRepo>();
 
-      try{
-      Map<String, dynamic> receiver = jsonDecode((await userRepo.getUserByPhoneNumber(event.phoneNumber))!);
-      emit(state.copyWith(
-        amount: event.amount,
-        receiverName: receiver["full_name"],
-        receiverWalletId: receiver["wallets"][0]["id"].toString(),
-        phoneNumber: event.phoneNumber,
-        message: event.message,
-      ));
-      }catch(exception) {
+      try {
+        Map<String, dynamic> userJson = jsonDecode(
+            (await userRepo.getUserByPhoneNumber(event.phoneNumber))!);
+        User receiver = User.fromJson(userJson);
+        Wallet wallet = Wallet.fromJson(userJson["wallets"][0]);
+        emit(state.copyWith(
+          amount: event.amount,
+          receiverName: receiver.full_name,
+          receiverWalletId: wallet.id.toString(),
+          phoneNumber: event.phoneNumber,
+          message: event.message,
+        ));
+      } catch (exception) {
         if (exception is DioException) {
           print(exception.response!.data);
         }
@@ -42,14 +47,20 @@ class PaymentConfirmBloc
     });
     on<SendPaymentEvent>((event, emit) async {
       final transactionRepo = GetIt.instance.get<TransactionRepo>();
-      final Map<String, dynamic> user = jsonDecode(prefs.getString(Preferences.user)!);
-      try{
-        String amount=state.amount;
-        if(amount.contains(RegExp(r'(\.|[đ])'))){
+      final Map<String, dynamic> user =
+          jsonDecode(prefs.getString(Preferences.user)!);
+      Wallet wallet = Wallet.fromJson(user["wallets"][0]);
+      try {
+        String amount = state.amount;
+        if (amount.contains(RegExp(r'(\.|[đ])'))) {
           amount = amount.replaceAll(RegExp(r'(\.|[đ])'), '');
         }
 
-        String? otp = await transactionRepo.createTransferTransaction(user["wallets"][0]["id"].toString(), state.receiverWalletId, amount, state.message!);
+        String? otp = await transactionRepo.createTransferTransaction(
+            wallet.id.toString(),
+            state.receiverWalletId,
+            amount,
+            state.message!);
         if (otp != null) {
           print("Create transfer transaction success. OTP: $otp");
 
@@ -61,7 +72,7 @@ class PaymentConfirmBloc
             body: 'Your OTP is $otp',
           );
         }
-      }catch(exception) {
+      } catch (exception) {
         if (exception is DioException) {
           print(exception.response!.data);
         }

@@ -291,7 +291,7 @@ class _AppService implements AppService {
   }
 
   @override
-  Future<HttpResponse<ListModelResponse>> getListTransaction(
+  Future<HttpResponse<dynamic>> getListTransaction(
     String id,
     String token,
   ) async {
@@ -300,20 +300,20 @@ class _AppService implements AppService {
     final _headers = <String, dynamic>{r'Authorization': token};
     _headers.removeWhere((k, v) => v == null);
     final Map<String, dynamic>? _data = null;
-    final _result = await _dio.fetch<Map<String, dynamic>>(
-        _setStreamType<HttpResponse<ListModelResponse>>(Options(
-      method: 'POST',
+    final _result =
+        await _dio.fetch(_setStreamType<HttpResponse<dynamic>>(Options(
+      method: 'GET',
       headers: _headers,
       extra: _extra,
     )
             .compose(
               _dio.options,
-              '/transaction/{user_id}',
+              '/transaction/${id}',
               queryParameters: queryParameters,
               data: _data,
             )
             .copyWith(baseUrl: baseUrl ?? _dio.options.baseUrl)));
-    final value = ListModelResponse.fromJson(_result.data!);
+    final value = _result.data;
     final httpResponse = HttpResponse(value, _result);
     return httpResponse;
   }
