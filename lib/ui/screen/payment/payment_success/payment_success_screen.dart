@@ -2,15 +2,13 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:intl/intl.dart';
-import 'package:nfc_e_wallet/data/preferences.dart';
-import 'package:nfc_e_wallet/main.dart';
+import 'package:nfc_e_wallet/data/model/transaction.dart';
 import 'package:nfc_e_wallet/ui/screen/payment/payment_success/bloc/payment_success_bloc.dart';
 import '../../../style/color.dart';
 import '../../app_navigator.dart';
 
 class PaymentSuccessScreen extends StatelessWidget {
-  final Map<String, dynamic> transaction;
+  final Transaction transaction;
 
   const PaymentSuccessScreen({
     Key? key,

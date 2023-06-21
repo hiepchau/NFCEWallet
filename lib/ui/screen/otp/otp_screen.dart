@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:nfc_e_wallet/data/model/transaction.dart';
 import 'package:nfc_e_wallet/l10n/l10n.dart';
 import 'package:nfc_e_wallet/ui/screen/otp/bloc/otp_bloc.dart';
 import 'package:nfc_e_wallet/ui/screen/payment/payment_success/payment_success_screen.dart';
@@ -32,11 +33,12 @@ class OTPScreen extends StatelessWidget {
               );
             }
             else if (state.type == "transfer_transaction"||state.type=="transaction"){
+              final transaction = Transaction.fromJson(state.data);
               ToastHelper.showToast(L10n.of(context).verifySuccess,
                   status: ToastStatus.success);
               Navigator.push(
                 context,
-                MaterialPageRoute(builder: (context) => PaymentSuccessScreen(transaction: state.data,)),
+                MaterialPageRoute(builder: (context) => PaymentSuccessScreen(transaction: transaction,)),
               );
             }
           } else if (state is OtpFailure) {

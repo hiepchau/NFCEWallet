@@ -9,20 +9,20 @@ part 'transaction.g.dart';
 
 @JsonSerializable()
 class Transaction{
-  @JsonKey(name: "_id")
-  final String id;
-  final User fromUser;
-  final User toUser;
+  @JsonKey(name: "id")
+  final int id;
+  final String from_User;
+  final String to_User;
   final String type;
-  final String amount;
+  final int amount;
   String? message;
   String? status;
-  DateTime? time;
+  String? time;
 
   Transaction({
     required this.id,
-    required this.fromUser,
-    required this.toUser,
+    required this.from_User,
+    required this.to_User,
     required this.type,
     required this.amount,
     this.message,
