@@ -33,7 +33,6 @@ class _HistoryWidget extends State<HistoryWidget> {
     return GestureDetector(
       onTap: () {Navigator.of(context).push(MaterialPageRoute(builder: (context)=> PaymentSuccessScreen(sender: '',
         recipient: '',
-        phoneNumber: '',
         message: '',
         paymentTime: '',)));},
       child: Container(
