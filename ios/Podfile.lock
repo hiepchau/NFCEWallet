@@ -4,6 +4,8 @@ PODS:
     - MTBBarcodeScanner
     - SwiftProtobuf
   - Flutter (1.0.0)
+  - flutter_keyboard_visibility (0.0.1):
+    - Flutter
   - flutter_local_notifications (0.0.1):
     - Flutter
   - flutter_localization (0.0.1):
@@ -24,6 +26,7 @@ PODS:
 DEPENDENCIES:
   - barcode_scan2 (from `.symlinks/plugins/barcode_scan2/ios`)
   - Flutter (from `Flutter`)
+  - flutter_keyboard_visibility (from `.symlinks/plugins/flutter_keyboard_visibility/ios`)
   - flutter_local_notifications (from `.symlinks/plugins/flutter_local_notifications/ios`)
   - flutter_localization (from `.symlinks/plugins/flutter_localization/ios`)
   - fluttertoast (from `.symlinks/plugins/fluttertoast/ios`)
@@ -41,6 +44,8 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/barcode_scan2/ios"
   Flutter:
     :path: Flutter
+  flutter_keyboard_visibility:
+    :path: ".symlinks/plugins/flutter_keyboard_visibility/ios"
   flutter_local_notifications:
     :path: ".symlinks/plugins/flutter_local_notifications/ios"
   flutter_localization:
@@ -55,6 +60,7 @@ EXTERNAL SOURCES:
 SPEC CHECKSUMS:
   barcode_scan2: 0af2bb63c81b4565aab6cd78278e4c0fa136dbb0
   Flutter: f04841e97a9d0b0a8025694d0796dd46242b2854
+  flutter_keyboard_visibility: 0339d06371254c3eb25eeb90ba8d17dca8f9c069
   flutter_local_notifications: 0c0b1ae97e741e1521e4c1629a459d04b9aec743
   flutter_localization: f43b18844a2b3d2c71fd64f04ffd6b1e64dd54d4
   fluttertoast: fafc4fa4d01a6a9e4f772ecd190ffa525e9e2d9c
