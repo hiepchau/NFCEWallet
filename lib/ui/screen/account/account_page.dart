@@ -2,9 +2,12 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:nfc_e_wallet/data/preferences.dart';
+import 'package:nfc_e_wallet/main.dart';
 import 'package:nfc_e_wallet/ui/screen/authenticate/login/authenticate_bloc.dart';
 import 'package:nfc_e_wallet/ui/screen/wallet/bloc/wallet_bloc.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import '../../../data/model/user.dart';
 import '../../style/color.dart';
 import '../../style/constants.dart';
 import '../../widgets/profile_widget.dart';
@@ -37,8 +40,6 @@ class AccountScreen extends StatefulWidget {
 
 class _AccountPage extends State<AccountScreen> {
   bool isVisible = false;
-
-  late SharedPreferences prefs;
 
   @override
   Widget build(BuildContext context) {
@@ -128,12 +129,12 @@ class _AccountPage extends State<AccountScreen> {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          const Text("Hiệp Châu",
+                          Text(user.full_name,
                               style: TextStyle(
                                 fontWeight: FontWeight.w700,
                               )),
-                          const Text(
-                            "0999000999",
+                          Text(
+                            user.phone_number,
                             style: wGreyTextStyle,
                           ),
                           const SizedBox(

@@ -36,14 +36,6 @@ class PaymentPageState extends State<PaymentPage> {
   final TextEditingController messageController = TextEditingController();
   final TextEditingController phoneNumberController = TextEditingController();
 
-  late User user;
-
-  @override
-  void initState() {
-    super.initState();
-    user = User.fromJson(jsonDecode(prefs.getString(Preferences.user)!));
-  }
-
   @override
   Widget build(BuildContext context) {
     return GestureDetector(

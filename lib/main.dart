@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:io';
 
 import 'package:flutter/foundation.dart';
@@ -11,12 +12,15 @@ import 'package:nfc_e_wallet/ui/screen/app_navigator.dart';
 import 'package:nfc_e_wallet/ui/screen/authenticate/login/authenticate_page.dart';
 import 'package:nfc_e_wallet/utils/notification_manager.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'data/model/user.dart';
+import 'data/preferences.dart';
 import 'dependency.dart';
 
 final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
 FlutterLocalNotificationsPlugin();
 
 late SharedPreferences prefs;
+late User user;
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -25,6 +29,7 @@ void main() async {
   await configureDependencies();
   //INIT PREFERENCES
   prefs = await SharedPreferences.getInstance();
+  user = User.fromJson(jsonDecode(prefs.getString(Preferences.user)!));
 
   runApp(ScreenUtilInit(
       designSize: kIsWeb ? const Size(790, 620) : const Size(390, 800),
