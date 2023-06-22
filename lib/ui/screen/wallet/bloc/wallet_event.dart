@@ -3,8 +3,7 @@ part of 'wallet_bloc.dart';
 abstract class WalletEvent {}
 
 class InitWalletEvent extends WalletEvent {
-  final String userId;
-  InitWalletEvent(this.userId);
+  InitWalletEvent();
 }
 
 class UpdateWalletEvent extends WalletEvent {

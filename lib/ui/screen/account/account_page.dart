@@ -2,6 +2,8 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:intl/intl.dart';
+import 'package:nfc_e_wallet/data/model/wallet.dart';
 import 'package:nfc_e_wallet/data/preferences.dart';
 import 'package:nfc_e_wallet/main.dart';
 import 'package:nfc_e_wallet/ui/screen/authenticate/login/authenticate_bloc.dart';
@@ -24,7 +26,7 @@ class AccountPage extends StatelessWidget {
             create: (context) => AccountPageBloc(),
           ),
           BlocProvider<WalletBloc>(
-            create: (context) => WalletBloc(),
+            create: (context) => WalletBloc()..add(InitWalletEvent()),
           ),
         ],
         child: AccountScreen(),
@@ -87,6 +89,7 @@ class _AccountPage extends State<AccountScreen> {
   }
 
   Widget getAccountSection(BuildContext context, WalletBloc wallet) {
+
     final isVisible = ValueNotifier(false);
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
@@ -211,9 +214,7 @@ class _AccountPage extends State<AccountScreen> {
                         },
                         childrenPadding: const EdgeInsets.all(5),
                         title: const Text("Tài khoản/Ví"),
-                        children: state is WalletInitialState
-                            ? _buildExpandableContent(state.listWallet)
-                            : _buildNoWallet(),
+                        children: _buildExpandableContent(state.listWallet),
                       )),
                   Visibility(
                     visible: isVisible.value,
@@ -225,7 +226,7 @@ class _AccountPage extends State<AccountScreen> {
                   ProfileWidget(
                     icon: Icons.receipt_long,
                     iconColor: Colors.yellow,
-                    title: 'Quản lý thanh toán',
+                    title: 'Liên kết ngân hàng',
                     subtitle: "",
                     onTap: () {},
                   ),
@@ -337,15 +338,20 @@ class _AccountPage extends State<AccountScreen> {
   }
 
   // ignore: non_constant_identifier_names
-  List<Widget> _buildExpandableContent(List? wallet_lists) {
-    List<Widget> columnContent = [];
+  List<Widget> _buildExpandableContent(List<Wallet>? wallet_lists) {
 
-    for (var content in wallet_lists!) {
-      if (content["name"] == "TPBank") {
+
+    List<Widget> columnContent = [];
+    if (wallet_lists == null) {
+      columnContent.add(Text("Lỗi mất rồi, bạn hãy thử lại nhé!"));
+      return columnContent;
+    }
+    for (var wallet in wallet_lists!) {
+      if (wallet.name == "TPBank") {
         columnContent.add(
           ListTile(
             title: Text(
-              content["name"],
+              wallet.name!,
               style: TextStyle(
                 fontSize: MediaQuery.of(context).size.width > 900
                     ? 15
@@ -355,7 +361,7 @@ class _AccountPage extends State<AccountScreen> {
               ),
             ),
             trailing: Text(
-              content["card_Number"],
+              wallet.cardnumber!,
               style: TextStyle(
                 fontSize: MediaQuery.of(context).size.width > 900
                     ? 15
@@ -374,11 +380,11 @@ class _AccountPage extends State<AccountScreen> {
           ),
         );
       }
-      if (content["name"] == "VietcomBank") {
+      if (wallet.name == "VietcomBank") {
         columnContent.add(
           ListTile(
             title: Text(
-              content["name"],
+              wallet.name!,
               style: TextStyle(
                 fontSize: MediaQuery.of(context).size.width > 900
                     ? 15
@@ -388,7 +394,7 @@ class _AccountPage extends State<AccountScreen> {
               ),
             ),
             trailing: Text(
-              content["card_Number"],
+              wallet.cardnumber!,
               style: TextStyle(
                 fontSize: MediaQuery.of(context).size.width > 900
                     ? 15
@@ -407,11 +413,11 @@ class _AccountPage extends State<AccountScreen> {
           ),
         );
       }
-      if (content["name"] == "Ví") {
+      if (wallet.name == "DefaultWallet") {
         columnContent.add(
           ListTile(
             title: Text(
-              content["name"],
+              "Ví",
               style: TextStyle(
                 fontSize: MediaQuery.of(context).size.width > 900
                     ? 15
@@ -421,7 +427,7 @@ class _AccountPage extends State<AccountScreen> {
               ),
             ),
             trailing: Text(
-              content["balance"],
+              formatCurrency(wallet.balance.toString()) + "đ",
               style: TextStyle(
                 fontSize: MediaQuery.of(context).size.width > 900
                     ? 15
@@ -440,5 +446,9 @@ class _AccountPage extends State<AccountScreen> {
       }
     }
     return columnContent;
+  }
+  String formatCurrency(String amount){
+    final currencyFormat = NumberFormat("#,##0.##");
+    return currencyFormat.format(int.parse(amount));
   }
 }

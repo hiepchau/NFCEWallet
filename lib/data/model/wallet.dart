@@ -9,18 +9,18 @@ part 'wallet.g.dart';
 @JsonSerializable()
 class Wallet{
   @JsonKey(name: "id")
-  final String? id;
+  final int id;
   final int? balance;
   final String? name;
   final String? type;
   String? cardnumber;
 
-  Wallet({
+  Wallet(
     this.id,
     this.balance,
     this.name,
     this.type, 
-  });
+  );
 
   factory Wallet.fromJson(Map<String, dynamic> json) => _$WalletFromJson(json);
   Map<String, dynamic> toJson() => _$WalletToJson(this);

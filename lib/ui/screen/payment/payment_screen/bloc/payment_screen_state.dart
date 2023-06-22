@@ -28,7 +28,8 @@ class PaymentScreenState {
 
 class PaymentScreenInitialState extends PaymentScreenState {}
 
-class ThemeState extends PaymentScreenState {}
+class ThemeState extends PaymentScreenState {
+}
 
 class MessageState extends PaymentScreenState {}
 

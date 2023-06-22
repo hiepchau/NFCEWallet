@@ -8,8 +8,7 @@ class WalletState {
   }
 }
 
-class WalletInitialState extends WalletState {
-}
+class WalletInitialState extends WalletState {}
 
 class WalletReadyState extends WalletState {
   final List<Wallet>? listWallet;
