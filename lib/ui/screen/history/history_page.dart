@@ -8,7 +8,6 @@ import 'package:nfc_e_wallet/data/model/transaction.dart';
 import 'package:nfc_e_wallet/ui/screen/history/bloc/history_bloc.dart';
 
 import '../../style/color.dart';
-import 'history_list.dart';
 import 'history_widget.dart';
 
 class HistoryPage extends StatefulWidget {
@@ -144,16 +143,17 @@ class _HistoryPage extends State<HistoryPage> {
                   : MediaQuery.of(context).size.width),
           child: TabBarView(children: [
             everythingHistoryScreen(context, state),
-            depositHistoryScreen(),
-            transferistoryScreen(),
-            receiveHistoryScreen(),
-            mobileHistoryScreen(),
-            withdrawHistoryScreen(),
+            depositHistoryScreen(context, state),
+            transferistoryScreen(context, state),
+            receiveHistoryScreen(context, state),
+            mobileHistoryScreen(context, state),
+            withdrawHistoryScreen(context, state),
           ])),
     );
   }
 
   Widget everythingHistoryScreen(BuildContext context, HistoryState state) {
+    bool isNull = true;
     List<Widget> listWidget = List<Widget>.empty(growable: true);
     List<Transaction> listTransaction = List.from(state.listTransactions);
     listTransaction.sort(((a, b) {
@@ -163,6 +163,150 @@ class _HistoryPage extends State<HistoryPage> {
     }));
     int temp = 0;
     for (Transaction transaction in listTransaction) {
+      if (DateTime.parse(transaction.time!).month != temp) {
+        isNull = false;
+        temp = DateTime.parse(transaction.time!).month;
+        listWidget.add(Padding(
+            padding: const EdgeInsets.only(left: 20),
+            child: Text(
+              "Tháng $temp",
+              style: TextStyle(
+                  fontSize: MediaQuery.of(context).size.width > 900
+                      ? 30
+                      : MediaQuery.of(context).size.width > 350
+                          ? 25
+                          : 20,
+                  color: primary,
+                  fontFamily: 'SVN-Gotham',
+                  fontWeight: FontWeight.w700),
+            )));
+      }
+      if (transaction.type == "RECEIVE") {
+        isNull=false;
+        listWidget.add(buildReceiveWidget(transaction));
+      }
+      if (transaction.type == "TRANSFER") {
+        isNull=false;
+        listWidget.add(buildTransferWidget(transaction));
+      }
+      if (transaction.type == "WITHDRAW") {
+        isNull=false;
+        listWidget.add(buildWithdrawWidget(transaction));
+      }
+      if (transaction.type == "PHONE") {
+        isNull=false;
+        listWidget.add(buildPhoneWidget(transaction));
+      }
+      if (transaction.type == "DEPOSIT") {
+        isNull=false;
+        listWidget.add(buildDepositWidget(transaction));
+      }
+    }
+    if(isNull){
+      listWidget=buildNoTransactionWidget(listWidget);
+    }
+    return ListView(
+      padding: const EdgeInsets.all(5),
+      children: listWidget,
+    );
+  }
+
+  Widget depositHistoryScreen(BuildContext context, HistoryState state) {
+    bool isNull = true;
+    List<Widget> listWidget = List<Widget>.empty(growable: true);
+    List<Transaction> listTransaction = List.from(state.listTransactions);
+    listTransaction.sort(((a, b) {
+      DateTime dateA = DateTime.parse(a.time!);
+      DateTime dateB = DateTime.parse(b.time!);
+      return dateB.compareTo(dateA);
+    }));
+    int temp = 0;
+    for (var transaction in listTransaction) {
+      if (DateTime.parse(transaction.time!).month != temp) {
+        temp = DateTime.parse(transaction.time!).month;
+        listWidget.add(Padding(
+            padding: const EdgeInsets.only(left: 20),
+            child: Text(
+              "Tháng $temp",
+              style: TextStyle(
+                  fontSize: MediaQuery.of(context).size.width > 900
+                      ? 30
+                      : MediaQuery.of(context).size.width > 350
+                          ? 25
+                          : 20,
+                  color: primary,
+                  fontFamily: 'SVN-Gotham',
+                  fontWeight: FontWeight.w700),
+            )));
+      }
+      if (transaction.type == "DEPOSIT") {
+        isNull = false;
+        listWidget.add(buildDepositWidget(transaction));
+      }
+    }
+    if (isNull == true) {
+      listWidget = buildNoTransactionWidget(listWidget);
+    }
+    return ListView(
+      padding: const EdgeInsets.all(5),
+      children: listWidget,
+    );
+  }
+
+  Widget transferistoryScreen(BuildContext context, HistoryState state) {
+    bool isNull = true;
+    List<Transaction> listTransaction = List.from(state.listTransactions);
+    listTransaction.sort(((a, b) {
+      DateTime dateA = DateTime.parse(a.time!);
+      DateTime dateB = DateTime.parse(b.time!);
+      return dateB.compareTo(dateA);
+    }));
+    int temp = 0;
+    List<Widget> listWidget = List<Widget>.empty(growable: true);
+    for (var transaction in listTransaction) {
+      if (DateTime.parse(transaction.time!).month != temp) {
+        temp = DateTime.parse(transaction.time!).month;
+        listWidget.add(Padding(
+            padding: const EdgeInsets.only(left: 20),
+            child: Text(
+              "Tháng $temp",
+              style: TextStyle(
+                  fontSize: MediaQuery.of(context).size.width > 900
+                      ? 30
+                      : MediaQuery.of(context).size.width > 350
+                          ? 25
+                          : 20,
+                  color: primary,
+                  fontFamily: 'SVN-Gotham',
+                  fontWeight: FontWeight.w700),
+            )));
+      }
+      if (transaction.type == "TRANSFER") {
+        isNull = false;
+        listWidget.add(buildTransferWidget(transaction));
+      }
+    }
+    if(isNull){
+      listWidget = buildNoTransactionWidget(listWidget);
+    }
+    return ListView(
+      padding: const EdgeInsets.all(5),
+      children: listWidget,
+    );
+  }
+
+  Widget receiveHistoryScreen(BuildContext context, HistoryState state) {
+    bool isNull = true;
+    List<Transaction> listTransaction = List.from(state.listTransactions);
+
+    listTransaction.sort(((a, b) {
+      DateTime dateA = DateTime.parse(a.time!);
+      DateTime dateB = DateTime.parse(b.time!);
+      return dateB.compareTo(dateA);
+    }));
+    int temp = 0;
+    List<Widget> listWidget = List<Widget>.empty(growable: true);
+    for (var transaction in listTransaction) {
       if (DateTime.parse(transaction.time!).month != temp) {
         temp = DateTime.parse(transaction.time!).month;
         listWidget.add(Padding(
@@ -181,276 +325,193 @@ class _HistoryPage extends State<HistoryPage> {
             )));
       }
       if (transaction.type == "RECEIVE") {
-        listWidget.add(HistoryWidget(
-            icon: Icons.arrow_downward_rounded,
-            iconColor: Colors.green,
-            title: "Nhận tiền",
-            subtitle: "Nhận tiền từ " + transaction.from_User,
-            time: transaction.time!,
-            balance: "",
-            amount: "+" + transaction.amount.toString()));
+        isNull = false;
+        listWidget.add(buildReceiveWidget(transaction));
       }
-      if (transaction.type == "TRANSFER") {
-        listWidget.add(HistoryWidget(
+    }
+    if(isNull){
+      listWidget=buildNoTransactionWidget(listWidget);
+    }
+    return ListView(
+      padding: const EdgeInsets.all(5),
+      children: listWidget,
+    );
+  }
+
+  Widget mobileHistoryScreen(BuildContext context, HistoryState state) {
+    bool isNull = true;
+    List<Transaction> listTransaction = List.from(state.listTransactions);
+
+    listTransaction.sort(((a, b) {
+      DateTime dateA = DateTime.parse(a.time!);
+      DateTime dateB = DateTime.parse(b.time!);
+      return dateB.compareTo(dateA);
+    }));
+    int temp = 0;
+    List<Widget> listWidget = List<Widget>.empty(growable: true);
+    for (var transaction in listTransaction) {
+      if (DateTime.parse(transaction.time!).month != temp) {
+        temp = DateTime.parse(transaction.time!).month;
+        listWidget.add(Padding(
+            padding: const EdgeInsets.only(left: 20),
+            child: Text(
+              "Tháng $temp",
+              style: TextStyle(
+                  fontSize: MediaQuery.of(context).size.width > 900
+                      ? 30
+                      : MediaQuery.of(context).size.width > 350
+                          ? 25
+                          : 20,
+                  color: primary,
+                  fontFamily: 'SVN-Gotham',
+                  fontWeight: FontWeight.w700),
+            )));
+      }
+      if (transaction.type == "PHONE") {
+        isNull = false;
+        listWidget.add(buildPhoneWidget(transaction));
+      }
+    }
+    if(isNull){
+      listWidget=buildNoTransactionWidget(listWidget);
+    }
+    return ListView(
+      padding: const EdgeInsets.all(5),
+      children: listWidget,
+    );
+  }
+
+  Widget withdrawHistoryScreen(BuildContext context, HistoryState state) {
+    bool isNull = true;
+    List<Transaction> listTransaction = List.from(state.listTransactions);
+
+    listTransaction.sort(((a, b) {
+      DateTime dateA = DateTime.parse(a.time!);
+      DateTime dateB = DateTime.parse(b.time!);
+      return dateB.compareTo(dateA);
+    }));
+    int temp = 0;
+    List<Widget> listWidget = List<Widget>.empty(growable: true);
+    for (var transaction in listTransaction) {
+      if (DateTime.parse(transaction.time!).month != temp) {
+        temp = DateTime.parse(transaction.time!).month;
+        listWidget.add(Padding(
+            padding: const EdgeInsets.only(left: 20),
+            child: Text(
+              "Tháng $temp",
+              style: TextStyle(
+                  fontSize: MediaQuery.of(context).size.width > 900
+                      ? 30
+                      : MediaQuery.of(context).size.width > 350
+                          ? 25
+                          : 20,
+                  color: primary,
+                  fontFamily: 'SVN-Gotham',
+                  fontWeight: FontWeight.w700),
+            )));
+      }
+      if (transaction.type == "WITHDRAW") {
+        isNull = false;
+        listWidget.add(buildWithdrawWidget(transaction));
+      }
+    }
+    if(isNull){
+      listWidget = buildNoTransactionWidget(listWidget);
+    }
+    return ListView(
+      padding: const EdgeInsets.all(5),
+      children: listWidget,
+    );
+  }
+
+  Widget buildTransferWidget(Transaction transaction){
+    return HistoryWidget(
+            transaction: transaction,
             icon: FontAwesomeIcons.moneyBillTransfer,
             iconColor: Colors.green,
             title: "Chuyển tiền",
             subtitle: "Chuyển tiền đến " + transaction.to_User,
             time: transaction.time!,
             balance: "",
-            amount: "-" + transaction.amount.toString()));
-      }
-      // if (element["type"] == "withdraw") {
-      //   listWidget.add(HistoryWidget(
-      //       icon: Icons.account_balance_wallet_rounded,
-      //       iconColor: Colors.redAccent,
-      //       title: "Rút tiền",
-      //       subtitle: "Rút tiền về " + element["to"],
-      //       time: element["time"],
-      //       balance: element["balance"],
-      //       amount: "-" + element["amount"]));
-      // }
-      // if (element["type"] == "phone") {
-      //   listWidget.add(HistoryWidget(
-      //       icon: Icons.phone_android,
-      //       iconColor: Colors.blueAccent,
-      //       title: "Nạp tiền điện thoại",
-      //       subtitle: "Nạp cho số " + element["to"],
-      //       time: element["time"],
-      //       balance: element["balance"],
-      //       amount: "-" + element["amount"]));
-      // }
-      // if (element["type"] == "deposit") {
-      //   listWidget.add(HistoryWidget(
-      //       icon: Icons.monetization_on_outlined,
-      //       iconColor: Colors.green,
-      //       title: "Nạp tiền",
-      //       subtitle: "Nạp tiền từ " + element["from"],
-      //       time: element["time"],
-      //       balance: element["balance"],
-      //       amount: "+" + element["balance"]));
-      //}
-    }
-    return ListView(
-      padding: const EdgeInsets.all(5),
-      children: listWidget,
-    );
+            amount: "-" + transaction.amount.toString());
   }
 
-  Widget depositHistoryScreen() {
-    List<Widget> listWidget = List<Widget>.empty(growable: true);
-    historyList.sort(((a, b) {
-      DateTime dateA = DateTime.parse(a["time"]);
-      DateTime dateB = DateTime.parse(b["time"]);
-      return dateB.compareTo(dateA);
-    }));
-    int temp = 0;
-    for (Map element in historyList) {
-      if (DateTime.parse(element["time"]).month != temp) {
-        temp = DateTime.parse(element["time"]).month;
-        listWidget.add(Padding(
-            padding: const EdgeInsets.only(left: 20),
-            child: Text(
-              "Tháng $temp",
-              style: TextStyle(
-                  fontSize: MediaQuery.of(context).size.width > 900
-                      ? 30
-                      : MediaQuery.of(context).size.width > 350
-                          ? 25
-                          : 20,
-                  color: primary,
-                  fontFamily: 'SVN-Gotham',
-                  fontWeight: FontWeight.w700),
-            )));
-      }
-      if (element["type"] == "deposit") {
-        listWidget.add(HistoryWidget(
-          icon: Icons.monetization_on_outlined,
-          iconColor: Colors.green,
-          title: "Nạp tiền",
-          subtitle: "Nạp tiền từ " + element["from"],
-          time: element["time"],
-          balance: element["balance"],
-          amount: "+" + element["balance"],
-        ));
-      }
-    }
-    return ListView(
-      padding: const EdgeInsets.all(5),
-      children: listWidget,
-    );
-  }
-
-  Widget transferistoryScreen() {
-    historyList.sort(((a, b) {
-      DateTime dateA = DateTime.parse(a["time"]);
-      DateTime dateB = DateTime.parse(b["time"]);
-      return dateB.compareTo(dateA);
-    }));
-    int temp = 0;
-    List<Widget> listWidget = List<Widget>.empty(growable: true);
-    for (Map element in historyList) {
-      if (DateTime.parse(element["time"]).month != temp) {
-        temp = DateTime.parse(element["time"]).month;
-        listWidget.add(Padding(
-            padding: const EdgeInsets.only(left: 20),
-            child: Text(
-              "Tháng $temp",
-              style: TextStyle(
-                  fontSize: MediaQuery.of(context).size.width > 900
-                      ? 30
-                      : MediaQuery.of(context).size.width > 350
-                          ? 25
-                          : 20,
-                  color: primary,
-                  fontFamily: 'SVN-Gotham',
-                  fontWeight: FontWeight.w700),
-            )));
-      }
-      if (element["type"] == "transfer") {
-        listWidget.add(HistoryWidget(
-            icon: FontAwesomeIcons.moneyBillTransfer,
-            iconColor: Colors.green,
-            title: "Chuyển tiền",
-            subtitle: "Chuyển tiền đến " + element["to"],
-            time: element["time"],
-            balance: element["balance"],
-            amount: "-" + element["amount"]));
-      }
-    }
-    return ListView(
-      padding: const EdgeInsets.all(5),
-      children: listWidget,
-    );
-  }
-
-  Widget receiveHistoryScreen() {
-    historyList.sort(((a, b) {
-      DateTime dateA = DateTime.parse(a["time"]);
-      DateTime dateB = DateTime.parse(b["time"]);
-      return dateB.compareTo(dateA);
-    }));
-    int temp = 0;
-    List<Widget> listWidget = List<Widget>.empty(growable: true);
-    for (Map element in historyList) {
-      if (DateTime.parse(element["time"]).month != temp) {
-        temp = DateTime.parse(element["time"]).month;
-        listWidget.add(Padding(
-            padding: const EdgeInsets.only(left: 20),
-            child: Text(
-              "Tháng $temp",
-              style: TextStyle(
-                  fontSize: MediaQuery.of(context).size.width > 900
-                      ? 30
-                      : MediaQuery.of(context).size.width > 350
-                          ? 25
-                          : 20,
-                  color: primary,
-                  fontFamily: 'SVN-Gotham',
-                  fontWeight: FontWeight.w700),
-            )));
-      }
-      if (element["type"] == "receive") {
-        listWidget.add(HistoryWidget(
-            icon: Icons.arrow_downward_rounded,
-            iconColor: Colors.green,
-            title: "Nhận tiền",
-            subtitle: "Nhận tiền từ " + element["from"],
-            time: element["time"],
-            balance: element["balance"],
-            amount: "+" + element["amount"]));
-      }
-    }
-    return ListView(
-      padding: const EdgeInsets.all(5),
-      children: listWidget,
-    );
-  }
-
-  Widget mobileHistoryScreen() {
-    historyList.sort(((a, b) {
-      DateTime dateA = DateTime.parse(a["time"]);
-      DateTime dateB = DateTime.parse(b["time"]);
-      return dateB.compareTo(dateA);
-    }));
-    int temp = 0;
-    List<Widget> listWidget = List<Widget>.empty(growable: true);
-    for (Map element in historyList) {
-      if (DateTime.parse(element["time"]).month != temp) {
-        temp = DateTime.parse(element["time"]).month;
-        listWidget.add(Padding(
-            padding: const EdgeInsets.only(left: 20),
-            child: Text(
-              "Tháng $temp",
-              style: TextStyle(
-                  fontSize: MediaQuery.of(context).size.width > 900
-                      ? 30
-                      : MediaQuery.of(context).size.width > 350
-                          ? 25
-                          : 20,
-                  color: primary,
-                  fontFamily: 'SVN-Gotham',
-                  fontWeight: FontWeight.w700),
-            )));
-      }
-      if (element["type"] == "phone") {
-        listWidget.add(HistoryWidget(
-            icon: Icons.phone_android,
-            iconColor: Colors.blueAccent,
-            title: "Nạp tiền điện thoại",
-            subtitle: "Nạp cho số " + element["to"],
-            time: element["time"],
-            balance: element["balance"],
-            amount: "-" + element["amount"]));
-      }
-    }
-    return ListView(
-      padding: const EdgeInsets.all(5),
-      children: listWidget,
-    );
-  }
-
-  Widget withdrawHistoryScreen() {
-    historyList.sort(((a, b) {
-      DateTime dateA = DateTime.parse(a["time"]);
-      DateTime dateB = DateTime.parse(b["time"]);
-      return dateB.compareTo(dateA);
-    }));
-    int temp = 0;
-    List<Widget> listWidget = List<Widget>.empty(growable: true);
-    for (Map element in historyList) {
-      if (DateTime.parse(element["time"]).month != temp) {
-        temp = DateTime.parse(element["time"]).month;
-        listWidget.add(Padding(
-            padding: const EdgeInsets.only(left: 20),
-            child: Text(
-              "Tháng $temp",
-              style: TextStyle(
-                  fontSize: MediaQuery.of(context).size.width > 900
-                      ? 30
-                      : MediaQuery.of(context).size.width > 350
-                          ? 25
-                          : 20,
-                  color: primary,
-                  fontFamily: 'SVN-Gotham',
-                  fontWeight: FontWeight.w700),
-            )));
-      }
-      if (element["type"] == "withdraw") {
-        listWidget.add(HistoryWidget(
+  Widget buildWithdrawWidget(Transaction transaction) {
+    return HistoryWidget(
+            transaction: transaction,
             icon: Icons.account_balance_wallet_rounded,
             iconColor: Colors.redAccent,
             title: "Rút tiền",
-            subtitle: "Rút tiền về " + element["to"],
-            time: element["time"],
-            balance: element["balance"],
-            amount: "-" + element["amount"]));
-      }
-    }
-    return ListView(
-      padding: const EdgeInsets.all(5),
-      children: listWidget,
+            subtitle: "Rút tiền về " + transaction.to_User,
+            time: transaction.time!,
+            balance: "",
+            amount: "-" + transaction.amount.toString());
+  }
+
+  Widget buildDepositWidget(Transaction transaction) {
+    return HistoryWidget(
+            transaction: transaction,
+            icon: Icons.monetization_on_outlined,
+            iconColor: Colors.green,
+            title: "Nạp tiền",
+            subtitle: "Nạp tiền từ " + transaction.to_User,
+            time: transaction.time!,
+            balance: "",
+            amount: "+" + transaction.amount.toString());
+  }
+
+  Widget buildPhoneWidget(Transaction transaction) {
+    return HistoryWidget(
+        transaction: transaction,
+        icon: Icons.phone_android,
+        iconColor: Colors.blueAccent,
+        title: "Nạp tiền điện thoại",
+        subtitle: "Nạp cho số " + transaction.to_User,
+        time: transaction.time!,
+        balance: "",
+        amount: "-" + transaction.amount.toString());
+  }
+
+  Widget buildReceiveWidget(Transaction transaction) {
+    return HistoryWidget(
+        transaction: transaction,
+        icon: Icons.arrow_downward_rounded,
+        iconColor: Colors.green,
+        title: "Nhận tiền",
+        subtitle: "Nhận tiền từ " + transaction.from_User,
+        time: transaction.time!,
+        balance: "",
+        amount: "+" + transaction.amount.toString());
+  }
+
+  List<Widget> buildNoTransactionWidget(List<Widget> listWidget) {
+    listWidget.clear();
+    listWidget.add(
+      Column(
+        children: [
+          Container(
+            height: MediaQuery.of(context).size.height / 3,
+            width: MediaQuery.of(context).size.width / 3,
+            decoration: const BoxDecoration(
+                image: DecorationImage(
+                    fit: BoxFit.fitHeight,
+                    image: AssetImage("assets/images/icons/cantfind.png"))),
+          ),
+          Text(
+            "Bạn không có giao dịch nào cả.",
+            style: TextStyle(
+              fontSize: MediaQuery.of(context).size.width > 900
+                  ? 15
+                  : MediaQuery.of(context).size.width > 350
+                      ? 15
+                      : 13,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+        ],
+      ),
     );
+    return listWidget;
   }
 
   void _toggleVisibility() {
@@ -459,6 +520,7 @@ class _HistoryPage extends State<HistoryPage> {
       HistoryWidget.isObscure = obscureText;
     });
   }
+
   String formatDate(String date) {
     DateTime parseDate = DateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'").parse(date);
     var inputDate = DateTime.parse(parseDate.toString());

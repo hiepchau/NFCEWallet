@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:nfc_e_wallet/main.dart';
 import 'package:nfc_e_wallet/ui/widgets/shortcut_widget/shortcut_icon.dart';
 import '../../utils/list_utils.dart';
 import '../../utils/widget_utils.dart';
@@ -27,7 +28,7 @@ class _Dashboard extends State<Dashboard> with TickerProviderStateMixin {
         automaticallyImplyLeading: false,
         backgroundColor: primary,
         title: Text(
-          'Xin chào, Hiep Chau',
+          'Xin chào, ${user.full_name}',
           style: TextStyle(color: onPrimary, fontSize: 18),
         ),
         actions: [
