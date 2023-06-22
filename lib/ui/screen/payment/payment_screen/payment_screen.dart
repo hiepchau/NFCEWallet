@@ -275,51 +275,53 @@ class PaymentPageState extends State<PaymentPage> {
                   ),
                 ),
                 Expanded(
-                    child: Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 10),
-                  child: Column(
-                    children: [
-                      AspectRatio(
-                          aspectRatio: 270 / 48,
-                          child: ElevatedButton(
-                            style: ElevatedButton.styleFrom(
-                              backgroundColor: green,
-                              foregroundColor: white,
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(10.0),
-                              ),
-                            ),
-                            onPressed: () {
-                              showModalBottomSheet(
-                                context: context,
-                                shape: const RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.vertical(
-                                    top: Radius.circular(30),
+                    child: SafeArea(
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 10),
+                        child: Column(
+                          children: [
+                            AspectRatio(
+                                aspectRatio: 270 / 48,
+                                child: ElevatedButton(
+                                  style: ElevatedButton.styleFrom(
+                                    backgroundColor: green,
+                                    foregroundColor: white,
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(10.0),
+                                    ),
                                   ),
-                                ),
-                                builder: (BuildContext context) {
-                                  return PaymentConfirm(
-                                    receiverPhoneNumber: phoneNumber,
-                                    amount: amount,
-                                    message: message,
-                                  );
-                                },
-                              );
-                            },
-                            child: const Text(
-                              'Tiếp tục',
-                              style: TextStyle(
-                                fontSize: 20,
-                                fontWeight: FontWeight.w200,
-                              ),
-                            ),
-                          )),
-                      SizedBox(
-                        height: 10,
-                      )
-                    ],
-                  ),
-                )),
+                                  onPressed: () {
+                                    showModalBottomSheet(
+                                      context: context,
+                                      shape: const RoundedRectangleBorder(
+                                        borderRadius: BorderRadius.vertical(
+                                          top: Radius.circular(30),
+                                        ),
+                                      ),
+                                      builder: (BuildContext context) {
+                                        return PaymentConfirm(
+                                          receiverPhoneNumber: phoneNumber,
+                                          amount: amount,
+                                          message: message,
+                                        );
+                                      },
+                                    );
+                                  },
+                                  child: const Text(
+                                    'Tiếp tục',
+                                    style: TextStyle(
+                                      fontSize: 20,
+                                      fontWeight: FontWeight.w200,
+                                    ),
+                                  ),
+                                )),
+                            SizedBox(
+                              height: 10,
+                            )
+                          ],
+                        ),
+                      ),
+                    )),
               ],
             ),
           );
