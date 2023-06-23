@@ -19,25 +19,39 @@ class PaymentConfirmBloc
     extends Bloc<PaymentConfirmEvent, PaymentConfirmState> {
   PaymentConfirmBloc() : super(PaymentConfirmState()) {
     on<InitializePaymentEvent>((event, emit) async {
-      final userRepo = GetIt.instance.get<UserRepo>();
+      if (event.type == "TRANSFER") {
+        final userRepo = GetIt.instance.get<UserRepo>();
 
-      try {
-        Map<String, dynamic> userJson = jsonDecode(
-            (await userRepo.getUserByPhoneNumber(event.phoneNumber))!);
-        User receiver = User.fromJson(userJson);
-        Wallet wallet = Wallet.fromJson(userJson["wallets"][0]);
+        try {
+          Map<String, dynamic> userJson = jsonDecode(
+              (await userRepo.getUserByPhoneNumber(event.phoneNumber))!);
+          User receiver = User.fromJson(userJson);
+          Wallet wallet = Wallet.fromJson(userJson["wallets"][0]);
+          emit(state.copyWith(
+            amount: event.amount,
+            receiverName: receiver.full_name,
+            receiverWalletId: wallet.id.toString(),
+            phoneNumber: event.phoneNumber,
+            message: event.message,
+          ));
+        } catch (exception) {
+          if (exception is DioException) {
+            print(exception.response!.data);
+          }
+          print("Get user data failed due to exception: $exception");
+        }
+      } else if (event.type == "WITHDRAW") {
         emit(state.copyWith(
           amount: event.amount,
-          receiverName: receiver.full_name,
-          receiverWalletId: wallet.id.toString(),
-          phoneNumber: event.phoneNumber,
           message: event.message,
+          phoneNumber: event.phoneNumber,
         ));
-      } catch (exception) {
-        if (exception is DioException) {
-          print(exception.response!.data);
-        }
-        print("Get user data failed due to exception: $exception");
+      } else if (event.type == "DEPOSIT") {
+        emit(state.copyWith(
+          amount: event.amount,
+          message: event.message,
+          phoneNumber: event.phoneNumber,
+        ));
       }
     });
     on<UpdateAmountEvent>((event, emit) {
@@ -46,37 +60,73 @@ class PaymentConfirmBloc
       ));
     });
     on<SendPaymentEvent>((event, emit) async {
-      final transactionRepo = GetIt.instance.get<TransactionRepo>();
-      final Map<String, dynamic> user =
-          jsonDecode(prefs.getString(Preferences.user)!);
-      Wallet wallet = Wallet.fromJson(user["wallets"][0]);
-      try {
-        String amount = state.amount;
-        if (amount.contains(RegExp(r'(\.|[đ])'))) {
-          amount = amount.replaceAll(RegExp(r'(\.|[đ])'), '');
-        }
+      if (event.type == "TRANSFER") {
+        final transactionRepo = GetIt.instance.get<TransactionRepo>();
+        final Map<String, dynamic> user =
+            jsonDecode(prefs.getString(Preferences.user)!);
+        Wallet wallet = Wallet.fromJson(user["wallets"][0]);
+        try {
+          String amount = state.amount;
+          if (amount.contains(RegExp(r'(\.|[đ])'))) {
+            amount = amount.replaceAll(RegExp(r'(\.|[đ])'), '');
+          }
 
-        String? otp = await transactionRepo.createTransferTransaction(
-            wallet.id.toString(),
-            state.receiverWalletId,
-            amount,
-            state.message!);
-        if (otp != null) {
-          print("Create transfer transaction success. OTP: $otp");
+          String? otp = await transactionRepo.createTransferTransaction(
+              wallet.id.toString(),
+              state.receiverWalletId,
+              amount,
+              state.message!);
+          if (otp != null) {
+            print("Create transfer transaction success. OTP: $otp");
 
-          emit(state.copyWith(isSuccess: true));
+            emit(state.copyWith(isSuccess: true));
 
-          await NotificationManager.showNotification(
-            id: 0,
-            title: 'OTP Received',
-            body: 'Your OTP is $otp',
-          );
+            await NotificationManager.showNotification(
+              id: 0,
+              title: 'OTP Received',
+              body: 'Your OTP is $otp',
+            );
+          }
+        } catch (exception) {
+          if (exception is DioException) {
+            print(exception.response!.data);
+          }
+          print("Get user data failed due to exception: $exception");
         }
-      } catch (exception) {
-        if (exception is DioException) {
-          print(exception.response!.data);
+      } else if (event.type == "DEPOSIT"){
+        final transactionRepo = GetIt.instance.get<TransactionRepo>();
+        final Map<String, dynamic> user =
+            jsonDecode(prefs.getString(Preferences.user)!);
+        Wallet wallet = Wallet.fromJson(user["wallets"][0]);
+        try {
+          String amount = state.amount;
+          if (amount.contains(RegExp(r'(\.|[đ])'))) {
+            amount = amount.replaceAll(RegExp(r'(\.|[đ])'), '');
+          }
+
+          String? otp = await transactionRepo.createTransaction(
+              "Bank",
+              wallet.id.toString(),
+              amount,
+              state.message!,
+              event.type);
+          if (otp != null) {
+            print("Create transfer transaction success. OTP: $otp");
+
+            emit(state.copyWith(isSuccess: true));
+
+            await NotificationManager.showNotification(
+              id: 0,
+              title: 'OTP Received',
+              body: 'Your OTP is $otp',
+            );
+          }
+        } catch (exception) {
+          if (exception is DioException) {
+            print(exception.response!.data);
+          }
+          print("Get user data failed due to exception: $exception");
         }
-        print("Get user data failed due to exception: $exception");
       }
     });
   }

@@ -24,7 +24,7 @@ class OTPScreen extends StatelessWidget {
       child: BlocListener<OtpBloc, OtpState>(
         listener: (context, state) {
           if (state is OtpSuccess) {
-            if (state.type == "register") {
+            if (state.type == "REGISTER") {
               ToastHelper.showToast(L10n.of(context).verifySuccess,
                   status: ToastStatus.success);
               Navigator.push(
@@ -32,7 +32,7 @@ class OTPScreen extends StatelessWidget {
                 MaterialPageRoute(builder: (context) => RootApp()),
               );
             }
-            else if (state.type == "transfer_transaction"||state.type=="transaction"){
+            else if (state.type == "TRANSFER_TRANSACTION"||state.type=="TRANSACTION"){
               final transaction = Transaction.fromJson(state.data);
               ToastHelper.showToast(L10n.of(context).verifySuccess,
                   status: ToastStatus.success);

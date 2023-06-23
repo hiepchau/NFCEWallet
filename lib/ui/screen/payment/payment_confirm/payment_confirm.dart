@@ -19,10 +19,12 @@ class PaymentConfirm extends StatelessWidget {
   final String amount;
   final String receiverPhoneNumber;
   final String? message;
+  final String type;
 
   const PaymentConfirm({
     Key? key,
     required this.amount,
+    required this.type,
     required this.receiverPhoneNumber,
     this.message,
   }) : super(key: key);
@@ -32,26 +34,33 @@ class PaymentConfirm extends StatelessWidget {
     return BlocProvider(
       create: (context) => PaymentConfirmBloc()
         ..add(InitializePaymentEvent(
-            amount: this.amount,
-            phoneNumber: this.receiverPhoneNumber,
-            message: this.message)),
+            type: type,
+            amount: amount,
+            phoneNumber: receiverPhoneNumber,
+            message: message)),
       child: Scaffold(
-        body: _paymentConfirmPage(),
+        body: _paymentConfirmPage(
+          type: type,
+        ),
       ),
     );
   }
 }
 
 class _paymentConfirmPage extends StatelessWidget {
-  const _paymentConfirmPage({Key? key}) : super(key: key);
+  final String type;
+  const _paymentConfirmPage({Key? key, required this.type}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     final Map<String, dynamic> user =
         jsonDecode(prefs.getString(Preferences.user)!);
+    String title = "";
+    List<List<String>> textLine = List.empty(growable: true);
+
     return BlocListener<PaymentConfirmBloc, PaymentConfirmState>(
       listener: (context, state) {
-        if(state.isSuccess==true){
+        if (state.isSuccess == true) {
           Navigator.push(
             context,
             MaterialPageRoute(
@@ -68,6 +77,32 @@ class _paymentConfirmPage extends StatelessWidget {
         String phoneNumber = state.phoneNumber;
         String receiverName = state.receiverName;
         String? message = state.message;
+
+        if (type == "DEPOSIT") {
+          title = "Nạp tiền vào ví";
+          textLine = [
+            ['Người nhận', user["full_name"]],
+            ['Số điện thoại', phoneNumber],
+            ['Phí giao dịch', 'Miễn phí'],
+          ];
+        } else if (type == "WITHDRAW") {
+          title = "Rút tiền";
+          textLine = [
+            ['Người nhận', user["full_name"]],
+            ['Số điện thoại', phoneNumber],
+            ['Phí giao dịch', 'Miễn phí'],
+          ];
+        } else if (type == "TRANSFER") {
+          title = "Chuyển tiền đến $receiverName";
+          textLine = [
+            ['Người nhận', receiverName],
+            ['Số điện thoại', phoneNumber],
+            ['Lời nhắn', message ?? ""],
+            ['Phí giao dịch', 'Miễn phí'],
+          ];
+        }
+
+
         return Column(
           children: [
             Expanded(
@@ -133,7 +168,7 @@ class _paymentConfirmPage extends StatelessWidget {
                                           fontWeight: FontWeight.w700),
                                     ),
                                     Text(
-                                      'Chuyển tiền đến $receiverName',
+                                      title,
                                       style: TextStyle(
                                           fontSize: 11.sp,
                                           fontWeight: FontWeight.w400),
@@ -146,12 +181,7 @@ class _paymentConfirmPage extends StatelessWidget {
                                       height: 10.h,
                                     ),
                                   ] +
-                                  buildLines([
-                                    ['Người nhận', receiverName],
-                                    ['Số điện thoại', phoneNumber],
-                                    ['Lời nhắn', message ?? ""],
-                                    ['Phí giao dịch', 'Miễn phí'],
-                                  ], context),
+                                  buildLines(textLine, context),
                             ),
                           ),
                         ),
@@ -230,7 +260,7 @@ class _paymentConfirmPage extends StatelessWidget {
                           onPressed: () {
                             context
                                 .read<PaymentConfirmBloc>()
-                                .add(SendPaymentEvent());
+                                .add(SendPaymentEvent(type: type));
                           },
                           child: Text(
                             'Xác nhận giao dịch',

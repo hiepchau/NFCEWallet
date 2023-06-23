@@ -7,6 +7,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:nfc_e_wallet/data/preferences.dart';
 import 'package:nfc_e_wallet/main.dart';
 import 'package:nfc_e_wallet/ui/screen/app_navigator.dart';
+import 'package:nfc_e_wallet/ui/screen/deposit/deposit_page.dart';
 import 'package:nfc_e_wallet/ui/screen/qr/qr_page.dart';
 import 'package:nfc_e_wallet/ui/select_transfer_page.dart';
 import 'package:nfc_e_wallet/ui/style/color.dart';
@@ -203,10 +204,10 @@ class _ShortcutPanel extends State<ShortcutPanel> {
                         ),
                         ShortcutIcon(
                           Icon(
-                            Icons.qr_code,
+                            Icons.arrow_downward_rounded,
                             color: primary,
                           ),
-                          'Mã thanh toán',
+                          'Nạp tiền',
                           iconWidth,
                           maxWidth,
                           onTap: () {
@@ -214,7 +215,7 @@ class _ShortcutPanel extends State<ShortcutPanel> {
                                 context,
                                 MaterialPageRoute(
                                     builder: (context) =>
-                                    const QRScreen('QRCODE')));
+                                    const DepositPage()));
                           },
                         ),
                       ],

@@ -15,12 +15,12 @@ class OtpBloc extends Bloc<OtpEvent, OtpState> {
         final data =
             await authenticator.verifyOtp(event.phoneNumber, event.otp);
         if (data != null) {
-          if (data["type"] == "register") {
-            emit(OtpSuccess(type: "register", data: data));
-          } else if (data["type"] == "transfer_transaction") {
-            emit(OtpSuccess(type: "transfer_transaction", data: data["from_Transaction"]));
-          } else if (data["type"] == "transaction") {
-            emit(OtpSuccess(type: "transaction", data: data["transaction"]));
+          if (data["type"] == "REGISTER") {
+            emit(OtpSuccess(type: "REGISTER", data: data));
+          } else if (data["type"] == "TRANSFER_TRANSACTION") {
+            emit(OtpSuccess(type: "TRANSFER_TRANSACTION", data: data["from_Transaction"]));
+          } else if (data["type"] == "TRANSACTION") {
+            emit(OtpSuccess(type: "TRANSACTION", data: data["transaction"]));
           }
         } else {
           emit(OtpFailure("Invalid OTP"));

@@ -102,15 +102,15 @@ class _WithdrawPage extends State<WithdrawPage> {
                           child: Column(children: [
                             Row(
                               children: [
-                                Expanded(
-                                  child: ToggleWidget(
-                                    icon: AssetImage(
-                                        'assets/images/icons/tpbankIcon.png'),
-                                    title: "TP Bank",
-                                    subtitle: "Miễn phí",
-                                    onTap: () {},
-                                  ),
-                                ),
+                                // Expanded(
+                                //   child: ToggleWidget(
+                                //     icon: AssetImage(
+                                //         'assets/images/icons/tpbankIcon.png'),
+                                //     title: "TP Bank",
+                                //     subtitle: "Miễn phí",
+                                //     onTap: () {},
+                                //   ),
+                                // ),
                                 Padding(
                                   padding: EdgeInsets.only(right: 5),
                                   child: Radio<Bank>(
@@ -125,15 +125,15 @@ class _WithdrawPage extends State<WithdrawPage> {
                             ),
                             Row(
                               children: [
-                                Expanded(
-                                  child: ToggleWidget(
-                                    icon: AssetImage(
-                                        'assets/images/icons/vietcombankIcon.png'),
-                                    title: "Vietcom Bank",
-                                    subtitle: "Miễn phí",
-                                    onTap: () {},
-                                  ),
-                                ),
+                                // Expanded(
+                                //   child: ToggleWidget(
+                                //     icon: AssetImage(
+                                //         'assets/images/icons/vietcombankIcon.png'),
+                                //     title: "Vietcom Bank",
+                                //     subtitle: "Miễn phí",
+                                //     onTap: () {},
+                                //   ),
+                                // ),
                                 Padding(
                                   padding: const EdgeInsets.only(right: 5),
                                   child: Radio<Bank>(
@@ -376,6 +376,6 @@ class _WithdrawPage extends State<WithdrawPage> {
       shape: const RoundedRectangleBorder(
           borderRadius: BorderRadius.vertical(top: Radius.circular(30))),
       builder: (BuildContext context) {
-        return const PaymentConfirm(receiverPhoneNumber: "0827989868", amount: "1.000.000",); //const PaymentConfirm();
+        return const PaymentConfirm(receiverPhoneNumber: "0827989868", amount: "1.000.000", type: "WITHDRAW",); //const PaymentConfirm();
       });
 }

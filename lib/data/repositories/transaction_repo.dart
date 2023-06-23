@@ -38,16 +38,25 @@ class TransactionRepo {
     });
   }
 
-  Future<bool> createTransaction(String fromUser, String toUser, String amount,
+  Future<String?> createTransaction(String fromUser, String toUser, String amount,
       String message, String type) async {
     return _appService
         .createTransaction(
-            'Bearer ' + _sharedPreferences.getString('token')!,
+            _sharedPreferences.getString('token')!,
             _requestFactory.createTransaction(
                 fromUser, toUser, amount, message, type))
         .then((http) async {
       print(http.response.statusCode);
-      return (http.response.statusCode != 200);
+      if (http.response.statusCode != 200) {
+        return null;
+      }
+      String? otp;
+
+      if (http.data['message'] == 'OTP SENT') {
+        otp = http.data['otp'];
+        print("OTP received: $otp");
+      }
+      return otp;
     });
   }
 

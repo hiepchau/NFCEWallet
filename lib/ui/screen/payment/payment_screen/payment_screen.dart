@@ -292,6 +292,7 @@ class PaymentPageState extends State<PaymentPage> {
                                       ),
                                       builder: (BuildContext context) {
                                         return PaymentConfirm(
+                                          type:"TRANSFER",
                                           receiverPhoneNumber: phoneNumber,
                                           amount: amount,
                                           message: message,

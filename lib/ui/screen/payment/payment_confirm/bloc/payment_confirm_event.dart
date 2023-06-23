@@ -24,11 +24,16 @@ class InitializePaymentEvent extends PaymentConfirmEvent {
   final String amount;
   final String phoneNumber;
   final String? message;
+  final String type;
 
   InitializePaymentEvent(
       {required this.amount,
       required this.phoneNumber,
+      required this.type,
       this.message});
 }
 
-class SendPaymentEvent extends PaymentConfirmEvent {}
+class SendPaymentEvent extends PaymentConfirmEvent {
+  final String type;
+  SendPaymentEvent({required this.type});
+}
