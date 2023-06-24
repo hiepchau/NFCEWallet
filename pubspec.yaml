@@ -51,6 +51,7 @@ dependencies:
   flutter_local_notifications: ^14.1.1
   flutter_typeahead: ^4.6.2
   nfc_manager: ^3.3.0
+  nfc_emulator: ^2.0.0-nullsafety.0
 
 dev_dependencies:
   flutter_test:

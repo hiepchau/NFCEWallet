@@ -4,6 +4,8 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:intl/intl.dart';
+import 'package:nfc_e_wallet/data/model/wallet.dart';
 import 'package:nfc_e_wallet/data/preferences.dart';
 import 'package:nfc_e_wallet/main.dart';
 import 'package:nfc_e_wallet/ui/screen/app_navigator.dart';
@@ -25,9 +27,14 @@ class ShortcutPanel extends StatefulWidget {
 
 class _ShortcutPanel extends State<ShortcutPanel> {
   Map<String, dynamic> user = jsonDecode(prefs.getString(Preferences.user)!);
+  Wallet defaulWallet = Wallet(1, 0, "0", "0");
   bool isVisible = false;
   @override
   Widget build(BuildContext context) {
+    final listWallet = user["wallets"];
+    for (var wallet in listWallet!) {
+      if (wallet["type"] == "DefaultWallet") defaulWallet = Wallet.fromJson(wallet);
+    }
     return AspectRatio(
       aspectRatio: MediaQuery.of(context).size.width > 900 ? 70 / 40 : 70 / 45,
       child: Container(
@@ -115,7 +122,7 @@ class _ShortcutPanel extends State<ShortcutPanel> {
                             children: [
                               Text(
                                 isVisible
-                                    ? "Số dư ví: ${user["wallets"][0]["balance"]}đ"
+                                    ? "Số dư ví: ${formatCurrency(defaulWallet.balance.toString())}đ"
                                     : "Số dư ví: ************",
                                 style: TextStyle(
                                     color: primary,
@@ -231,5 +238,9 @@ class _ShortcutPanel extends State<ShortcutPanel> {
         ),
       ),
     );
+  }
+  String formatCurrency(String amount) {
+    final currencyFormat = NumberFormat("#,##0.##");
+    return currencyFormat.format(int.parse(amount));
   }
 }

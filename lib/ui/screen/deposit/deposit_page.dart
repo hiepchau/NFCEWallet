@@ -416,7 +416,7 @@ class _DepositPage extends State<DepositPage> {
       builder: (BuildContext context) {
         return PaymentConfirm(
           type: "DEPOSIT",
-          receiverPhoneNumber: "0827989868",
+          receiverPhoneNumber: user.phone_number,
           amount: withdrawController.text.toString(),
         ); 
       });
