@@ -1,8 +1,11 @@
+import 'dart:convert';
+
 import 'package:animated_bottom_navigation_bar/animated_bottom_navigation_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_font_icons/flutter_font_icons.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:nfc_e_wallet/ui/widgets/shortcut_widget/shortcut_panel.dart';
+import 'package:nfc_host_card_emulation/nfc_host_card_emulation.dart';
 
 import '../style/color.dart';
 import 'account/account_page.dart';
@@ -20,6 +23,13 @@ class _RootAppState extends State<RootApp> with TickerProviderStateMixin {
   int pageIndex = 0;
   GlobalKey key = GlobalKey();
   late final tabController = TabController(length: 4, vsync: this);
+
+  //INIT NFC
+  final port = 0;
+  // change data to transmit here
+
+  final data = utf8.encode("hehe");
+
 
   @override
   void initState() {
