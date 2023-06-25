@@ -12,6 +12,7 @@ import 'package:nfc_e_wallet/ui/screen/app_navigator.dart';
 import 'package:nfc_e_wallet/ui/screen/authenticate/login/authenticate_page.dart';
 import 'package:nfc_e_wallet/utils/nfc_manager.dart';
 import 'package:nfc_e_wallet/utils/notification_manager.dart';
+import 'package:nfc_host_card_emulation/nfc_host_card_emulation.dart';
 import 'package:nfc_manager/nfc_manager.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'data/model/user.dart';
@@ -23,6 +24,7 @@ FlutterLocalNotificationsPlugin();
 
 late SharedPreferences prefs;
 late User user;
+late NfcState nfcState;
 late NFCManager nfcManager;
 
 void main() async {
@@ -34,7 +36,17 @@ void main() async {
   prefs = await SharedPreferences.getInstance();
   user = User.fromJson(jsonDecode(prefs.getString(Preferences.user)!));
 
-  nfcManager = NFCManager();
+  //INIT NFC
+  nfcManager = NFCManager();  
+  nfcState = await NfcHce.checkDeviceNfcState();
+
+  if (nfcState == NfcState.enabled) {
+    await NfcHce.init(
+      aid: Uint8List.fromList([0xA0, 0x00, 0xDA, 0xDA, 0xDA, 0xDA, 0xDA]),
+      permanentApduResponses: false,
+      listenOnlyConfiguredPorts: false,
+    );
+  }
 
   runApp(ScreenUtilInit(
       designSize: kIsWeb ? const Size(790, 620) : const Size(390, 800),
