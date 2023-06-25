@@ -6,7 +6,7 @@ import 'package:nfc_e_wallet/utils/toast_helper.dart';
 import 'package:nfc_manager/nfc_manager.dart';
 import '../../../../l10n/l10n.dart';
 import '../../../style/color.dart';
-import '../../root_screen.dart';
+import '../../root/root_screen.dart';
 import '../forgot_password/forgot_password_screen.dart';
 import '../signup/signup_screen.dart';
 import 'authenticate_bloc.dart';
@@ -186,19 +186,6 @@ class _LoginFormState extends State<LoginForm> {
                               );
                             },
                             child: Text('Forgot password?'),
-                            style: TextButton.styleFrom(
-                              primary: primary, // This is the color of the text
-                            ),
-                          ),
-                        ),
-                        Container(
-                          width: double.infinity,
-                          child: TextButton(
-                            onPressed: () {
-                              nfcManager.getNFCAvailable();
-                              nfcManager.startNFCSession();
-                            },
-                            child: Text('NFC test'),
                             style: TextButton.styleFrom(
                               primary: primary, // This is the color of the text
                             ),

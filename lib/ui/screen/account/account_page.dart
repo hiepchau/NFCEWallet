@@ -7,6 +7,7 @@ import 'package:nfc_e_wallet/data/model/wallet.dart';
 import 'package:nfc_e_wallet/data/preferences.dart';
 import 'package:nfc_e_wallet/main.dart';
 import 'package:nfc_e_wallet/ui/screen/authenticate/login/authenticate_bloc.dart';
+import 'package:nfc_e_wallet/ui/screen/security/security_screen.dart';
 import 'package:nfc_e_wallet/ui/screen/wallet/bloc/wallet_bloc.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../../../data/model/user.dart';
@@ -235,7 +236,12 @@ class _AccountPage extends State<AccountScreen> {
                     iconColor: Colors.green,
                     title: 'Bảo mật',
                     subtitle: "",
-                    onTap: () {},
+                    onTap: () {
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => SecurityScreen()));
+                    },
                   ),
                 ]);
               },

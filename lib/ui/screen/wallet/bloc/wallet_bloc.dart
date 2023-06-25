@@ -29,6 +29,7 @@ class WalletBloc extends Bloc<WalletEvent, WalletState> {
       try {
         final wallet = await walletRepo.createWallet(
             event.name, event.type, event.cardNumber);
+        listWallet.add(wallet!);
         emit(WalletCreatedState(wallet));
       } catch (exception) {
         if (exception is DioException) {

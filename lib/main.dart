@@ -7,6 +7,7 @@ import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
+import 'package:nfc_e_wallet/data/model/wallet.dart';
 import 'package:nfc_e_wallet/l10n/l10n.dart';
 import 'package:nfc_e_wallet/ui/screen/app_navigator.dart';
 import 'package:nfc_e_wallet/ui/screen/authenticate/login/authenticate_page.dart';
@@ -20,12 +21,16 @@ import 'data/preferences.dart';
 import 'dependency.dart';
 
 final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
-FlutterLocalNotificationsPlugin();
+    FlutterLocalNotificationsPlugin();
 
 late SharedPreferences prefs;
 late User user;
+late bool isNFCEnable;
+late bool isAuthByFingerprint;
 late NfcState nfcState;
 late NFCManager nfcManager;
+late List<Wallet> listWallet;
+late Wallet defaultWallet;
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -34,19 +39,12 @@ void main() async {
   await configureDependencies();
   //INIT PREFERENCES
   prefs = await SharedPreferences.getInstance();
-  user = User.fromJson(jsonDecode(prefs.getString(Preferences.user)!));
+  isNFCEnable = prefs.getBool("NFC") ?? false;
+  isAuthByFingerprint = prefs.getBool("AuthByFingerprint") ?? false;
 
   //INIT NFC
-  nfcManager = NFCManager();  
+  nfcManager = NFCManager();
   nfcState = await NfcHce.checkDeviceNfcState();
-
-  if (nfcState == NfcState.enabled) {
-    await NfcHce.init(
-      aid: Uint8List.fromList([0xA0, 0x00, 0xDA, 0xDA, 0xDA, 0xDA, 0xDA]),
-      permanentApduResponses: false,
-      listenOnlyConfiguredPorts: false,
-    );
-  }
 
   runApp(ScreenUtilInit(
       designSize: kIsWeb ? const Size(790, 620) : const Size(390, 800),

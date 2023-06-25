@@ -4,7 +4,7 @@ import 'package:nfc_e_wallet/data/model/transaction.dart';
 import 'package:nfc_e_wallet/l10n/l10n.dart';
 import 'package:nfc_e_wallet/ui/screen/otp/bloc/otp_bloc.dart';
 import 'package:nfc_e_wallet/ui/screen/payment/payment_success/payment_success_screen.dart';
-import 'package:nfc_e_wallet/ui/screen/root_screen.dart';
+import 'package:nfc_e_wallet/ui/screen/root/root_screen.dart';
 import 'package:nfc_e_wallet/utils/toast_helper.dart';
 import 'package:pin_code_fields/pin_code_fields.dart';
 import 'package:rxdart/rxdart.dart';
