@@ -121,6 +121,7 @@ class _LoginFormState extends State<LoginForm> {
                       children: [
                         TextField(
                           controller: _phoneNumberController,
+                          keyboardType: TextInputType.number,
                           decoration: InputDecoration(
                             hintText: 'Your phone number',
                             border: OutlineInputBorder(
@@ -173,9 +174,10 @@ class _LoginFormState extends State<LoginForm> {
                                 borderRadius: BorderRadius.circular(8),
                               ),
                             ),
-                            child: Text('Sign In', style: TextStyle(
-                              color: onPrimary
-                            ),),
+                            child: Text(
+                              'Sign In',
+                              style: TextStyle(color: onPrimary),
+                            ),
                           ),
                         ),
                         SizedBox(height: 16),

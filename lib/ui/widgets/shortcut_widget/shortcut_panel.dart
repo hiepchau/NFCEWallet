@@ -231,6 +231,7 @@ class _ShortcutPanel extends State<ShortcutPanel> {
     );
   }
   String formatCurrency(String amount) {
+    if (amount.isEmpty) return "";
     final currencyFormat = NumberFormat("#,##0.##");
     return currencyFormat.format(int.parse(amount));
   }

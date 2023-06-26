@@ -5,6 +5,7 @@ import 'package:meta/meta.dart';
 import 'package:dio/dio.dart';
 import 'package:get_it/get_it.dart';
 import 'package:nfc_e_wallet/data/repositories/authenticator.dart';
+import 'package:nfc_e_wallet/main.dart';
 
 part 'authenticate_event.dart';
 part 'authenticate_state.dart';
@@ -17,7 +18,7 @@ class AuthenticationBloc extends Bloc<AuthenticationEvent, AuthenticationInfoSta
       try
       {
         bool loginstate = await authenticator.login(
-            event.phoneNumber as String, event.password as String);
+            event.phoneNumber as String, event.password as String, FCMToken!);
 
         if(loginstate) {
           print("Login success");

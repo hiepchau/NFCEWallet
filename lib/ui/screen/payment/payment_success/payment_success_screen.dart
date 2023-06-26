@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:intl/intl.dart';
 import 'package:nfc_e_wallet/data/model/transaction.dart';
 import 'package:nfc_e_wallet/main.dart';
 import 'package:nfc_e_wallet/ui/screen/payment/payment_success/bloc/payment_success_bloc.dart';
@@ -49,6 +50,7 @@ class PaymentSuccessScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     String title = "";
+    String amount = "1";
     List<List<String>> textLine = List.empty(growable: true);
 
     return BlocProvider(
@@ -56,6 +58,7 @@ class PaymentSuccessScreen extends StatelessWidget {
             PaymentSuccessBloc()..add(InitPaymentSuccessEvent(transaction)),
         child: BlocBuilder<PaymentSuccessBloc, PaymentSuccessState>(
           builder: (context, state) {
+            amount = state.amount;
             final type = state.type;
             if (type == "DEPOSIT") {
               title = "Nạp tiền vào ví";
@@ -138,7 +141,7 @@ class PaymentSuccessScreen extends StatelessWidget {
                                             ? 20
                                             : 15,
                                     fontWeight: FontWeight.bold)),
-                            Text(state.amount,
+                            Text("${formatCurrency(amount)}đ",
                                 style: TextStyle(
                                     fontSize:
                                         MediaQuery.of(context).size.width > 350
@@ -276,23 +279,6 @@ class PaymentSuccessScreen extends StatelessWidget {
                       child: GestureDetector(
                         onTap: () {
                           AppNav.popUntil(context, (route) => route.isFirst);
-                          /*Navigator.of(context).pushAndRemoveUntil(
-                      PageRouteBuilder(
-                        pageBuilder: (BuildContext context, animation,
-                            secondaryAnimation) {
-                          return const RootApp();
-                        },
-                        transitionsBuilder:
-                            (context, animation, secondaryAnimation, child) {
-                          final tween = Tween(begin: 0.0, end: 1.0);
-                          final fadeAnimation = animation.drive(tween);
-                          return FadeTransition(
-                            opacity: fadeAnimation,
-                            child: child,
-                          );
-                        },
-                      ),
-                      (route) => false);*/
                         },
                         child: Container(
                           decoration: BoxDecoration(
@@ -315,5 +301,10 @@ class PaymentSuccessScreen extends StatelessWidget {
             // Handle closure
           },
         ));
+  }
+  String formatCurrency(String amount) {
+    if(amount.isEmpty) return "";
+    final currencyFormat = NumberFormat("#,##0.##");
+    return currencyFormat.format(int.parse(amount));
   }
 }

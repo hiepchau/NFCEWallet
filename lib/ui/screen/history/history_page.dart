@@ -18,7 +18,6 @@ class HistoryPage extends StatefulWidget {
 }
 
 class _HistoryPage extends State<HistoryPage> {
-  bool obscureText = true;
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
@@ -110,22 +109,6 @@ class _HistoryPage extends State<HistoryPage> {
               const SizedBox(
                 width: 20,
               ),
-              Column(children: [
-                GestureDetector(
-                  onTap: _toggleVisibility,
-                  child: Icon(
-                    obscureText
-                        ? FontAwesomeIcons.eye
-                        : FontAwesomeIcons.eyeSlash,
-                    size: 15.0,
-                    color: onPrimary,
-                  ),
-                ),
-                Text(
-                  obscureText ? "Hiện số dư" : "Ẩn số dư",
-                  style: TextStyle(fontSize: 10, color: onPrimary),
-                )
-              ])
             ]))
       ]),
     );
@@ -432,7 +415,6 @@ class _HistoryPage extends State<HistoryPage> {
             title: "Chuyển tiền",
             subtitle: "Chuyển tiền đến " + transaction.to_User,
             time: transaction.time!,
-            balance: "",
             amount: "-" + transaction.amount.toString());
   }
 
@@ -444,7 +426,6 @@ class _HistoryPage extends State<HistoryPage> {
             title: "Rút tiền",
             subtitle: "Rút tiền về " + transaction.to_User,
             time: transaction.time!,
-            balance: "",
             amount: "-" + transaction.amount.toString());
   }
 
@@ -456,7 +437,6 @@ class _HistoryPage extends State<HistoryPage> {
             title: "Nạp tiền",
             subtitle: "Nạp tiền từ " + transaction.to_User,
             time: transaction.time!,
-            balance: "",
             amount: "+" + transaction.amount.toString());
   }
 
@@ -468,7 +448,6 @@ class _HistoryPage extends State<HistoryPage> {
         title: "Nạp tiền điện thoại",
         subtitle: "Nạp cho số " + transaction.to_User,
         time: transaction.time!,
-        balance: "",
         amount: "-" + transaction.amount.toString());
   }
 
@@ -480,7 +459,6 @@ class _HistoryPage extends State<HistoryPage> {
         title: "Nhận tiền",
         subtitle: "Nhận tiền từ " + transaction.from_User,
         time: transaction.time!,
-        balance: "",
         amount: "+" + transaction.amount.toString());
   }
 
@@ -512,13 +490,6 @@ class _HistoryPage extends State<HistoryPage> {
       ),
     );
     return listWidget;
-  }
-
-  void _toggleVisibility() {
-    setState(() {
-      obscureText = !obscureText;
-      HistoryWidget.isObscure = obscureText;
-    });
   }
 
   String formatDate(String date) {

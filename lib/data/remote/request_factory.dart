@@ -14,10 +14,11 @@ class RequestFactory {
     };
   }
 
-  createLogin(String username, String password) {
+  createLogin(String username, String password, String fcmToken) {
     return {
       "username": username,
-      "password": password
+      "password": password,
+      "deviceToken": fcmToken,
     };
   }
 

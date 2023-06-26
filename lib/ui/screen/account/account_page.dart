@@ -558,6 +558,7 @@ class _AccountPage extends State<AccountScreen> {
     return columnContent;
   }
   String formatCurrency(String amount){
+    if (amount.isEmpty) return "";
     final currencyFormat = NumberFormat("#,##0.##");
     return currencyFormat.format(int.parse(amount));
   }

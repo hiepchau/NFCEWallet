@@ -19,7 +19,7 @@ class WithdrawPage extends StatefulWidget {
 
 class _WithdrawPage extends State<WithdrawPage> {
   bool isVisible = false;
-  int groupValue = -1;
+  int groupValue = 0;
   TextEditingController withdrawController = TextEditingController();
   @override
   Widget build(BuildContext context) {
@@ -185,10 +185,23 @@ class _WithdrawPage extends State<WithdrawPage> {
                                         padding: const EdgeInsets.symmetric(
                                             horizontal: 15, vertical: 10),
                                         child: TextFormField(
+                                          onChanged: (value) {
+                                            value = formatCurrency(
+                                                value.replaceAll('.', ''));
+                                            withdrawController.value =
+                                                TextEditingValue(
+                                              text: value,
+                                              selection:
+                                                  TextSelection.collapsed(
+                                                      offset: value.length),
+                                            );
+                                          },
                                           controller: withdrawController,
+                                          keyboardType: TextInputType.number,
                                           decoration: InputDecoration(
                                             hoverColor: primaryContainer,
                                             focusColor: primary,
+                                            suffixText: "đ",
                                             filled: true,
                                             fillColor: Colors.white,
                                             contentPadding:
@@ -322,15 +335,18 @@ class _WithdrawPage extends State<WithdrawPage> {
   }
 
   String formatCurrency(String amount) {
+    if (amount.isEmpty) return "";
     final currencyFormat = NumberFormat("#,##0.##");
     return currencyFormat.format(int.parse(amount));
   }
 
   List<Widget> buildListWallet(List<Wallet> listWallet) {
+    bool isNull = true;
     List<Widget> listWidget = [];
     for (int i = 0; i < listWallet.length; i++) {
       Wallet wallet = listWallet[i];
       if (wallet.type == "Bank") {
+        isNull=false;
         AssetImage assetImage = const AssetImage('');
         if (wallet.name == "Vietcombank") {
           assetImage =
@@ -357,6 +373,9 @@ class _WithdrawPage extends State<WithdrawPage> {
           ),
         );
       }
+    }
+    if(isNull){
+      listWidget.add(Text("Bạn vẫn chưa liên kết với ngân hàng nào cả! Hãy liên kết nhé"));
     }
     return listWidget;
   }

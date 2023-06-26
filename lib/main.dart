@@ -1,6 +1,6 @@
 import 'dart:convert';
 import 'dart:io';
-
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
@@ -23,6 +23,8 @@ import 'dependency.dart';
 final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
     FlutterLocalNotificationsPlugin();
 
+final FirebaseMessaging messaging = FirebaseMessaging.instance;
+
 late SharedPreferences prefs;
 late User user;
 late bool isNFCEnable;
@@ -31,6 +33,7 @@ late NfcState nfcState;
 late NFCManager nfcManager;
 late List<Wallet> listWallet;
 late Wallet defaultWallet;
+late String? FCMToken;
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -42,12 +45,25 @@ void main() async {
   isNFCEnable = prefs.getBool("NFC") ?? false;
   isAuthByFingerprint = prefs.getBool("AuthByFingerprint") ?? false;
   listWallet = List.empty(growable: true);
-  defaultWallet = Wallet(0, 0, "", "","");
+  defaultWallet = Wallet(0, 0, "", "", "");
 
   //INIT NFC
   nfcManager = NFCManager();
   nfcState = await NfcHce.checkDeviceNfcState();
 
+  //INIT FCM
+  NotificationSettings settings = await messaging.requestPermission(
+    alert: true,
+    announcement: false,
+    badge: true,
+    carPlay: false,
+    criticalAlert: false,
+    provisional: false,
+    sound: true,
+  );
+  if (settings.authorizationStatus == AuthorizationStatus.authorized) {
+    FCMToken = await messaging.getToken();
+  }
   runApp(ScreenUtilInit(
       useInheritedMediaQuery: true,
       designSize: kIsWeb ? const Size(790, 620) : const Size(390, 800),

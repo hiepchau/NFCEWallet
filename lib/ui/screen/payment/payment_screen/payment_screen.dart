@@ -4,10 +4,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:flutter_typeahead/flutter_typeahead.dart';
+import 'package:intl/intl.dart';
 import 'package:nfc_e_wallet/data/model/user.dart';
 import 'package:nfc_e_wallet/data/preferences.dart';
 import 'package:nfc_e_wallet/main.dart';
-import 'package:nfc_e_wallet/ui/screen/payment/payment_screen/bloc/payment_screen_bloc.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../../style/color.dart';
@@ -18,10 +18,7 @@ class PaymentScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider(
-      create: (context) => PaymentScreenBloc(),
-      child: PaymentPage(),
-    );
+    return PaymentPage();
   }
 }
 
@@ -42,18 +39,7 @@ class PaymentPageState extends State<PaymentPage> {
       onTap: () {
         FocusScope.of(context).unfocus();
       },
-      child: BlocBuilder<PaymentScreenBloc, PaymentScreenState>(
-        builder: (context, state) {
-          TextEditingController _typeAheadController =
-              TextEditingController(text: state.phoneNumber);
-          String message = state.message;
-          String amount = state.amount;
-          String phoneNumber = state.phoneNumber;
-          amountController.text = amount;
-          messageController.text = message;
-          phoneNumberController.text = phoneNumber;
-
-          return Scaffold(
+      child: Scaffold(
             resizeToAvoidBottomInset: false,
             appBar: AppBar(
               title: Text(
@@ -125,13 +111,8 @@ class PaymentPageState extends State<PaymentPage> {
                               ),
                               TypeAheadField(
                                 textFieldConfiguration: TextFieldConfiguration(
-                                  onSubmitted: (value) {
-                                    context
-                                        .read<PaymentScreenBloc>()
-                                        .add(ChangePhoneNumberEvent(value));
-                                  },
                                   autofocus: false,
-                                  controller: _typeAheadController,
+                                  controller: phoneNumberController,
                                   decoration: InputDecoration(
                                     labelText:
                                         'Số điện thoại hoặc tên người nhận',
@@ -156,21 +137,27 @@ class PaymentPageState extends State<PaymentPage> {
                                 onSuggestionSelected: (suggestion) {
                                   Map<String, dynamic> userSuggestion =
                                       suggestion as Map<String, dynamic>;
-                                  context.read<PaymentScreenBloc>().add(
-                                      ChangePhoneNumberEvent(
-                                          userSuggestion["phone"]));
-                                  _typeAheadController.text =
+                                  phoneNumberController.text =
                                       userSuggestion["phone"];
                                 },
                               ),
-                              SizedBox(
+                              const SizedBox(
                                 height: 15,
                               ),
-                              TextField(
+                              TextFormField(
+                                onChanged: (value) {
+                                  value = formatCurrency(value.replaceAll('.', ''));
+                                  amountController.value = TextEditingValue(
+                                    text: value,
+                                    selection: TextSelection.collapsed(
+                                        offset: value.length),
+                                  );
+                                },
                                 controller: amountController,
                                 keyboardType: TextInputType.number,
                                 decoration: InputDecoration(
                                   labelText: "Nhập mệnh giá",
+                                  suffixText: "đ",
                                   prefixIcon:
                                       Icon(Icons.monetization_on_outlined),
                                   border: OutlineInputBorder(
@@ -202,11 +189,6 @@ class PaymentPageState extends State<PaymentPage> {
                                   Expanded(
                                     child: TextFormField(
                                       controller: messageController,
-                                      onFieldSubmitted: (value) {
-                                        context
-                                            .read<PaymentScreenBloc>()
-                                            .add(ChangeMessageEvent(value));
-                                      },
                                       minLines: 5,
                                       maxLines: 5,
                                       decoration: InputDecoration(
@@ -242,22 +224,17 @@ class PaymentPageState extends State<PaymentPage> {
                                 children: [
                                   buildRoundButton(
                                       suggestIconHeight, 'Chuyển tiền', () {
-                                    context
-                                        .read<PaymentScreenBloc>()
-                                        .add(ChangeMessageEvent('Chuyển tiền'));
+                                    messageController.text = 'Chuyển tiền';
                                   }),
                                   buildRoundButton(
                                       suggestIconHeight, 'Chúc zui', () {
-                                    context
-                                        .read<PaymentScreenBloc>()
-                                        .add(ChangeMessageEvent('Chúc zui'));
+                                    messageController.text = 'Chúc zui';
                                   }),
                                   buildRoundButton(
                                       suggestIconHeight, 'Hết nợ hết nghĩa!',
                                       () {
-                                    context.read<PaymentScreenBloc>().add(
-                                        ChangeMessageEvent(
-                                            'Hết nợ hết nghĩa!'));
+                                    messageController.text =
+                                        'Hết nợ hết nghĩa!';
                                   }),
                                 ],
                               ),
@@ -268,58 +245,58 @@ class PaymentPageState extends State<PaymentPage> {
                 ),
                 Expanded(
                     child: SafeArea(
-                      child: Padding(
-                        padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 10),
-                        child: Column(
-                          children: [
-                            AspectRatio(
-                                aspectRatio: 270 / 48,
-                                child: ElevatedButton(
-                                  style: ElevatedButton.styleFrom(
-                                    backgroundColor: green,
-                                    foregroundColor: white,
-                                    shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(10.0),
+                  child: Padding(
+                    padding:
+                        const EdgeInsets.symmetric(vertical: 5, horizontal: 10),
+                    child: Column(
+                      children: [
+                        AspectRatio(
+                            aspectRatio: 270 / 48,
+                            child: ElevatedButton(
+                              style: ElevatedButton.styleFrom(
+                                backgroundColor: green,
+                                foregroundColor: white,
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(10.0),
+                                ),
+                              ),
+                              onPressed: () {
+                                showModalBottomSheet(
+                                  context: context,
+                                  shape: const RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.vertical(
+                                      top: Radius.circular(30),
                                     ),
                                   ),
-                                  onPressed: () {
-                                    showModalBottomSheet(
-                                      context: context,
-                                      shape: const RoundedRectangleBorder(
-                                        borderRadius: BorderRadius.vertical(
-                                          top: Radius.circular(30),
-                                        ),
-                                      ),
-                                      builder: (BuildContext context) {
-                                        return PaymentConfirm(
-                                          type:"TRANSFER",
-                                          receiverPhoneNumber: phoneNumber,
-                                          amount: amount,
-                                          message: message,
-                                        );
-                                      },
+                                  builder: (BuildContext context) {
+                                    return PaymentConfirm(
+                                      type: "TRANSFER",
+                                      receiverPhoneNumber:
+                                          phoneNumberController.text,
+                                      amount: amountController.text,
+                                      message: messageController.text,
                                     );
                                   },
-                                  child: const Text(
-                                    'Tiếp tục',
-                                    style: TextStyle(
-                                      fontSize: 20,
-                                      fontWeight: FontWeight.w200,
-                                    ),
-                                  ),
-                                )),
-                            SizedBox(
-                              height: 10,
-                            )
-                          ],
-                        ),
-                      ),
-                    )),
+                                );
+                              },
+                              child: const Text(
+                                'Tiếp tục',
+                                style: TextStyle(
+                                  fontSize: 20,
+                                  fontWeight: FontWeight.w200,
+                                ),
+                              ),
+                            )),
+                        SizedBox(
+                          height: 10,
+                        )
+                      ],
+                    ),
+                  ),
+                )),
               ],
             ),
-          );
-        },
-      ),
+          )
     );
   }
 
@@ -343,7 +320,7 @@ class PaymentPageState extends State<PaymentPage> {
       BuildContext context, double suggestIconHeight, String text) {
     text = '$textđ';
     return buildRoundButton(suggestIconHeight, text, () {
-      context.read<PaymentScreenBloc>().add(ChangeAmountEvent(text));
+      amountController.text = text;
     });
   }
 
@@ -372,5 +349,11 @@ class PaymentPageState extends State<PaymentPage> {
         ),
       ),
     );
+  }
+
+  String formatCurrency(String amount) {
+    if (amount.isEmpty) return "";
+    final currencyFormat = NumberFormat("#,##0.##");
+    return currencyFormat.format(int.parse(amount));
   }
 }

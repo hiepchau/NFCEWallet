@@ -23,7 +23,7 @@ class DepositPage extends StatefulWidget {
 
 class _DepositPage extends State<DepositPage> {
   bool isVisible = false;
-  int groupValue = -1;
+  int groupValue = 0;
   TextEditingController amountController = TextEditingController();
   @override
   Widget build(BuildContext context) {
@@ -136,18 +136,14 @@ class _DepositPage extends State<DepositPage> {
                                     iconColor: black,
                                     title: 'Nạp tiền bằng thẻ ngân hàng',
                                     subtitle: "Miễn phí",
-                                    onTap: () {
-                                      
-                                    },
+                                    onTap: () {},
                                   ),
                                   ProfileWidget(
                                       icon: FontAwesomeIcons.shop,
                                       iconColor: black,
                                       title: 'Nạp tiền tại điểm giao dịch',
                                       subtitle: "Miễn phí",
-                                      onTap: () {
-                                        
-                                      }),
+                                      onTap: () {}),
                                 ],
                               ))),
                       Expanded(
@@ -205,12 +201,26 @@ class _DepositPage extends State<DepositPage> {
                                             padding: const EdgeInsets.symmetric(
                                                 horizontal: 15, vertical: 10),
                                             child: TextFormField(
+                                              onChanged: ((value) {
+                                                value = formatCurrency(
+                                                    value.replaceAll('.', ''));
+                                                amountController.value =
+                                                    TextEditingValue(
+                                                  text: value,
+                                                  selection:
+                                                      TextSelection.collapsed(
+                                                          offset: value.length),
+                                                );
+                                              }),
                                               controller: amountController,
+                                              keyboardType:
+                                                  TextInputType.number,
                                               decoration: InputDecoration(
                                                 hoverColor: primaryContainer,
                                                 focusColor: primary,
                                                 filled: true,
                                                 fillColor: Colors.white,
+                                                suffixText: "đ",
                                                 contentPadding:
                                                     const EdgeInsets.symmetric(
                                                         vertical: 10,
@@ -249,10 +259,8 @@ class _DepositPage extends State<DepositPage> {
                                           ),
                                           child: Center(
                                             child: TextButton(
-                                              onPressed: () =>
-                                                  amountController
-                                                  .text =
-                                                      "100.000",
+                                              onPressed: () => amountController
+                                                  .text = "100.000",
                                               child: Text("100.000đ",
                                                   style: const TextStyle(
                                                       fontSize: 13)),
@@ -275,10 +283,8 @@ class _DepositPage extends State<DepositPage> {
                                           ),
                                           child: Center(
                                             child: TextButton(
-                                              onPressed: () =>
-                                                  amountController
-                                                  .text =
-                                                      "200.000",
+                                              onPressed: () => amountController
+                                                  .text = "200.000",
                                               child: Text("200.000đ",
                                                   style: const TextStyle(
                                                       fontSize: 13)),
@@ -301,10 +307,8 @@ class _DepositPage extends State<DepositPage> {
                                           ),
                                           child: Center(
                                             child: TextButton(
-                                              onPressed: () =>
-                                                  amountController
-                                                  .text =
-                                                      "500.000",
+                                              onPressed: () => amountController
+                                                  .text = "500.000",
                                               child: Text("500.000đ",
                                                   style: const TextStyle(
                                                       fontSize: 13)),
@@ -358,25 +362,23 @@ class _DepositPage extends State<DepositPage> {
   }
 
   List<Widget> buildListWallet(List<Wallet> listWallet) {
+    bool isNull = true;
     List<Widget> listWidget = [];
     for (int i = 0; i < listWallet.length; i++) {
       Wallet wallet = listWallet[i];
       if (wallet.type == "Bank") {
+        isNull = false;
         AssetImage assetImage = const AssetImage('');
         if (wallet.name == "Vietcombank") {
-          assetImage = const
-              AssetImage('assets/images/icons/vietcombankIcon.png');
-        } else if (wallet.name=="TPbank"){
           assetImage =
-              const AssetImage('assets/images/icons/tpbankIcon.png');
-        }
-        else if (wallet.name == "BIDV") {
+              const AssetImage('assets/images/icons/vietcombankIcon.png');
+        } else if (wallet.name == "TPbank") {
+          assetImage = const AssetImage('assets/images/icons/tpbankIcon.png');
+        } else if (wallet.name == "BIDV") {
           assetImage = const AssetImage('assets/images/icons/bidv.png');
-        }
-        else if (wallet.name == "Techcombank") {
+        } else if (wallet.name == "Techcombank") {
           assetImage = const AssetImage('assets/images/icons/techcombank.png');
-        }
-        else if (wallet.name == "MB") {
+        } else if (wallet.name == "MB") {
           assetImage = const AssetImage('assets/images/icons/mb.png');
         }
         listWidget.add(
@@ -393,10 +395,15 @@ class _DepositPage extends State<DepositPage> {
         );
       }
     }
+    if (isNull) {
+      listWidget.add(
+          Text("Bạn vẫn chưa liên kết với ngân hàng nào cả! Hãy liên kết nhé"));
+    }
     return listWidget;
   }
 
   String formatCurrency(String amount) {
+    if (amount.isEmpty) return "";
     final currencyFormat = NumberFormat("#,##0.##");
     return currencyFormat.format(int.parse(amount));
   }

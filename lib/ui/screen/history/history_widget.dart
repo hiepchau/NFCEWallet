@@ -13,7 +13,6 @@ class HistoryWidget extends StatefulWidget {
     required this.title,
     required this.subtitle,
     required this.time,
-    required this.balance,
     required this.amount,
     required this.transaction,
   });
@@ -23,7 +22,6 @@ class HistoryWidget extends StatefulWidget {
   final String title;
   final String subtitle;
   final String time;
-  final String balance;
   final String amount;
   static bool isObscure = true;
   @override
@@ -110,22 +108,7 @@ class _HistoryWidget extends State<HistoryWidget> {
                                     ? 12
                                     : 12,
                                 fontFamily: 'SVN-Gotham'),
-                          ),
-                          Text(
-                            HistoryWidget.isObscure
-                                ? "Số dư ví: ******"
-                                : "Số dư ví: " + widget.balance,
-                            textAlign: TextAlign.start,
-                            style: TextStyle(
-                                color: Color.fromARGB(125, 0, 0, 0),
-                                fontSize: MediaQuery.of(context).size.width >
-                                    900
-                                    ? 13
-                                    : MediaQuery.of(context).size.width > 350
-                                    ? 12
-                                    : 12,
-                                fontFamily: 'SVN-Gotham'),
-                          )
+                          ),                   
                         ])
                   ],
                 ),

@@ -123,6 +123,7 @@ class _SignUpFormState extends State<SignUpForm> {
                       children: [
                         TextField(
                           controller: _phoneNumberController,
+                          keyboardType: TextInputType.number,
                           decoration: InputDecoration(
                             hintText: 'Your phone number',
                             border: OutlineInputBorder(

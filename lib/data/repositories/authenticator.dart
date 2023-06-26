@@ -23,9 +23,9 @@ class Authenticator {
   Authenticator(this._logger, this._sharedPreferences, this._appService,
       this._requestFactory, this._eventBus);
 
-  Future<bool> login(String username, String password) async {
+  Future<bool> login(String username, String password, String fcmToken) async {
     return _appService
-        .login(_requestFactory.createLogin(username, password))
+        .login(_requestFactory.createLogin(username, password, fcmToken))
         .then((http) async {
       print("LOGIN: $http.response.statusCode");
       if (http.response.statusCode != 200) {
