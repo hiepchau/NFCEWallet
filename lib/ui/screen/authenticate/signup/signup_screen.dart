@@ -12,6 +12,7 @@ class SignUpPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      resizeToAvoidBottomInset: true,
       body: BlocProvider(
         create: (context) => SignupBloc(),
         child: SignUpForm(),
@@ -98,7 +99,8 @@ class _SignUpFormState extends State<SignUpForm> {
                       onTap: () {
                         Navigator.push(
                           context,
-                          MaterialPageRoute(builder: (context) => LoginScreen()),
+                          MaterialPageRoute(
+                              builder: (context) => LoginScreen()),
                         );
                       },
                       child: Text(
@@ -245,12 +247,15 @@ class _SignUpFormState extends State<SignUpForm> {
                                     status: ToastStatus.failure);
                               }
                             },
-                            child: Text('Sign Up'),
                             style: ElevatedButton.styleFrom(
-                              primary: green1,
+                              backgroundColor: primary,
                               shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(8),
                               ),
+                            ),
+                            child: Text(
+                              'Sign Up',
+                              style: TextStyle(color: onPrimary),
                             ),
                           ),
                         ),

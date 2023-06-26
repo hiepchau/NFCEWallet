@@ -15,6 +15,7 @@ class LoginScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      resizeToAvoidBottomInset: true,
       body: BlocProvider(
         create: (context) => AuthenticationBloc(),
         child: LoginForm(),
@@ -70,7 +71,8 @@ class _LoginFormState extends State<LoginForm> {
               width: double.infinity,
               color: primary,
               child: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
                 child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
@@ -165,13 +167,15 @@ class _LoginFormState extends State<LoginForm> {
                                     status: ToastStatus.failure);
                               }
                             },
-                            child: Text('Sign In'),
                             style: ElevatedButton.styleFrom(
-                              primary: green1,
+                              backgroundColor: primary,
                               shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(8),
                               ),
                             ),
+                            child: Text('Sign In', style: TextStyle(
+                              color: onPrimary
+                            ),),
                           ),
                         ),
                         SizedBox(height: 16),

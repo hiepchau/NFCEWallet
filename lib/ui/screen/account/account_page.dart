@@ -8,6 +8,7 @@ import 'package:nfc_e_wallet/data/preferences.dart';
 import 'package:nfc_e_wallet/main.dart';
 import 'package:nfc_e_wallet/ui/screen/authenticate/login/authenticate_bloc.dart';
 import 'package:nfc_e_wallet/ui/screen/security/security_screen.dart';
+import 'package:nfc_e_wallet/ui/screen/wallet/add_wallet_page.dart';
 import 'package:nfc_e_wallet/ui/screen/wallet/bloc/wallet_bloc.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../../../data/model/user.dart';
@@ -229,7 +230,12 @@ class _AccountPage extends State<AccountScreen> {
                     iconColor: Colors.yellow,
                     title: 'Liên kết ngân hàng',
                     subtitle: "",
-                    onTap: () {},
+                    onTap: () {
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => AddBankScreen()));
+                    },
                   ),
                   ProfileWidget(
                     icon: Icons.shield,

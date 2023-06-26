@@ -38,6 +38,7 @@ class _RootAppState extends State<RootApp> with TickerProviderStateMixin {
           permanentApduResponses: false,
           listenOnlyConfiguredPorts: false,
         );
+        initNFC();
       } else {
         SmartDialog.show(builder: (context) {
           return Container(
@@ -62,18 +63,21 @@ class _RootAppState extends State<RootApp> with TickerProviderStateMixin {
     final userJson = jsonDecode(prefs.getString(Preferences.user)!);
     for (var wallet in userJson["wallets"]) {
       listWallet.add(Wallet.fromJson(wallet));
-      if(wallet["type"]=="DefaulWallet"){
-        defaultWallet=Wallet.fromJson(wallet);
+      if (wallet["type"] == "DefaultWallet") {
+        defaultWallet = Wallet.fromJson(wallet);
+        print(defaultWallet.balance);
       }
     }
   }
 
-  void initNFC() {
+  void initNFC() async {
     //INIT NFC
     final port = 0;
     // change data to transmit here
 
     final data = utf8.encode(defaultWallet.id.toString());
+
+    await NfcHce.addApduResponse(port, data);
   }
 
   @override
@@ -145,6 +149,7 @@ class _RootAppState extends State<RootApp> with TickerProviderStateMixin {
 
   Widget getBody() {
     return TabBarView(
+      physics: NeverScrollableScrollPhysics(),
       controller: tabController,
       children: [
         const Dashboard(),
