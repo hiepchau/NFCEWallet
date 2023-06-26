@@ -42,7 +42,7 @@ void main() async {
   isNFCEnable = prefs.getBool("NFC") ?? false;
   isAuthByFingerprint = prefs.getBool("AuthByFingerprint") ?? false;
   listWallet = List.empty(growable: true);
-  defaultWallet = Wallet(0, 0, "", "");
+  defaultWallet = Wallet(0, 0, "", "","");
 
   //INIT NFC
   nfcManager = NFCManager();

@@ -12,8 +12,9 @@ class UpdateWalletEvent extends WalletEvent {
 }
 
 class CreateWalletEvent extends WalletEvent {
+  final String userId;
   final String name;
   final String type;
   final String cardNumber;
-  CreateWalletEvent(this.name, this.type, this.cardNumber);
+  CreateWalletEvent(this.userId,this.name, this.type, this.cardNumber);
 }

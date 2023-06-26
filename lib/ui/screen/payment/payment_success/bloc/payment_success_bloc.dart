@@ -29,6 +29,7 @@ class PaymentSuccessBloc
               .getUserByWallet(transaction.to_User)
               .then((value) => User.fromJson(value!));
           emit(state.copyWith(
+            type: transaction.type,
             recipient: receiver.full_name,
             message: transaction.message,
             paymentTime: formatDate(transaction.time!),
@@ -48,11 +49,44 @@ class PaymentSuccessBloc
               .getUserByWallet(transaction.from_User)
               .then((value) => User.fromJson(value!));
           emit(state.copyWith(
+              type: transaction.type,
               recipient: user.full_name,
               message: transaction.message,
               paymentTime: formatDate(transaction.time!),
               phoneNumber: sender.phone_number,
               sender: sender.phone_number,
+              amount: transaction.amount.toString()));
+        } catch (exception) {
+          if (exception is DioException) {
+            print(exception.response!.data);
+          }
+          print("Get user data failed due to exception: $exception");
+        }
+      } else if (transaction.type == "DEPOSIT") {
+        try {
+          emit(state.copyWith(
+              type: transaction.type,
+              recipient: user.full_name,
+              message: transaction.message,
+              paymentTime: formatDate(transaction.time!),
+              phoneNumber: user.phone_number,
+              sender: transaction.from_User,
+              amount: transaction.amount.toString()));
+        } catch (exception) {
+          if (exception is DioException) {
+            print(exception.response!.data);
+          }
+          print("Get user data failed due to exception: $exception");
+        }
+      } else if (transaction.type == "WITHDRAW") {
+        try {
+          emit(state.copyWith(
+              type: transaction.type,
+              recipient: transaction.to_User,
+              message: transaction.message,
+              paymentTime: formatDate(transaction.time!),
+              phoneNumber: user.phone_number,
+              sender: user.phone_number,
               amount: transaction.amount.toString()));
         } catch (exception) {
           if (exception is DioException) {

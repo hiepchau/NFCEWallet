@@ -9,9 +9,16 @@ import 'package:nfc_e_wallet/utils/toast_helper.dart';
 import 'package:pin_code_fields/pin_code_fields.dart';
 import 'package:rxdart/rxdart.dart';
 
-class OTPScreen extends StatelessWidget {
+class OTPScreen extends StatefulWidget {
+  const OTPScreen({super.key, required this.phoneNumber});
   final String phoneNumber;
-  OTPScreen({Key? key, required this.phoneNumber}) : super(key: key);
+  @override
+  OTPScreenState createState() => OTPScreenState(phoneNumber: phoneNumber);
+}
+
+class OTPScreenState extends State<OTPScreen> {
+  final String phoneNumber;
+  OTPScreenState({Key? key, required this.phoneNumber});
 
   final _otpBloc = OtpBloc();
   final _otpController = TextEditingController();
@@ -31,14 +38,17 @@ class OTPScreen extends StatelessWidget {
                 context,
                 MaterialPageRoute(builder: (context) => RootApp()),
               );
-            }
-            else if (state.type == "TRANSFER_TRANSACTION"||state.type=="TRANSACTION"){
+            } else if (state.type == "TRANSFER_TRANSACTION" ||
+                state.type == "TRANSACTION") {
               final transaction = Transaction.fromJson(state.data);
               ToastHelper.showToast(L10n.of(context).verifySuccess,
                   status: ToastStatus.success);
               Navigator.push(
                 context,
-                MaterialPageRoute(builder: (context) => PaymentSuccessScreen(transaction: transaction,)),
+                MaterialPageRoute(
+                    builder: (context) => PaymentSuccessScreen(
+                          transaction: transaction,
+                        )),
               );
             }
           } else if (state is OtpFailure) {
@@ -88,8 +98,9 @@ class OTPScreen extends StatelessWidget {
                       activeFillColor: Colors.white,
                     ),
                     onChanged: (value) {
-                      _otpStreamController.add(
-                          value); // Update BehaviorSubject with the latest OTP value
+                      setState(() {
+                        _otpStreamController.add(value);
+                      });
                     },
                   ),
                   TextButton(
@@ -112,6 +123,7 @@ class OTPScreen extends StatelessWidget {
                             return ElevatedButton(
                               onPressed: isValidLength
                                   ? () {
+                                      print(_otpController.text);
                                       context.read<OtpBloc>().add(
                                           SubmitOtpEvent(_otpController.text,
                                               phoneNumber));

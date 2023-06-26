@@ -42,8 +42,8 @@ class _RootAppState extends State<RootApp> with TickerProviderStateMixin {
       } else {
         SmartDialog.show(builder: (context) {
           return Container(
-            height: 80,
-            width: 180,
+            height: 100,
+            width: 250,
             decoration: BoxDecoration(
               color: Colors.black,
               borderRadius: BorderRadius.circular(10),
@@ -63,9 +63,9 @@ class _RootAppState extends State<RootApp> with TickerProviderStateMixin {
     final userJson = jsonDecode(prefs.getString(Preferences.user)!);
     for (var wallet in userJson["wallets"]) {
       listWallet.add(Wallet.fromJson(wallet));
+      
       if (wallet["type"] == "DefaultWallet") {
         defaultWallet = Wallet.fromJson(wallet);
-        print(defaultWallet.balance);
       }
     }
   }

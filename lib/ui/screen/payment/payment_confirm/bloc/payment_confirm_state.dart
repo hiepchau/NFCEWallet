@@ -7,12 +7,14 @@ class PaymentConfirmState {
   final String phoneNumber;
   final String? message;
   final bool? isSuccess;
+  final String? bank;
   PaymentConfirmState(
       {this.amount = "",
       this.receiverName = "",
       this.phoneNumber = "",
       this.receiverWalletId = "",
       this.message = "",
+      this.bank="",
       this.isSuccess});
   PaymentConfirmState copyWith(
       {String? amount,
@@ -20,14 +22,16 @@ class PaymentConfirmState {
       String? phoneNumber,
       String? message,
       String? receiverWalletId,
-      bool? isSuccess}) {
+      bool? isSuccess,
+      String? bank,}) {
     return PaymentConfirmState(
         amount: amount ?? this.amount,
         receiverName: receiverName ?? this.receiverName,
         phoneNumber: phoneNumber ?? this.phoneNumber,
         message: message ?? this.message,
         receiverWalletId: receiverWalletId ?? this.receiverWalletId,
-        isSuccess: isSuccess ?? this.isSuccess);
+        isSuccess: isSuccess ?? this.isSuccess,
+        bank: bank ?? this.bank);
   }
 }
 

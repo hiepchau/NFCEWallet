@@ -7,6 +7,7 @@ class PaymentSuccessState {
   final String paymentTime;
   final String amount;
   final String phoneNumber;
+  final String? type;
 
   PaymentSuccessState(
       {this.sender = "",
@@ -14,14 +15,16 @@ class PaymentSuccessState {
       this.message = "",
       this.paymentTime = "",
       this.amount = "",
-      this.phoneNumber = "",});
+      this.phoneNumber = "",
+      this.type = "",});
   PaymentSuccessState copyWith({
     String? sender,
     String? recipient,
     String? message,
     String? paymentTime,
     String? amount,
-    String? phoneNumber
+    String? phoneNumber,
+    String? type,
   }) {
     return PaymentSuccessState(
       sender: sender ?? this.sender,
@@ -29,7 +32,8 @@ class PaymentSuccessState {
       paymentTime: paymentTime ?? this.paymentTime,
       message: message ?? this.message,
       amount: amount ?? this.amount,
-      phoneNumber: phoneNumber ?? this.phoneNumber
+      phoneNumber: phoneNumber ?? this.phoneNumber,
+      type: type ?? this.type,
     );
   }
 }

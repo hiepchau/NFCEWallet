@@ -216,7 +216,7 @@ class _AccountPage extends State<AccountScreen> {
                         },
                         childrenPadding: const EdgeInsets.all(5),
                         title: const Text("Tài khoản/Ví"),
-                        children: _buildExpandableContent(state.listWallet),
+                        children: _buildExpandableContent(listWallet),
                       )),
                   Visibility(
                     visible: isVisible.value,
@@ -352,14 +352,13 @@ class _AccountPage extends State<AccountScreen> {
   // ignore: non_constant_identifier_names
   List<Widget> _buildExpandableContent(List<Wallet>? wallet_lists) {
 
-
     List<Widget> columnContent = [];
     if (wallet_lists == null) {
-      columnContent.add(Text("Lỗi mất rồi, bạn hãy thử lại nhé!"));
+      columnContent.add(const Text("Lỗi mất rồi, bạn hãy thử lại nhé!"));
       return columnContent;
     }
     for (var wallet in wallet_lists!) {
-      if (wallet.name == "TPBank") {
+      if (wallet.name == "TPbank") {
         columnContent.add(
           ListTile(
             title: Text(
@@ -373,7 +372,7 @@ class _AccountPage extends State<AccountScreen> {
               ),
             ),
             trailing: Text(
-              wallet.cardnumber!,
+              wallet.card_number!,
               style: TextStyle(
                 fontSize: MediaQuery.of(context).size.width > 900
                     ? 15
@@ -392,7 +391,7 @@ class _AccountPage extends State<AccountScreen> {
           ),
         );
       }
-      if (wallet.name == "VietcomBank") {
+      if (wallet.name == "Vietcombank") {
         columnContent.add(
           ListTile(
             title: Text(
@@ -406,7 +405,7 @@ class _AccountPage extends State<AccountScreen> {
               ),
             ),
             trailing: Text(
-              wallet.cardnumber!,
+              wallet.card_number!,
               style: TextStyle(
                 fontSize: MediaQuery.of(context).size.width > 900
                     ? 15
@@ -425,7 +424,106 @@ class _AccountPage extends State<AccountScreen> {
           ),
         );
       }
-      if (wallet.name == "DefaultWallet") {
+      if (wallet.name == "Techcombank") {
+        columnContent.add(
+          ListTile(
+            title: Text(
+              wallet.name!,
+              style: TextStyle(
+                fontSize: MediaQuery.of(context).size.width > 900
+                    ? 15
+                    : MediaQuery.of(context).size.width > 350
+                        ? 15
+                        : 13,
+              ),
+            ),
+            trailing: Text(
+              wallet.card_number!,
+              style: TextStyle(
+                fontSize: MediaQuery.of(context).size.width > 900
+                    ? 15
+                    : MediaQuery.of(context).size.width > 350
+                        ? 15
+                        : 13,
+              ),
+            ),
+            leading: CircleAvatar(
+                backgroundColor: Colors.transparent,
+                child: Image.asset(
+                  'assets/images/icons/techcombank.png',
+                  width: 25,
+                  height: 25,
+                )),
+          ),
+        );
+      }
+      if (wallet.name == "MB") {
+        columnContent.add(
+          ListTile(
+            title: Text(
+              wallet.name!,
+              style: TextStyle(
+                fontSize: MediaQuery.of(context).size.width > 900
+                    ? 15
+                    : MediaQuery.of(context).size.width > 350
+                        ? 15
+                        : 13,
+              ),
+            ),
+            trailing: Text(
+              wallet.card_number!,
+              style: TextStyle(
+                fontSize: MediaQuery.of(context).size.width > 900
+                    ? 15
+                    : MediaQuery.of(context).size.width > 350
+                        ? 15
+                        : 13,
+              ),
+            ),
+            leading: CircleAvatar(
+                backgroundColor: Colors.transparent,
+                child: Image.asset(
+                  'assets/images/icons/mb.png',
+                  width: 25,
+                  height: 25,
+                )),
+          ),
+        );
+      }
+      if (wallet.name == "BIDV") {
+        columnContent.add(
+          ListTile(
+            title: Text(
+              wallet.name!,
+              style: TextStyle(
+                fontSize: MediaQuery.of(context).size.width > 900
+                    ? 15
+                    : MediaQuery.of(context).size.width > 350
+                        ? 15
+                        : 13,
+              ),
+            ),
+            trailing: Text(
+              wallet.card_number!,
+              style: TextStyle(
+                fontSize: MediaQuery.of(context).size.width > 900
+                    ? 15
+                    : MediaQuery.of(context).size.width > 350
+                        ? 15
+                        : 13,
+              ),
+            ),
+            leading: CircleAvatar(
+                backgroundColor: Colors.transparent,
+                child: Image.asset(
+                  'assets/images/icons/bidv.png',
+                  width: 25,
+                  height: 25,
+                )),
+          ),
+        );
+      }
+      if (wallet.type == "DefaultWallet") {
         columnContent.add(
           ListTile(
             title: Text(

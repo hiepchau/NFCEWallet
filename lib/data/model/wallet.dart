@@ -13,13 +13,14 @@ class Wallet{
   final int? balance;
   final String? name;
   final String? type;
-  String? cardnumber;
+  final String? card_number;
 
   Wallet(
     this.id,
     this.balance,
     this.name,
-    this.type, 
+    this.type,
+    this.card_number, 
   );
 
   factory Wallet.fromJson(Map<String, dynamic> json) => _$WalletFromJson(json);

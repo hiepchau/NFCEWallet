@@ -1,4 +1,5 @@
 import 'package:bloc/bloc.dart';
+import 'package:dio/dio.dart';
 import 'package:equatable/equatable.dart';
 import 'package:get_it/get_it.dart';
 import 'package:nfc_e_wallet/data/repositories/authenticator.dart';
@@ -12,6 +13,7 @@ class OtpBloc extends Bloc<OtpEvent, OtpState> {
       emit(OtpLoading());
       final authenticator = GetIt.instance.get<Authenticator>();
       try {
+        print(event.otp);
         final data =
             await authenticator.verifyOtp(event.phoneNumber, event.otp);
         if (data != null) {
@@ -26,6 +28,9 @@ class OtpBloc extends Bloc<OtpEvent, OtpState> {
           emit(OtpFailure("Invalid OTP"));
         }
       } catch (error) {
+        if(error is DioException){
+          print(error.message);
+        }
         emit(OtpFailure(error.toString()));
       }
     });

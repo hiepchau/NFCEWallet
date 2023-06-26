@@ -19,6 +19,7 @@ class PaymentConfirm extends StatelessWidget {
   final String amount;
   final String receiverPhoneNumber;
   final String? message;
+  final String? bank;
   final String type;
 
   const PaymentConfirm({
@@ -27,6 +28,7 @@ class PaymentConfirm extends StatelessWidget {
     required this.type,
     required this.receiverPhoneNumber,
     this.message,
+    this.bank,
   }) : super(key: key);
 
   @override
@@ -34,6 +36,7 @@ class PaymentConfirm extends StatelessWidget {
     return BlocProvider(
       create: (context) => PaymentConfirmBloc()
         ..add(InitializePaymentEvent(
+            bank: bank,
             type: type,
             amount: amount,
             phoneNumber: receiverPhoneNumber,
@@ -53,8 +56,6 @@ class _paymentConfirmPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final Map<String, dynamic> user =
-        jsonDecode(prefs.getString(Preferences.user)!);
     String title = "";
     List<List<String>> textLine = List.empty(growable: true);
 
@@ -65,7 +66,7 @@ class _paymentConfirmPage extends StatelessWidget {
             context,
             MaterialPageRoute(
               builder: (context) =>
-                  OTPScreen(phoneNumber: user["phone_number"]),
+                  OTPScreen(phoneNumber: user.phone_number),
             ),
           );
         }
@@ -77,18 +78,20 @@ class _paymentConfirmPage extends StatelessWidget {
         String phoneNumber = state.phoneNumber;
         String receiverName = state.receiverName;
         String? message = state.message;
+        String? bank = state.bank;
 
         if (type == "DEPOSIT") {
           title = "Nạp tiền vào ví";
           textLine = [
-            ['Người nhận', user["full_name"]],
+            ['Từ', bank!],
+            ['Người nhận', user.full_name],
             ['Số điện thoại', phoneNumber],
             ['Phí giao dịch', 'Miễn phí'],
           ];
         } else if (type == "WITHDRAW") {
-          title = "Rút tiền";
+          title = "Rút tiền về ví $bank";
           textLine = [
-            ['Người nhận', user["full_name"]],
+            ['Người nhận', user.full_name],
             ['Số điện thoại', phoneNumber],
             ['Phí giao dịch', 'Miễn phí'],
           ];
@@ -220,7 +223,7 @@ class _paymentConfirmPage extends StatelessWidget {
                                         Text('Nguồn tiền thanh toán',
                                             style: TextStyle(fontSize: 15.sp)),
                                         Text(
-                                            'Số dư: ${user["wallets"][0]["balance"]}đ',
+                                            'Số dư: ${defaultWallet.balance}đ',
                                             style: TextStyle(fontSize: 12.sp))
                                       ],
                                     )

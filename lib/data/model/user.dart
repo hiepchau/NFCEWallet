@@ -10,7 +10,7 @@ class User {
   @JsonKey(name: 'id')
   final int id;
   final DateTime? birthday;
-  final String? identifyId;
+  final String? identify_ID;
   final String full_name;
   final String phone_number;
   String? city;
@@ -20,7 +20,7 @@ class User {
   User(
       this.id,
       this.birthday,
-      this.identifyId,
+      this.identify_ID,
       this.full_name,
       this.phone_number,
       this.city, 

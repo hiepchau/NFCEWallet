@@ -1,13 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:intl/intl.dart';
+import 'package:nfc_e_wallet/data/model/wallet.dart';
+import 'package:nfc_e_wallet/main.dart';
 
 import 'screen/payment/payment_confirm/payment_confirm.dart';
 import 'style/color.dart';
 import 'widgets/profile_widget.dart';
 import 'widgets/toggle_widget.dart';
-
-enum Bank { TPBank, VietcomBank }
 
 class WithdrawPage extends StatefulWidget {
   const WithdrawPage({super.key});
@@ -18,7 +19,7 @@ class WithdrawPage extends StatefulWidget {
 
 class _WithdrawPage extends State<WithdrawPage> {
   bool isVisible = false;
-  Bank? _bank = Bank.TPBank;
+  int groupValue = -1;
   TextEditingController withdrawController = TextEditingController();
   @override
   Widget build(BuildContext context) {
@@ -63,9 +64,9 @@ class _WithdrawPage extends State<WithdrawPage> {
                       ],
                     ),
                   ),
-                  Padding(
-                      padding: const EdgeInsets.symmetric(
-                          vertical: 5.0, horizontal: 15),
+                  const Padding(
+                      padding:
+                          EdgeInsets.symmetric(vertical: 5.0, horizontal: 15),
                       child: Row(
                         children: [
                           Text(
@@ -76,7 +77,8 @@ class _WithdrawPage extends State<WithdrawPage> {
                         ],
                       )),
                   Padding(
-                    padding: EdgeInsets.symmetric(vertical: 10, horizontal: 15),
+                    padding: const EdgeInsets.symmetric(
+                        vertical: 10, horizontal: 15),
                     child: Container(
                       padding: MediaQuery.of(context).size.width > 350
                           ? EdgeInsets.all(10)
@@ -92,73 +94,46 @@ class _WithdrawPage extends State<WithdrawPage> {
                                 blurRadius: 5,
                                 offset: const Offset(0, 2))
                           ]),
-                      child: Column(children: [
-                        Row(
-                          children: [
-                            // Expanded(
-                            //   child: ToggleWidget(
-                            //     icon: AssetImage(
-                            //         'assets/images/icons/tpbankIcon.png'),
-                            //     title: "TP Bank",
-                            //     subtitle: "Miễn phí",
-                            //     onTap: () {},
-                            //   ),
-                            // ),
-                            Padding(
-                              padding: EdgeInsets.only(right: 5),
-                              child: Radio<Bank>(
-                                value: Bank.TPBank,
-                                groupValue: _bank,
-                                onChanged: (Bank? value) => setState(() {
-                                  _bank = value;
-                                }),
-                              ),
-                            )
-                          ],
-                        ),
-                        Row(
-                          children: [
-                            // Expanded(
-                            //   child: ToggleWidget(
-                            //     icon: AssetImage(
-                            //         'assets/images/icons/vietcombankIcon.png'),
-                            //     title: "Vietcom Bank",
-                            //     subtitle: "Miễn phí",
-                            //     onTap: () {},
-                            //   ),
-                            // ),
-                            Padding(
-                              padding: const EdgeInsets.only(right: 5),
-                              child: Radio<Bank>(
-                                value: Bank.VietcomBank,
-                                groupValue: _bank,
-                                onChanged: (Bank? value) => setState(() {
-                                  _bank = value;
-                                }),
-                              ),
-                            )
-                          ],
-                        ),
-                        ProfileWidget(
-                          icon: FontAwesomeIcons.creditCard,
-                          iconColor: black,
-                          title: 'Rút tiền về ngân hàng',
-                          subtitle: "Miễn phí",
-                          onTap: () {
-                            showModal();
-                          },
-                        ),
-                        ProfileWidget(
-                            icon: FontAwesomeIcons.shop,
-                            iconColor: black,
-                            title: 'Rút tiền tại điểm giao dịch',
-                            subtitle: "Miễn phí",
-                            onTap: () {
-                              showModal();
-                            }),
-                      ]),
+                      child: Column(
+                        children: buildListWallet(listWallet),
+                      ),
                     ),
                   ),
+                  Padding(
+                      padding: const EdgeInsets.symmetric(
+                          vertical: 10, horizontal: 15),
+                      child: Container(
+                          padding: MediaQuery.of(context).size.width > 350
+                              ? EdgeInsets.all(10)
+                              : EdgeInsets.all(0),
+                          decoration: BoxDecoration(
+                              color: white,
+                              borderRadius:
+                                  const BorderRadius.all(Radius.circular(10)),
+                              boxShadow: [
+                                BoxShadow(
+                                    color: grey.withOpacity(0.5),
+                                    spreadRadius: 2,
+                                    blurRadius: 5,
+                                    offset: const Offset(0, 2))
+                              ]),
+                          child: Column(
+                            children: [
+                              ProfileWidget(
+                                icon: FontAwesomeIcons.creditCard,
+                                iconColor: black,
+                                title: 'Nạp tiền bằng thẻ ngân hàng',
+                                subtitle: "Miễn phí",
+                                onTap: () {},
+                              ),
+                              ProfileWidget(
+                                  icon: FontAwesomeIcons.shop,
+                                  iconColor: black,
+                                  title: 'Nạp tiền tại điểm giao dịch',
+                                  subtitle: "Miễn phí",
+                                  onTap: () {}),
+                            ],
+                          ))),
                   Expanded(
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.end,
@@ -197,7 +172,7 @@ class _WithdrawPage extends State<WithdrawPage> {
                                                     offset: const Offset(0, 2))
                                               ]),
                                           child: Text(
-                                            "Số dư ví: 900.000đ",
+                                            "Số dư ví: ${formatCurrency(defaultWallet.balance.toString())}đ",
                                             style: TextStyle(color: primary),
                                           )),
                                     ),
@@ -346,15 +321,56 @@ class _WithdrawPage extends State<WithdrawPage> {
     );
   }
 
+  String formatCurrency(String amount) {
+    final currencyFormat = NumberFormat("#,##0.##");
+    return currencyFormat.format(int.parse(amount));
+  }
+
+  List<Widget> buildListWallet(List<Wallet> listWallet) {
+    List<Widget> listWidget = [];
+    for (int i = 0; i < listWallet.length; i++) {
+      Wallet wallet = listWallet[i];
+      if (wallet.type == "Bank") {
+        AssetImage assetImage = const AssetImage('');
+        if (wallet.name == "Vietcombank") {
+          assetImage =
+              const AssetImage('assets/images/icons/vietcombankIcon.png');
+        } else if (wallet.name == "TPbank") {
+          assetImage = const AssetImage('assets/images/icons/tpbankIcon.png');
+        } else if (wallet.name == "BIDV") {
+          assetImage = const AssetImage('assets/images/icons/bidv.png');
+        } else if (wallet.name == "Techcombank") {
+          assetImage = const AssetImage('assets/images/icons/techcombank.png');
+        } else if (wallet.name == "MB") {
+          assetImage = const AssetImage('assets/images/icons/mb.png');
+        }
+        listWidget.add(
+          ToggleWidget(
+            icon: assetImage,
+            title: wallet.name.toString(),
+            subtitle: "Miễn phí",
+            value: i,
+            groupValue: groupValue,
+            onChanged: (newValue) {
+              setState(() => groupValue = newValue!);
+            },
+          ),
+        );
+      }
+    }
+    return listWidget;
+  }
+
   showModal() => showModalBottomSheet(
       context: context,
       shape: const RoundedRectangleBorder(
           borderRadius: BorderRadius.vertical(top: Radius.circular(30))),
       builder: (BuildContext context) {
-        return const PaymentConfirm(
-          receiverPhoneNumber: "0827989868",
-          amount: "1.000.000",
+        return PaymentConfirm(
+          bank: listWallet[groupValue].name,
+          receiverPhoneNumber: user.phone_number,
+          amount: withdrawController.text,
           type: "WITHDRAW",
-        ); //const PaymentConfirm();
+        );
       });
 }

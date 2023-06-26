@@ -17,16 +17,16 @@ class WalletRepo {
   WalletRepo(this._logger, this._sharedPreferences, this._appService,
       this._requestFactory, this._eventBus);
 
-  Future<Wallet?> createWallet(
+  Future<Wallet?> createWallet(String userId,
       String name, String type, String cardNumber) async {
     return _appService
-        .createWallet(_sharedPreferences.getString('token')!,
+        .createWallet(userId, _sharedPreferences.getString('token')!,
             _requestFactory.createWallet(name, type, cardNumber))
         .then((http) async {
       print(http.response.statusCode);
       print(http.response.data);
       if (http.response.statusCode != 200) return null;
-      return http.response.data.wallet;
+      return Wallet.fromJson(http.response.data["wallet"]);
     });
   }
 
