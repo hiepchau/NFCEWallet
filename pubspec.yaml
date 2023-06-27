@@ -53,6 +53,7 @@ dependencies:
   nfc_manager: ^3.3.0
   nfc_host_card_emulation: ^1.1.0
   firebase_messaging: ^14.6.3
+  firebase_core: ^2.14.0
 
 dev_dependencies:
   flutter_test:

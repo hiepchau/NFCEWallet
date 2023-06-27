@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "1076719932303",
+    "project_id": "e-wallet-1fc69",
+    "storage_bucket": "e-wallet-1fc69.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1076719932303:android:25dda63f60e078ffc871fa",
+        "android_client_info": {
+          "package_name": "com.example.nfc_e_wallet"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBFAYaOS1rIGgw35o8he0Cy96MvJToAqNU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

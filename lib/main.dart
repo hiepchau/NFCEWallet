@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'dart:io';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -20,6 +21,15 @@ import 'data/model/user.dart';
 import 'data/preferences.dart';
 import 'dependency.dart';
 
+@pragma('vm:entry-point')
+Future<void> firebaseMessagingBackgroundHandler(RemoteMessage message) async {
+  await Firebase.initializeApp();
+  await NotificationManager.initialize();
+
+  NotificationManager.showNotification(
+      id: 1, title: message.data["title"], body: message.data["body"]);
+}
+
 final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
     FlutterLocalNotificationsPlugin();
 
@@ -33,7 +43,7 @@ late NfcState nfcState;
 late NFCManager nfcManager;
 late List<Wallet> listWallet;
 late Wallet defaultWallet;
-late String? FCMToken;
+late String FCMToken;
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -52,18 +62,8 @@ void main() async {
   nfcState = await NfcHce.checkDeviceNfcState();
 
   //INIT FCM
-  NotificationSettings settings = await messaging.requestPermission(
-    alert: true,
-    announcement: false,
-    badge: true,
-    carPlay: false,
-    criticalAlert: false,
-    provisional: false,
-    sound: true,
-  );
-  if (settings.authorizationStatus == AuthorizationStatus.authorized) {
-    FCMToken = await messaging.getToken();
-  }
+  await NotificationManager.initializeFCM();
+
   runApp(ScreenUtilInit(
       useInheritedMediaQuery: true,
       designSize: kIsWeb ? const Size(790, 620) : const Size(390, 800),
