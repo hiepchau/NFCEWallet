@@ -95,6 +95,22 @@ class PaymentSuccessBloc
           print("Get user data failed due to exception: $exception");
         }
       }
+      else if (transaction.type == "PAYMENT") {
+        try {
+          emit(state.copyWith(
+              type: transaction.type,
+              recipient: transaction.to_User,
+              paymentTime: formatDate(transaction.time!),
+              phoneNumber: user.phone_number,
+              sender: user.phone_number,
+              amount: transaction.amount.toString()));
+        } catch (exception) {
+          if (exception is DioException) {
+            print(exception.response!.data);
+          }
+          print("Get user data failed due to exception: $exception");
+        }
+      }
     });
   }
 

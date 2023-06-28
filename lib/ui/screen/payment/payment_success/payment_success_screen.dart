@@ -52,7 +52,6 @@ class PaymentSuccessScreen extends StatelessWidget {
     String title = "";
     String amount = "1";
     List<List<String>> textLine = List.empty(growable: true);
-
     return BlocProvider(
         create: (context) =>
             PaymentSuccessBloc()..add(InitPaymentSuccessEvent(transaction)),
@@ -82,6 +81,14 @@ class PaymentSuccessScreen extends StatelessWidget {
                 ['Người nhận', state.recipient],
                 ['SĐT', state.phoneNumber],
                 ['Lời nhắn', state.message],
+                ['Thời gian', state.paymentTime],
+                ['Phí giao dịch', 'Miễn phí'],
+              ];
+            }
+            else if (type == "PAYMENT") {
+              title = "Thanh toán đơn hàng ở ${state.recipient}";
+              textLine = [
+                ['SĐT', state.phoneNumber],
                 ['Thời gian', state.paymentTime],
                 ['Phí giao dịch', 'Miễn phí'],
               ];

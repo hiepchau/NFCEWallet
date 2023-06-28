@@ -35,7 +35,7 @@ class _RootAppState extends State<RootApp> with TickerProviderStateMixin {
       if (nfcState == NfcState.enabled) {
         await NfcHce.init(
           aid: Uint8List.fromList([0xA0, 0x00, 0xDA, 0xDA, 0xDA, 0xDA, 0xDA]),
-          permanentApduResponses: false,
+          permanentApduResponses: true,
           listenOnlyConfiguredPorts: false,
         );
         initNFC();
@@ -77,7 +77,6 @@ class _RootAppState extends State<RootApp> with TickerProviderStateMixin {
     // change data to transmit here
 
     final data = utf8.encode(defaultWallet.id.toString());
-
     await NfcHce.addApduResponse(port, data);
   }
 

@@ -184,6 +184,10 @@ class _HistoryPage extends State<HistoryPage> {
         isNull=false;
         listWidget.add(buildDepositWidget(transaction));
       }
+      if (transaction.type == "PAYMENT") {
+        isNull = false;
+        listWidget.add(buildPaymenttWidget(transaction));
+      }
     }
     if(isNull){
       listWidget=buildNoTransactionWidget(listWidget);
@@ -438,6 +442,17 @@ class _HistoryPage extends State<HistoryPage> {
             subtitle: "Nạp tiền từ " + transaction.to_User,
             time: transaction.time!,
             amount: "+" + transaction.amount.toString());
+  }
+
+   Widget buildPaymenttWidget(Transaction transaction) {
+    return HistoryWidget(
+        transaction: transaction,
+        icon: Icons.shop,
+        iconColor: Colors.green,
+        title: "Thanh toán",
+        subtitle: "Thanh toán đơn hàng ở " + transaction.to_User,
+        time: transaction.time!,
+        amount: "-" + transaction.amount.toString());
   }
 
   Widget buildPhoneWidget(Transaction transaction) {
