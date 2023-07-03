@@ -14,16 +14,18 @@ import '../../../style/color.dart';
 import '../payment_confirm/payment_confirm.dart';
 
 class PaymentScreen extends StatelessWidget {
-  const PaymentScreen({super.key});
+  final String? phoneNumber;
+  const PaymentScreen({super.key, this.phoneNumber});
 
   @override
   Widget build(BuildContext context) {
-    return PaymentPage();
+    return PaymentPage(phoneNumber: phoneNumber,);
   }
 }
 
 class PaymentPage extends StatefulWidget {
-  const PaymentPage({super.key});
+  final String? phoneNumber;
+  const PaymentPage({super.key, this.phoneNumber});
   @override
   State<PaymentPage> createState() => PaymentPageState();
 }
@@ -32,6 +34,13 @@ class PaymentPageState extends State<PaymentPage> {
   final TextEditingController amountController = TextEditingController();
   final TextEditingController messageController = TextEditingController();
   final TextEditingController phoneNumberController = TextEditingController();
+
+  @override
+  void initState() {
+    super.initState();
+    phoneNumberController.text=widget.phoneNumber!;
+  }
+
 
   @override
   Widget build(BuildContext context) {

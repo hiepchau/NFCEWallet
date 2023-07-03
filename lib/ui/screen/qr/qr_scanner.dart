@@ -18,11 +18,21 @@ class _QRScannerState extends State<QRScannerScreen> {
   Future _scanQR(BuildContext context) async {
     try {
       String qrResult = (await BarcodeScanner.scan(
-          options: ScanOptions(autoEnableFlash: _isFlashOn)))
+              options: ScanOptions(autoEnableFlash: _isFlashOn)))
           .rawContent;
       setState(() {
-        _scanResult = qrResult;
-        AppNav.pushWidget(context, PaymentScreen());
+        if (qrResult.isNotEmpty) {
+          _scanResult = qrResult;
+
+          AppNav.pushWidget(
+              context,
+              PaymentScreen(
+                phoneNumber: qrResult,
+              ));
+        }
+        else {
+          _scanResult="ERROR, try again";
+        }
       });
     } on PlatformException catch (ex) {
       if (ex.code == BarcodeScanner.cameraAccessDenied) {
