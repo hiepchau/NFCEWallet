@@ -93,6 +93,16 @@ class PaymentSuccessScreen extends StatelessWidget {
                 ['Phí giao dịch', 'Miễn phí'],
               ];
             }
+            else if (type == "RECEIVE") {
+              title = "Nhận tiền từ ${state.sender}";
+              textLine = [
+                ['Người gửi', state.sender],
+                ['SĐT người gửi', state.phoneNumber],
+                ['Thời gian', state.paymentTime],
+                ['Lời nhắn', state.message],
+                ['Phí giao dịch', 'Miễn phí'],
+              ];
+            }
             return SafeArea(
                 child: Scaffold(
                     body: Stack(children: [
