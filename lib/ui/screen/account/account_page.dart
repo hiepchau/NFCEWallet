@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:intl/intl.dart';
 import 'package:nfc_e_wallet/data/model/wallet.dart';
 import 'package:nfc_e_wallet/data/preferences.dart';
@@ -288,14 +289,18 @@ class _AccountPage extends State<AccountScreen> {
                 iconColor: Colors.grey,
                 title: 'Cài đặt ứng dụng',
                 subtitle: "",
-                onTap: () {},
+                onTap: () {
+                  notAvailable();
+                },
               ),
               ProfileWidget(
                 icon: Icons.headset_mic,
                 iconColor: Colors.green,
                 title: 'Trung tâm trợ giúp',
                 subtitle: "",
-                onTap: () {},
+                onTap: () {
+                  notAvailable();
+                },
               ),
             ]),
           ),
@@ -561,5 +566,21 @@ class _AccountPage extends State<AccountScreen> {
     if (amount.isEmpty) return "";
     final currencyFormat = NumberFormat("#,##0.##");
     return currencyFormat.format(int.parse(amount));
+  }
+    void notAvailable() {
+    SmartDialog.show(builder: (context) {
+      return Container(
+        height: 100,
+        width: 250,
+        padding: const EdgeInsets.all(10),
+        decoration: BoxDecoration(
+          color: Colors.black,
+          borderRadius: BorderRadius.circular(10),
+        ),
+        alignment: Alignment.center,
+        child: const Text('Chức năng hiện tại đang phát triển. Xin thông cảm!',
+            style: TextStyle(color: Colors.white)),
+      );
+    });
   }
 }

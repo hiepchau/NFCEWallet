@@ -2,6 +2,7 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:nfc_e_wallet/ui/style/color.dart';
 import 'package:nfc_e_wallet/ui/widgets/dashed_line.dart';
@@ -27,6 +28,7 @@ class PromoItem extends StatelessWidget {
     return AspectRatio(
       aspectRatio: 150 / 180,
       child: GestureDetector(
+        onTap: notAvailable,
         child: Container(
             decoration: BoxDecoration(
               color: Colors.white,
@@ -151,5 +153,22 @@ class PromoItem extends StatelessWidget {
             )),
       ),
     );
+  }
+    void notAvailable(){
+    SmartDialog.show(builder: (context) {
+          return Container(
+            height: 100,
+            width: 250,
+            padding: const EdgeInsets.all(10),
+            decoration: BoxDecoration(
+              color: Colors.black,
+              borderRadius: BorderRadius.circular(10),
+            ),
+            alignment: Alignment.center,
+            child: const Text(
+                'Chức năng hiện tại đang phát triển. Xin thông cảm!',
+                style: TextStyle(color: Colors.white)),
+          );
+        });
   }
 }
