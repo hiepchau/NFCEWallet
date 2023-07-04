@@ -54,7 +54,7 @@ class PaymentSuccessBloc
               message: transaction.message,
               paymentTime: formatDate(transaction.time!),
               phoneNumber: sender.phone_number,
-              sender: sender.phone_number,
+              sender: sender.full_name,
               amount: transaction.amount.toString()));
         } catch (exception) {
           if (exception is DioException) {
