@@ -87,7 +87,7 @@ class _LoginFormState extends State<LoginForm> {
                       ),
                       const SizedBox(height: 24),
                       const Text(
-                        'Welcome Back!',
+                        'Chào mừng trở lại!',
                         style: TextStyle(
                             color: Colors.white,
                             fontSize: 24,
@@ -103,7 +103,7 @@ class _LoginFormState extends State<LoginForm> {
                           );
                         },
                         child: Text(
-                          "Don’t have an account? Create Account",
+                          "Không có tài khoản? Hãy đăng nhập",
                           style: TextStyle(color: Colors.white, fontSize: 16),
                         ),
                       ),
@@ -123,7 +123,7 @@ class _LoginFormState extends State<LoginForm> {
                           controller: _phoneNumberController,
                           keyboardType: TextInputType.number,
                           decoration: InputDecoration(
-                            hintText: 'Your phone number',
+                            hintText: 'Số điện thoại của bạn',
                             border: OutlineInputBorder(
                                 borderRadius: BorderRadius.circular(8.0)),
                           ),
@@ -134,7 +134,7 @@ class _LoginFormState extends State<LoginForm> {
                           controller: _passwordController,
                           obscureText: _obscureText,
                           decoration: InputDecoration(
-                            hintText: 'Password',
+                            hintText: 'Mật khẩu',
                             border: OutlineInputBorder(
                                 borderRadius: BorderRadius.circular(8.0)),
                             suffixIcon: IconButton(
@@ -164,7 +164,7 @@ class _LoginFormState extends State<LoginForm> {
                                     );
                               } else {
                                 ToastHelper.showToast(
-                                    'Please fill out all fields',
+                                    'Hãy điền hết tất cả các thông tin',
                                     status: ToastStatus.failure);
                               }
                             },
@@ -175,7 +175,7 @@ class _LoginFormState extends State<LoginForm> {
                               ),
                             ),
                             child: Text(
-                              'Sign In',
+                              'Đăng nhập',
                               style: TextStyle(color: onPrimary),
                             ),
                           ),
@@ -191,7 +191,7 @@ class _LoginFormState extends State<LoginForm> {
                                     builder: (context) => ForgotPasswordPage()),
                               );
                             },
-                            child: Text('Forgot password?'),
+                            child: Text('Quên mật khẩu?'),
                             style: TextButton.styleFrom(
                               primary: primary, // This is the color of the text
                             ),

@@ -63,7 +63,7 @@ class _SignUpFormState extends State<SignUpForm> {
             ),
           );
         } else if (state.signupStatus == SignupStatus.InvalidInfo) {
-          ToastHelper.showToast("Register failed", status: ToastStatus.failure);
+          ToastHelper.showToast("Đăng ký thất bại", status: ToastStatus.failure);
         }
       },
       child: Column(
@@ -88,7 +88,7 @@ class _SignUpFormState extends State<SignUpForm> {
                     ),
                     const SizedBox(height: 24),
                     const Text(
-                      'Create Account!',
+                      'Tạo tài khoản!',
                       style: TextStyle(
                           color: Colors.white,
                           fontSize: 24,
@@ -104,7 +104,7 @@ class _SignUpFormState extends State<SignUpForm> {
                         );
                       },
                       child: Text(
-                        "Already have an account? Sign in",
+                        "Đã có tài khoản rồi! Hãy đăng nhập",
                         style: TextStyle(color: Colors.white, fontSize: 16),
                       ),
                     ),
@@ -125,7 +125,7 @@ class _SignUpFormState extends State<SignUpForm> {
                           controller: _phoneNumberController,
                           keyboardType: TextInputType.number,
                           decoration: InputDecoration(
-                            hintText: 'Your phone number',
+                            hintText: 'Số điện thoại của bạn',
                             border: OutlineInputBorder(
                                 borderRadius: BorderRadius.circular(8.0)),
                           ),
@@ -136,7 +136,7 @@ class _SignUpFormState extends State<SignUpForm> {
                           controller: _passwordController,
                           obscureText: _obscurePasswordText,
                           decoration: InputDecoration(
-                            hintText: 'Password',
+                            hintText: 'Mật khẩu của bạn',
                             border: OutlineInputBorder(
                                 borderRadius: BorderRadius.circular(8.0)),
                             suffixIcon: IconButton(
@@ -156,7 +156,7 @@ class _SignUpFormState extends State<SignUpForm> {
                           controller: _repeatPasswordController,
                           obscureText: _obscureRePasswordText,
                           decoration: InputDecoration(
-                            hintText: 'Repeat Password',
+                            hintText: 'Nhập lại mật khẩu của bạn',
                             border: OutlineInputBorder(
                                 borderRadius: BorderRadius.circular(8.0)),
                             suffixIcon: IconButton(
@@ -175,7 +175,7 @@ class _SignUpFormState extends State<SignUpForm> {
                         TextField(
                           controller: _fullNameController,
                           decoration: InputDecoration(
-                            hintText: 'Your full name',
+                            hintText: 'Họ tên của bạn',
                             border: OutlineInputBorder(
                                 borderRadius: BorderRadius.circular(8.0)),
                           ),
@@ -185,7 +185,7 @@ class _SignUpFormState extends State<SignUpForm> {
                         TextField(
                           controller: _identifyIDController,
                           decoration: InputDecoration(
-                            hintText: 'Your identify ID',
+                            hintText: 'CMND hoặc CCCD',
                             border: OutlineInputBorder(
                                 borderRadius: BorderRadius.circular(8.0)),
                           ),
@@ -211,7 +211,7 @@ class _SignUpFormState extends State<SignUpForm> {
                             child: TextField(
                               controller: _dobController,
                               decoration: InputDecoration(
-                                hintText: 'Date of birth',
+                                hintText: 'Ngày sinh',
                                 border: OutlineInputBorder(
                                     borderRadius: BorderRadius.circular(8.0)),
                               ),
@@ -255,7 +255,7 @@ class _SignUpFormState extends State<SignUpForm> {
                               ),
                             ),
                             child: Text(
-                              'Sign Up',
+                              'Đăng ký',
                               style: TextStyle(color: onPrimary),
                             ),
                           ),
