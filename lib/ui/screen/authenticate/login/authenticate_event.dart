@@ -9,4 +9,3 @@ class LoginEvent extends AuthenticationEvent{
   LoginEvent(this.phoneNumber, this.password);
 }
 
-class LogoutEvent extends AuthenticationEvent{}

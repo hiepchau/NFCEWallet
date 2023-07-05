@@ -1,51 +1,74 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
+import 'package:intl/intl.dart';
 import 'package:nfc_e_wallet/data/model/wallet.dart';
+import 'package:nfc_e_wallet/data/preferences.dart';
+import 'package:nfc_e_wallet/main.dart';
+import 'package:nfc_e_wallet/ui/screen/authenticate/login/authenticate_bloc.dart';
+import 'package:nfc_e_wallet/ui/screen/security/security_screen.dart';
+import 'package:nfc_e_wallet/ui/screen/wallet/add_wallet_page.dart';
 import 'package:nfc_e_wallet/ui/screen/wallet/bloc/wallet_bloc.dart';
-import '../../../wallet_list.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import '../../../data/model/user.dart';
 import '../../style/color.dart';
 import '../../style/constants.dart';
 import '../../widgets/profile_widget.dart';
 import '../authenticate/login/login_page.dart';
+import 'account_page_bloc.dart';
 
-class AccountPage extends StatefulWidget {
-  AccountPage({super.key});
+class AccountPage extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      body: MultiBlocProvider(
+        providers: [
+          BlocProvider<AccountPageBloc>(
+            create: (context) => AccountPageBloc(),
+          ),
+          BlocProvider<WalletBloc>(
+            create: (context) => WalletBloc()..add(InitWalletEvent()),
+          ),
+        ],
+        child: AccountScreen(),
+      ),
+    );
+  }
+}
 
+class AccountScreen extends StatefulWidget {
   @override
   _AccountPage createState() => _AccountPage();
 }
 
-class _AccountPage extends State<AccountPage> {
-  late WalletBloc walletBloc;
+class _AccountPage extends State<AccountScreen> {
   bool isVisible = false;
 
   @override
-  void initState() {
-    super.initState();
-    walletBloc = WalletBloc();
-    //PASS USER ID
-    walletBloc.add(InitWalletEvent("1"));
-  }
-
-  @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        backgroundColor: primary,
-        title: Text(
-          'Tài khoản',
-          style: TextStyle(color: onPrimary),
-        ),
-        automaticallyImplyLeading: false,
-      ),
-      body: BlocProvider(
-        create: (context) => WalletBloc(),
-        child: getBody(context),
-      ),
+    final accountBloc = BlocProvider.of<AccountPageBloc>(context);
+    final walletBloc = BlocProvider.of<WalletBloc>(context);
+    return BlocBuilder<AccountPageBloc, AccountPageState>(
+      bloc: accountBloc,
+      builder: (context, state) {
+        return Scaffold(
+          appBar: AppBar(
+            backgroundColor: primary,
+            title: Text(
+              'Tài khoản',
+              style: TextStyle(color: onPrimary),
+            ),
+            automaticallyImplyLeading: false,
+          ),
+          body: getBody(context, walletBloc),
+        );
+      },
     );
   }
 
-  Widget getBody(BuildContext context) {
+  Widget getBody(BuildContext context, WalletBloc walletBloc) {
     return Column(
       children: [
         Expanded(
@@ -59,7 +82,7 @@ class _AccountPage extends State<AccountPage> {
                     maxWidth: MediaQuery.of(context).size.width >= 900
                         ? MediaQuery.of(context).size.width / 2
                         : MediaQuery.of(context).size.width),
-                child: getAccountSection(context),
+                child: getAccountSection(context, walletBloc),
               ),
             ),
           ),
@@ -68,7 +91,9 @@ class _AccountPage extends State<AccountPage> {
     );
   }
 
-  Widget getAccountSection(BuildContext context) {
+  Widget getAccountSection(BuildContext context, WalletBloc wallet) {
+
+    final isVisible = ValueNotifier(false);
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
       child: Column(
@@ -110,12 +135,12 @@ class _AccountPage extends State<AccountPage> {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          const Text("Hiệp Châu",
+                          Text(user.full_name,
                               style: TextStyle(
                                 fontWeight: FontWeight.w700,
                               )),
-                          const Text(
-                            "0999000999",
+                          Text(
+                            user.phone_number,
                             style: wGreyTextStyle,
                           ),
                           const SizedBox(
@@ -180,6 +205,7 @@ class _AccountPage extends State<AccountPage> {
                       offset: const Offset(0, 2))
                 ]),
             child: BlocBuilder<WalletBloc, WalletState>(
+              bloc: wallet,
               builder: (context, state) {
                 return Column(children: [
                   Theme(
@@ -187,18 +213,14 @@ class _AccountPage extends State<AccountPage> {
                           .copyWith(dividerColor: Colors.transparent),
                       child: ExpansionTile(
                         onExpansionChanged: (temp) {
-                          setState(() {
-                            isVisible = temp;
-                          });
+                          isVisible.value = temp;
                         },
                         childrenPadding: const EdgeInsets.all(5),
                         title: const Text("Tài khoản/Ví"),
-                        children: state is WalletInitialState
-                            ? _buildExpandableContent(state.listWallet)
-                            : _buildNoWallet(),
+                        children: _buildExpandableContent(listWallet),
                       )),
                   Visibility(
-                    visible: isVisible,
+                    visible: isVisible.value,
                     child: Text(
                       "Xem tất cả (3)",
                       style: TextStyle(color: primary),
@@ -207,16 +229,26 @@ class _AccountPage extends State<AccountPage> {
                   ProfileWidget(
                     icon: Icons.receipt_long,
                     iconColor: Colors.yellow,
-                    title: 'Quản lý thanh toán',
+                    title: 'Liên kết ngân hàng',
                     subtitle: "",
-                    onTap: () {},
+                    onTap: () {
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => AddBankScreen()));
+                    },
                   ),
                   ProfileWidget(
                     icon: Icons.shield,
                     iconColor: Colors.green,
                     title: 'Bảo mật',
                     subtitle: "",
-                    onTap: () {},
+                    onTap: () {
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => SecurityScreen()));
+                    },
                   ),
                 ]);
               },
@@ -257,14 +289,18 @@ class _AccountPage extends State<AccountPage> {
                 iconColor: Colors.grey,
                 title: 'Cài đặt ứng dụng',
                 subtitle: "",
-                onTap: () {},
+                onTap: () {
+                  notAvailable();
+                },
               ),
               ProfileWidget(
                 icon: Icons.headset_mic,
                 iconColor: Colors.green,
                 title: 'Trung tâm trợ giúp',
                 subtitle: "",
-                onTap: () {},
+                onTap: () {
+                  notAvailable();
+                },
               ),
             ]),
           ),
@@ -273,6 +309,7 @@ class _AccountPage extends State<AccountPage> {
           ),
           GestureDetector(
             onTap: () {
+              context.read<AccountPageBloc>().add(LogoutEvent());
               Navigator.pushAndRemoveUntil(
                   context,
                   MaterialPageRoute(builder: (context) => LoginScreen()),
@@ -318,15 +355,19 @@ class _AccountPage extends State<AccountPage> {
   }
 
   // ignore: non_constant_identifier_names
-  List<Widget> _buildExpandableContent(List? wallet_lists) {
-    List<Widget> columnContent = [];
+  List<Widget> _buildExpandableContent(List<Wallet>? wallet_lists) {
 
-    for (var content in wallet_lists!) {
-      if (content["name"] == "TPBank") {
+    List<Widget> columnContent = [];
+    if (wallet_lists == null) {
+      columnContent.add(const Text("Lỗi mất rồi, bạn hãy thử lại nhé!"));
+      return columnContent;
+    }
+    for (var wallet in wallet_lists!) {
+      if (wallet.name == "TPbank") {
         columnContent.add(
           ListTile(
             title: Text(
-              content["name"],
+              wallet.name!,
               style: TextStyle(
                 fontSize: MediaQuery.of(context).size.width > 900
                     ? 15
@@ -336,7 +377,7 @@ class _AccountPage extends State<AccountPage> {
               ),
             ),
             trailing: Text(
-              content["card_Number"],
+              wallet.card_number!,
               style: TextStyle(
                 fontSize: MediaQuery.of(context).size.width > 900
                     ? 15
@@ -355,11 +396,11 @@ class _AccountPage extends State<AccountPage> {
           ),
         );
       }
-      if (content["name"] == "VietcomBank") {
+      if (wallet.name == "Vietcombank") {
         columnContent.add(
           ListTile(
             title: Text(
-              content["name"],
+              wallet.name!,
               style: TextStyle(
                 fontSize: MediaQuery.of(context).size.width > 900
                     ? 15
@@ -369,7 +410,7 @@ class _AccountPage extends State<AccountPage> {
               ),
             ),
             trailing: Text(
-              content["card_Number"],
+              wallet.card_number!,
               style: TextStyle(
                 fontSize: MediaQuery.of(context).size.width > 900
                     ? 15
@@ -388,11 +429,11 @@ class _AccountPage extends State<AccountPage> {
           ),
         );
       }
-      if (content["name"] == "Ví") {
+      if (wallet.name == "Techcombank") {
         columnContent.add(
           ListTile(
             title: Text(
-              content["name"],
+              wallet.name!,
               style: TextStyle(
                 fontSize: MediaQuery.of(context).size.width > 900
                     ? 15
@@ -402,7 +443,106 @@ class _AccountPage extends State<AccountPage> {
               ),
             ),
             trailing: Text(
-              content["balance"],
+              wallet.card_number!,
+              style: TextStyle(
+                fontSize: MediaQuery.of(context).size.width > 900
+                    ? 15
+                    : MediaQuery.of(context).size.width > 350
+                        ? 15
+                        : 13,
+              ),
+            ),
+            leading: CircleAvatar(
+                backgroundColor: Colors.transparent,
+                child: Image.asset(
+                  'assets/images/icons/techcombank.png',
+                  width: 25,
+                  height: 25,
+                )),
+          ),
+        );
+      }
+      if (wallet.name == "MB") {
+        columnContent.add(
+          ListTile(
+            title: Text(
+              wallet.name!,
+              style: TextStyle(
+                fontSize: MediaQuery.of(context).size.width > 900
+                    ? 15
+                    : MediaQuery.of(context).size.width > 350
+                        ? 15
+                        : 13,
+              ),
+            ),
+            trailing: Text(
+              wallet.card_number!,
+              style: TextStyle(
+                fontSize: MediaQuery.of(context).size.width > 900
+                    ? 15
+                    : MediaQuery.of(context).size.width > 350
+                        ? 15
+                        : 13,
+              ),
+            ),
+            leading: CircleAvatar(
+                backgroundColor: Colors.transparent,
+                child: Image.asset(
+                  'assets/images/icons/mb.png',
+                  width: 25,
+                  height: 25,
+                )),
+          ),
+        );
+      }
+      if (wallet.name == "BIDV") {
+        columnContent.add(
+          ListTile(
+            title: Text(
+              wallet.name!,
+              style: TextStyle(
+                fontSize: MediaQuery.of(context).size.width > 900
+                    ? 15
+                    : MediaQuery.of(context).size.width > 350
+                        ? 15
+                        : 13,
+              ),
+            ),
+            trailing: Text(
+              wallet.card_number!,
+              style: TextStyle(
+                fontSize: MediaQuery.of(context).size.width > 900
+                    ? 15
+                    : MediaQuery.of(context).size.width > 350
+                        ? 15
+                        : 13,
+              ),
+            ),
+            leading: CircleAvatar(
+                backgroundColor: Colors.transparent,
+                child: Image.asset(
+                  'assets/images/icons/bidv.png',
+                  width: 25,
+                  height: 25,
+                )),
+          ),
+        );
+      }
+      if (wallet.type == "DefaultWallet") {
+        columnContent.add(
+          ListTile(
+            title: Text(
+              "Ví",
+              style: TextStyle(
+                fontSize: MediaQuery.of(context).size.width > 900
+                    ? 15
+                    : MediaQuery.of(context).size.width > 350
+                        ? 15
+                        : 13,
+              ),
+            ),
+            trailing: Text(
+              formatCurrency(wallet.balance.toString()) + "đ",
               style: TextStyle(
                 fontSize: MediaQuery.of(context).size.width > 900
                     ? 15
@@ -421,5 +561,26 @@ class _AccountPage extends State<AccountPage> {
       }
     }
     return columnContent;
+  }
+  String formatCurrency(String amount){
+    if (amount.isEmpty) return "";
+    final currencyFormat = NumberFormat("#,##0.##");
+    return currencyFormat.format(int.parse(amount));
+  }
+    void notAvailable() {
+    SmartDialog.show(builder: (context) {
+      return Container(
+        height: 100,
+        width: 250,
+        padding: const EdgeInsets.all(10),
+        decoration: BoxDecoration(
+          color: Colors.black,
+          borderRadius: BorderRadius.circular(10),
+        ),
+        alignment: Alignment.center,
+        child: const Text('Chức năng hiện tại đang phát triển. Xin thông cảm!',
+            style: TextStyle(color: Colors.white)),
+      );
+    });
   }
 }

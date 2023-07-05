@@ -10,14 +10,18 @@ class ToggleWidget extends StatefulWidget {
   final String subtitle;
   final Color subtitleColor;
   final Color color;
-  final Function onTap;
+  final Function(int?)? onChanged;
+  final int groupValue;
+  final int value;
 
   const ToggleWidget({
     Key? key,
     required this.icon,
     required this.title,
     required this.subtitle,
-    required this.onTap,
+    required this.onChanged,
+    required this.value,
+    required this.groupValue,
     this.color = white,
     this.subtitleColor = black,
   }) : super(key: key);
@@ -29,11 +33,12 @@ class ToggleWidget extends StatefulWidget {
 class _ToggleWidget extends State<ToggleWidget> {
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: () {
-        widget.onTap();
-      },
-      child: Container(
+    return RadioListTile(
+      controlAffinity: ListTileControlAffinity.trailing,
+      value: widget.value,
+      groupValue: widget.groupValue,
+      onChanged: widget.onChanged,
+      title: Container(
         width: double.infinity,
         decoration: BoxDecoration(
           color: widget.color,
@@ -47,7 +52,7 @@ class _ToggleWidget extends State<ToggleWidget> {
           ],
         ),
         child: Padding(
-          padding: const EdgeInsets.all(18),
+          padding: const EdgeInsets.all(5),
           child: Column(
             children: [
               Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [

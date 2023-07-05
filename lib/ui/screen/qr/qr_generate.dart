@@ -2,6 +2,8 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:barcode_widget/barcode_widget.dart';
 import 'package:flutter_countdown_timer/flutter_countdown_timer.dart';
+import 'package:nfc_e_wallet/main.dart';
+import 'package:intl/intl.dart';
 
 import '../../style/color.dart';
 import '../../style/constants.dart';
@@ -17,7 +19,7 @@ class GenerateQRScreen extends StatefulWidget {
 class _GenerateQRPageState extends State<GenerateQRScreen> {
   int endTime = DateTime.now().millisecondsSinceEpoch + 1000 * 60;
   TextEditingController controller = TextEditingController();
-  String data = "123123";
+  String data = user.phone_number;
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -151,7 +153,7 @@ class _GenerateQRPageState extends State<GenerateQRScreen> {
                                           ? 13
                                           : 15),
                                 ),
-                                Text("Số dư: 2.000.000",
+                                Text("Số dư: ${formatCurrency(defaultWallet.balance.toString())}",
                                     style: TextStyle(
                                         fontWeight: FontWeight.normal,
                                         fontSize: MediaQuery.of(context)
@@ -178,5 +180,10 @@ class _GenerateQRPageState extends State<GenerateQRScreen> {
         ),
       ],
     );
+  }
+    String formatCurrency(String amount) {
+    if (amount.isEmpty) return "";
+    final currencyFormat = NumberFormat("#,##0.##");
+    return currencyFormat.format(int.parse(amount));
   }
 }

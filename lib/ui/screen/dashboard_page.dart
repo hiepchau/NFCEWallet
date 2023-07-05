@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:nfc_e_wallet/main.dart';
+import 'package:nfc_e_wallet/ui/widgets/shortcut_widget/shortcut_icon.dart';
 import '../../utils/list_utils.dart';
 import '../../utils/widget_utils.dart';
 import '../style/color.dart';
-import '../widgets/shortcut_icon.dart';
 import 'app_navigator.dart';
 import 'notification/notification_page.dart';
 
@@ -27,15 +29,17 @@ class _Dashboard extends State<Dashboard> with TickerProviderStateMixin {
         automaticallyImplyLeading: false,
         backgroundColor: primary,
         title: Text(
-          'Xin chào, Hiep Chau',
+          'Xin chào, ${user.full_name}',
           style: TextStyle(color: onPrimary, fontSize: 18),
         ),
         actions: [
           IconButton(
-              onPressed: () => AppNav.push(
-                  context,
-                  MaterialPageRoute(
-                      builder: (context) => const NotificationPage())),
+              onPressed: () => 
+              notAvailable(),
+              // AppNav.push(
+              //     context,
+              //     MaterialPageRoute(
+              //         builder: (context) => const NotificationPage())),
               icon: Icon(
                 Icons.notifications,
                 color: onPrimary,
@@ -106,7 +110,8 @@ class _Dashboard extends State<Dashboard> with TickerProviderStateMixin {
                                 ),
                                 'Nạp tiền ĐT',
                                 iconLabelWidth,
-                                labelWidth),
+                                labelWidth,
+                                onTap: notAvailable),
                             ShortcutIcon(
                                 Icon(
                                   Icons.receipt_long,
@@ -114,7 +119,8 @@ class _Dashboard extends State<Dashboard> with TickerProviderStateMixin {
                                 ),
                                 'Thanh toán hóa đơn',
                                 iconLabelWidth,
-                                labelWidth),
+                                labelWidth,
+                                onTap: notAvailable),
                             ShortcutIcon(
                                 Icon(
                                   Icons.shield,
@@ -122,7 +128,8 @@ class _Dashboard extends State<Dashboard> with TickerProviderStateMixin {
                                 ),
                                 'Bảo hiểm',
                                 iconLabelWidth,
-                                labelWidth),
+                                labelWidth,
+                                onTap: notAvailable),
                             ShortcutIcon(
                                 Icon(
                                   FontAwesomeIcons.piggyBank,
@@ -130,7 +137,8 @@ class _Dashboard extends State<Dashboard> with TickerProviderStateMixin {
                                 ),
                                 'Tài khoản tích lũy',
                                 iconLabelWidth,
-                                labelWidth),
+                                labelWidth,
+                                onTap: notAvailable,),
                             ShortcutIcon(
                                 Icon(
                                   FontAwesomeIcons.simCard,
@@ -138,13 +146,15 @@ class _Dashboard extends State<Dashboard> with TickerProviderStateMixin {
                                 ),
                                 'Nạp 3G/4G',
                                 iconLabelWidth,
-                                labelWidth),
+                                labelWidth,
+                                onTap: notAvailable,),
                             ShortcutIcon(
                                 Image.asset(
                                     'assets/images/icons/vetc-logo.png'),
                                 'VETC',
                                 iconLabelWidth,
-                                labelWidth),
+                                labelWidth,
+                                onTap: notAvailable,),
                             ShortcutIcon(
                                 Icon(
                                   FontAwesomeIcons.ticket,
@@ -152,7 +162,8 @@ class _Dashboard extends State<Dashboard> with TickerProviderStateMixin {
                                 ),
                                 'Đặt vé phim',
                                 iconLabelWidth,
-                                labelWidth),
+                                labelWidth,
+                                onTap: notAvailable,),
                             ShortcutIcon(
                                 Icon(
                                   Icons.widgets,
@@ -160,7 +171,8 @@ class _Dashboard extends State<Dashboard> with TickerProviderStateMixin {
                                 ),
                                 'Tất cả',
                                 iconLabelWidth,
-                                labelWidth),
+                                labelWidth,
+                                onTap: notAvailable,),
                           ])
                               .map((e) => Row(
                             crossAxisAlignment:
@@ -188,13 +200,17 @@ class _Dashboard extends State<Dashboard> with TickerProviderStateMixin {
                           WidgetUtils.rowEvenlyWidthDivideWrap(
                               width, labelWidth, 4, [
                             ShortcutIcon(Icon(Icons.abc_outlined),
-                                'Mua vé máy bay', iconLabelWidth, labelWidth),
+                                'Mua vé máy bay', iconLabelWidth, labelWidth,
+                                onTap: notAvailable,),
                             ShortcutIcon(Icon(Icons.access_alarm_rounded),
-                                'KFC', iconLabelWidth, labelWidth),
+                                'KFC', iconLabelWidth, labelWidth,
+                                onTap: notAvailable,),
                             ShortcutIcon(Icon(Icons.add_box_rounded),
-                                'Jolibee', iconLabelWidth, labelWidth),
+                                'Jolibee', iconLabelWidth, labelWidth,
+                                onTap: notAvailable,),
                             ShortcutIcon(Icon(Icons.add_circle), 'Uniqlo',
-                                iconLabelWidth, labelWidth),
+                                iconLabelWidth, labelWidth,
+                                onTap: notAvailable,),
                           ])
                               .map((e) => Row(
                             crossAxisAlignment:
@@ -237,13 +253,16 @@ class _Dashboard extends State<Dashboard> with TickerProviderStateMixin {
                           WidgetUtils.rowEvenlyWidthDivideWrap(
                               width, labelWidth, 4, [
                             ShortcutIcon(Icon(Icons.abc_outlined),
-                                'Mua vé máy bay', iconLabelWidth, labelWidth),
+                                'Mua vé máy bay', iconLabelWidth, labelWidth,
+                                onTap: notAvailable),
                             ShortcutIcon(Icon(Icons.access_alarm_rounded),
-                                'KFC', iconLabelWidth, labelWidth),
+                                'KFC', iconLabelWidth, labelWidth,
+                                onTap: notAvailable),
                             ShortcutIcon(Icon(Icons.add_box_rounded), 'Jolibee',
                                 iconLabelWidth, labelWidth),
                             ShortcutIcon(Icon(Icons.add_circle), 'Uniqlo',
-                                iconLabelWidth, labelWidth),
+                                iconLabelWidth, labelWidth,
+                                onTap: notAvailable),
                           ])
                               .map((e) => Row(
                             crossAxisAlignment:
@@ -350,5 +369,22 @@ class _Dashboard extends State<Dashboard> with TickerProviderStateMixin {
         ),
       ),
     );
+  }
+  void notAvailable(){
+    SmartDialog.show(builder: (context) {
+          return Container(
+            height: 100,
+            width: 250,
+            padding: const EdgeInsets.all(10),
+            decoration: BoxDecoration(
+              color: Colors.black,
+              borderRadius: BorderRadius.circular(10),
+            ),
+            alignment: Alignment.center,
+            child: const Text(
+                'Chức năng hiện tại đang phát triển. Xin thông cảm!',
+                style: TextStyle(color: Colors.white)),
+          );
+        });
   }
 }

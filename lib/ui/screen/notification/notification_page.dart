@@ -47,17 +47,29 @@ class _NotificationPage extends State<NotificationPage> {
                   indicatorColor: primary,
                   labelColor: primary,
                   tabs: const [
-                    Text(
-                      "Tất cả",
+                    SizedBox(
+                      width: 50,
+                      child: Text(
+                        "Tất cả",
+                      ),
                     ),
-                    Text(
-                      "Nhắc nhở",
+                    SizedBox(
+                      width: 50,
+                      child: Text(
+                        "Nhắc nhở",
+                      ),
                     ),
-                    Text(
-                      "Giao dịch",
+                    SizedBox(
+                      width: 50,
+                      child: Text(
+                        "Giao dịch",
+                      ),
                     ),
-                    Text(
-                      "Khuyến mãi",
+                    SizedBox(
+                      width: 50,
+                      child: Text(
+                        "Khuyến mãi",
+                      ),
                     ),
                   ]),
             ),

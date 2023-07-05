@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
+import 'package:nfc_e_wallet/ui/screen/authenticate/login/login_page.dart';
 import '../../../../l10n/l10n.dart';
 import '../../../../utils/toast_helper.dart';
 import '../../../style/color.dart';
@@ -11,6 +12,7 @@ class SignUpPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      resizeToAvoidBottomInset: true,
       body: BlocProvider(
         create: (context) => SignupBloc(),
         child: SignUpForm(),
@@ -45,6 +47,7 @@ class _SignUpFormState extends State<SignUpForm> {
       _obscureRePasswordText = !_obscureRePasswordText;
     });
   }
+
   DateTime _dob = DateTime.now();
 
   @override
@@ -55,119 +58,138 @@ class _SignUpFormState extends State<SignUpForm> {
           Navigator.push(
             context,
             MaterialPageRoute(
-              builder: (context) => OTPScreen(phoneNumber: _phoneNumberController.text),
+              builder: (context) =>
+                  OTPScreen(phoneNumber: _phoneNumberController.text),
             ),
           );
         } else if (state.signupStatus == SignupStatus.InvalidInfo) {
-          ToastHelper.showToast("Register failed", status: ToastStatus.failure);
+          ToastHelper.showToast("Đăng ký thất bại", status: ToastStatus.failure);
         }
       },
-      child: Stack(
+      child: Column(
         children: [
           Container(
             height: 250,
             width: double.infinity,
             color: primary,
-          ),
-          SafeArea(
             child: Padding(
-              padding: EdgeInsets.only(left: 24),
+              padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
               child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  SizedBox(height: 24),
-                  Container(
-                    width: 45,
-                    height: 45,
-                    decoration: BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.circular(24),
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    const SizedBox(height: 50),
+                    Container(
+                      width: 45,
+                      height: 45,
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(24),
+                      ),
                     ),
-                  ),
-                  SizedBox(height: 24),
-                  Text(
-                    'Create Account',
-                    style: TextStyle(color: Colors.white, fontSize: 24, fontWeight: FontWeight.w600),
-                  ),
-                  SizedBox(height: 8),
-                  TextButton(
-                    onPressed: () {
-                      Navigator.of(context).pop();
-                    },
-                    child: Text(
-                      "Already have an account? Sign In",
-                      style: TextStyle(color: Colors.white, fontSize: 16),
+                    const SizedBox(height: 24),
+                    const Text(
+                      'Tạo tài khoản!',
+                      style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 24,
+                          fontWeight: FontWeight.w600),
                     ),
-                  ),
-                  SizedBox(height: 32),
-                  Padding(
-                    padding: EdgeInsets.symmetric(horizontal: 24),
-                    child: Column(
+                    const SizedBox(height: 8),
+                    InkWell(
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => LoginScreen()),
+                        );
+                      },
+                      child: Text(
+                        "Đã có tài khoản rồi! Hãy đăng nhập",
+                        style: TextStyle(color: Colors.white, fontSize: 16),
+                      ),
+                    ),
+                  ]),
+            ),
+          ),
+          Expanded(
+            child: SingleChildScrollView(
+              child: Padding(
+                padding: EdgeInsets.symmetric(horizontal: 20),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    SizedBox(height: 32),
+                    Column(
                       children: [
                         TextField(
                           controller: _phoneNumberController,
+                          keyboardType: TextInputType.number,
                           decoration: InputDecoration(
-                            hintText: 'Your phone number',
-                            border: OutlineInputBorder(borderRadius: BorderRadius.circular(8.0)),
+                            hintText: 'Số điện thoại của bạn',
+                            border: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(8.0)),
                           ),
-                          onChanged: (value) {
-                          },
+                          onChanged: (value) {},
                         ),
                         SizedBox(height: 24.0),
                         TextField(
                           controller: _passwordController,
                           obscureText: _obscurePasswordText,
                           decoration: InputDecoration(
-                            hintText: 'Password',
-                            border: OutlineInputBorder(borderRadius: BorderRadius.circular(8.0)),
+                            hintText: 'Mật khẩu của bạn',
+                            border: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(8.0)),
                             suffixIcon: IconButton(
                               icon: Icon(
                                 // Based on passwordVisible state choose the icon
-                                _obscurePasswordText ? Icons.visibility_off : Icons.visibility,
+                                _obscurePasswordText
+                                    ? Icons.visibility_off
+                                    : Icons.visibility,
                               ),
                               onPressed: _togglePasswordVisibility,
                             ),
                           ),
-                          onChanged: (value) {
-                          },
+                          onChanged: (value) {},
                         ),
                         SizedBox(height: 24.0),
                         TextField(
                           controller: _repeatPasswordController,
                           obscureText: _obscureRePasswordText,
                           decoration: InputDecoration(
-                            hintText: 'Repeat Password',
-                            border: OutlineInputBorder(borderRadius: BorderRadius.circular(8.0)),
+                            hintText: 'Nhập lại mật khẩu của bạn',
+                            border: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(8.0)),
                             suffixIcon: IconButton(
                               icon: Icon(
                                 // Based on passwordVisible state choose the icon
-                                _obscureRePasswordText ? Icons.visibility_off : Icons.visibility,
+                                _obscureRePasswordText
+                                    ? Icons.visibility_off
+                                    : Icons.visibility,
                               ),
                               onPressed: _toggleRePasswordVisibility,
                             ),
                           ),
-                          onChanged: (value) {
-                          },
+                          onChanged: (value) {},
                         ),
                         SizedBox(height: 24.0),
                         TextField(
                           controller: _fullNameController,
                           decoration: InputDecoration(
-                            hintText: 'Your full name',
-                            border: OutlineInputBorder(borderRadius: BorderRadius.circular(8.0)),
+                            hintText: 'Họ tên của bạn',
+                            border: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(8.0)),
                           ),
-                          onChanged: (value) {
-                          },
+                          onChanged: (value) {},
                         ),
                         SizedBox(height: 24.0),
                         TextField(
                           controller: _identifyIDController,
                           decoration: InputDecoration(
-                            hintText: 'Your identify ID',
-                            border: OutlineInputBorder(borderRadius: BorderRadius.circular(8.0)),
+                            hintText: 'CMND hoặc CCCD',
+                            border: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(8.0)),
                           ),
-                          onChanged: (value) {
-                          },
+                          onChanged: (value) {},
                         ),
                         SizedBox(height: 24.0),
                         GestureDetector(
@@ -181,15 +203,17 @@ class _SignUpFormState extends State<SignUpForm> {
                             if (pickedDate != null && pickedDate != _dob)
                               setState(() {
                                 _dob = pickedDate;
-                                _dobController.text = DateFormat('yyyy-MM-dd').format(_dob);
+                                _dobController.text =
+                                    DateFormat('yyyy-MM-dd').format(_dob);
                               });
                           },
                           child: AbsorbPointer(
                             child: TextField(
                               controller: _dobController,
                               decoration: InputDecoration(
-                                hintText: 'Date of birth',
-                                border: OutlineInputBorder(borderRadius: BorderRadius.circular(8.0)),
+                                hintText: 'Ngày sinh',
+                                border: OutlineInputBorder(
+                                    borderRadius: BorderRadius.circular(8.0)),
                               ),
                               readOnly: true,
                             ),
@@ -205,37 +229,41 @@ class _SignUpFormState extends State<SignUpForm> {
                                   _repeatPasswordController.text.isNotEmpty &&
                                   _identifyIDController.text.isNotEmpty &&
                                   _dobController.text.isNotEmpty) {
-                                if (_passwordController.text == _repeatPasswordController.text) {
-                                  context.read<SignupBloc>().add(
-                                      SignupEvent(
-                                          fullName: _fullNameController.text,
-                                          phone: _phoneNumberController.text,
-                                          password: _passwordController.text,
-                                          identifyID: _identifyIDController.text,
-                                          dob: _dobController.text
-                                      )
-                                  );
+                                if (_passwordController.text ==
+                                    _repeatPasswordController.text) {
+                                  context.read<SignupBloc>().add(SignupEvent(
+                                      fullName: _fullNameController.text,
+                                      phone: _phoneNumberController.text,
+                                      password: _passwordController.text,
+                                      identifyID: _identifyIDController.text,
+                                      dob: _dobController.text));
                                 } else {
-                                  ToastHelper.showToast(L10n().enterConfirmPasswordSame, status: ToastStatus.failure);
+                                  ToastHelper.showToast(
+                                      L10n().enterConfirmPasswordSame,
+                                      status: ToastStatus.failure);
                                 }
                               } else {
-                                ToastHelper.showToast(L10n().enterFullInformation, status: ToastStatus.failure);
+                                ToastHelper.showToast(
+                                    L10n().enterFullInformation,
+                                    status: ToastStatus.failure);
                               }
                             },
-                            child: Text('Sign Up'),
                             style: ElevatedButton.styleFrom(
-                              primary: green1,
+                              backgroundColor: primary,
                               shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(8),
                               ),
                             ),
+                            child: Text(
+                              'Đăng ký',
+                              style: TextStyle(color: onPrimary),
+                            ),
                           ),
-
                         ),
                       ],
                     ),
-                  ),
-                ],
+                  ],
+                ),
               ),
             ),
           ),

@@ -7,16 +7,17 @@ part of 'wallet.dart';
 // **************************************************************************
 
 Wallet _$WalletFromJson(Map<String, dynamic> json) => Wallet(
-      id: json['_id'] as String?,
-      balance: json['balance'] as int?,
-      name: json['name'] as String?,
-      type: json['type'] as String?,
-    )..cardnumber = json['cardnumber'] as String?;
+      json['id'] as int,
+      json['balance'] as int?,
+      json['name'] as String?,
+      json['type'] as String?,
+      json['card_number'] as String?,
+    );
 
 Map<String, dynamic> _$WalletToJson(Wallet instance) => <String, dynamic>{
-      '_id': instance.id,
+      'id': instance.id,
       'balance': instance.balance,
       'name': instance.name,
       'type': instance.type,
-      'cardnumber': instance.cardnumber,
+      'card_number': instance.card_number,
     };

@@ -1,10 +1,14 @@
 part of 'wallet_bloc.dart';
 
-abstract class WalletState {}
-
-class WalletInitialState extends WalletState {
-  final List<Wallet>? listWallet = [];
+class WalletState {
+  final List<Wallet>? listWallet;
+  WalletState({this.listWallet = const []});
+  WalletState copyWith({List<Wallet>? listWallet}){
+    return WalletState(listWallet: listWallet ?? this.listWallet);
+  }
 }
+
+class WalletInitialState extends WalletState {}
 
 class WalletReadyState extends WalletState {
   final List<Wallet>? listWallet;

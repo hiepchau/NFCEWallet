@@ -120,10 +120,14 @@ class _AppService implements AppService {
   }
 
   @override
-  Future<HttpResponse<dynamic>> verifyOtp(Map<String, dynamic> request) async {
+  Future<HttpResponse<dynamic>> verifyOtp(
+    String token,
+    Map<String, dynamic> request,
+  ) async {
     const _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
-    final _headers = <String, dynamic>{};
+    final _headers = <String, dynamic>{r'Authorization': token};
+    _headers.removeWhere((k, v) => v == null);
     final _data = <String, dynamic>{};
     _data.addAll(request);
     final _result =
@@ -190,7 +194,35 @@ class _AppService implements AppService {
     )
             .compose(
               _dio.options,
-              '/user/${id}}',
+              '/user/${id}',
+              queryParameters: queryParameters,
+              data: _data,
+            )
+            .copyWith(baseUrl: baseUrl ?? _dio.options.baseUrl)));
+    final value = BaseResponse.fromJson(_result.data!);
+    final httpResponse = HttpResponse(value, _result);
+    return httpResponse;
+  }
+
+  @override
+  Future<HttpResponse<BaseResponse>> getUserByPhoneNumber(
+    String phoneNumber,
+    String token,
+  ) async {
+    const _extra = <String, dynamic>{};
+    final queryParameters = <String, dynamic>{};
+    final _headers = <String, dynamic>{r'Authorization': token};
+    _headers.removeWhere((k, v) => v == null);
+    final Map<String, dynamic>? _data = null;
+    final _result = await _dio.fetch<Map<String, dynamic>>(
+        _setStreamType<HttpResponse<BaseResponse>>(Options(
+      method: 'GET',
+      headers: _headers,
+      extra: _extra,
+    )
+            .compose(
+              _dio.options,
+              '/user/get_user_by_phone_number/${phoneNumber}',
               queryParameters: queryParameters,
               data: _data,
             )
@@ -259,7 +291,7 @@ class _AppService implements AppService {
   }
 
   @override
-  Future<HttpResponse<ListModelResponse>> getListTransaction(
+  Future<HttpResponse<dynamic>> getListTransaction(
     String id,
     String token,
   ) async {
@@ -268,20 +300,20 @@ class _AppService implements AppService {
     final _headers = <String, dynamic>{r'Authorization': token};
     _headers.removeWhere((k, v) => v == null);
     final Map<String, dynamic>? _data = null;
-    final _result = await _dio.fetch<Map<String, dynamic>>(
-        _setStreamType<HttpResponse<ListModelResponse>>(Options(
-      method: 'POST',
+    final _result =
+        await _dio.fetch(_setStreamType<HttpResponse<dynamic>>(Options(
+      method: 'GET',
       headers: _headers,
       extra: _extra,
     )
             .compose(
               _dio.options,
-              '/transaction/{user_id}',
+              '/transaction/${id}',
               queryParameters: queryParameters,
               data: _data,
             )
             .copyWith(baseUrl: baseUrl ?? _dio.options.baseUrl)));
-    final value = ListModelResponse.fromJson(_result.data!);
+    final value = _result.data;
     final httpResponse = HttpResponse(value, _result);
     return httpResponse;
   }
@@ -289,11 +321,13 @@ class _AppService implements AppService {
   @override
   Future<HttpResponse<dynamic>> createWallet(
     String id,
+    String token,
     Map<String, dynamic> request,
   ) async {
     const _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
-    final _headers = <String, dynamic>{};
+    final _headers = <String, dynamic>{r'Authorization': token};
+    _headers.removeWhere((k, v) => v == null);
     final _data = <String, dynamic>{};
     _data.addAll(request);
     final _result =
@@ -304,7 +338,7 @@ class _AppService implements AppService {
     )
             .compose(
               _dio.options,
-              '/wallet/{user_id}',
+              '/wallet/${id}',
               queryParameters: queryParameters,
               data: _data,
             )
@@ -316,7 +350,7 @@ class _AppService implements AppService {
 
   @override
   Future<HttpResponse<ListModelResponse>> getWalletByUserId(
-    String id,
+    String userId,
     String token,
   ) async {
     const _extra = <String, dynamic>{};
@@ -332,12 +366,40 @@ class _AppService implements AppService {
     )
             .compose(
               _dio.options,
-              '/wallet/{user_id}',
+              '/wallet/${userId}',
               queryParameters: queryParameters,
               data: _data,
             )
             .copyWith(baseUrl: baseUrl ?? _dio.options.baseUrl)));
     final value = ListModelResponse.fromJson(_result.data!);
+    final httpResponse = HttpResponse(value, _result);
+    return httpResponse;
+  }
+
+  @override
+  Future<HttpResponse<dynamic>> getUserByWallet(
+    String walletId,
+    String token,
+  ) async {
+    const _extra = <String, dynamic>{};
+    final queryParameters = <String, dynamic>{};
+    final _headers = <String, dynamic>{r'Authorization': token};
+    _headers.removeWhere((k, v) => v == null);
+    final Map<String, dynamic>? _data = null;
+    final _result =
+        await _dio.fetch(_setStreamType<HttpResponse<dynamic>>(Options(
+      method: 'GET',
+      headers: _headers,
+      extra: _extra,
+    )
+            .compose(
+              _dio.options,
+              '/wallet/get_user_by_wallet/${walletId}',
+              queryParameters: queryParameters,
+              data: _data,
+            )
+            .copyWith(baseUrl: baseUrl ?? _dio.options.baseUrl)));
+    final value = _result.data;
     final httpResponse = HttpResponse(value, _result);
     return httpResponse;
   }

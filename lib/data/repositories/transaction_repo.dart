@@ -6,7 +6,7 @@ import '../model/transaction.dart';
 import '../remote/app_service.dart';
 import '../remote/request_factory.dart';
 
-class TransactionRepo{
+class TransactionRepo {
   final EventBus _eventBus;
   final Logger _logger;
   final SharedPreferences _sharedPreferences;
@@ -16,35 +16,59 @@ class TransactionRepo{
   TransactionRepo(this._logger, this._sharedPreferences, this._appService,
       this._requestFactory, this._eventBus);
 
-  Future<bool> createTransferTransaction(String fromUser, String toUser, String amount, String message) async {
+  Future<String?> createTransferTransaction(
+      String fromUser, String toUser, String amount, String message) async {
     return _appService
-        .createTransferTransaction('Bearer '+_sharedPreferences.getString('token')!, _requestFactory.createTransferTransaction(fromUser, toUser, amount, message))
+        .createTransferTransaction(
+            _sharedPreferences.getString('token')!,
+            _requestFactory.createTransferTransaction(
+                fromUser, toUser, amount, message))
         .then((http) async {
       print(http.response.statusCode);
-      return (http.response.statusCode != 200);
+      if (http.response.statusCode != 200) {
+        return null;
+      }
+      String? otp;
+
+      if (http.data['message'] == 'OTP SENT') {
+        otp = http.data['otp'];
+        print("OTP received: $otp");
+      }
+      return otp;
     });
   }
 
-  Future<bool> createTransaction(String fromUser, String toUser, String amount, String message, String type) async {
+  Future<String?> createTransaction(String fromUser, String toUser, String amount,
+      String message, String type) async {
     return _appService
-        .createTransaction('Bearer '+_sharedPreferences.getString('token')!, _requestFactory.createTransaction(fromUser, toUser, amount, message, type))
+        .createTransaction(
+            _sharedPreferences.getString('token')!,
+            _requestFactory.createTransaction(
+                fromUser, toUser, amount, message, type))
         .then((http) async {
       print(http.response.statusCode);
-      return (http.response.statusCode != 200);
+      if (http.response.statusCode != 200) {
+        return null;
+      }
+      String? otp;
+
+      if (http.data['message'] == 'OTP SENT') {
+        otp = http.data['otp'];
+        print("OTP received: $otp");
+      }
+      return otp;
     });
   }
 
-  Future<List<Transaction>?> getListTransaction(String id) async {
+  Future<List<dynamic>?> getListTransaction(String userId) async {
     return _appService
-        .getListTransaction(id, 'Bearer '+_sharedPreferences.getString('token')!)
+        .getListTransaction(userId, _sharedPreferences.getString('token')!)
         .then((http) async {
       print(http.response.statusCode);
       if (http.response.statusCode != 200) {
         return [];
       }
-      else{
-        return http.data.toListTransaction();
-      }
+      return http.response.data;
     });
   }
 }

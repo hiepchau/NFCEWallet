@@ -7,12 +7,12 @@ part 'user.g.dart';
 
 @JsonSerializable()
 class User {
-  @JsonKey(name: '_id')
-  final String id;
-  final DateTime birthday;
-  final String identifyId;
-  final String fullname;
-  final String phonenumber;
+  @JsonKey(name: 'id')
+  final int id;
+  final DateTime? birthday;
+  final String? identify_ID;
+  final String full_name;
+  final String phone_number;
   String? city;
   String? job;
   String? device;
@@ -20,9 +20,9 @@ class User {
   User(
       this.id,
       this.birthday,
-      this.identifyId,
-      this.fullname,
-      this.phonenumber,
+      this.identify_ID,
+      this.full_name,
+      this.phone_number,
       this.city, 
       this.job,
       this.device,

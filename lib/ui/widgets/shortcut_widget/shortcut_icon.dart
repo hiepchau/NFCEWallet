@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import '../style/color.dart';
+import 'package:nfc_e_wallet/ui/style/color.dart';
 
 class ShortcutIcon extends StatelessWidget {
   final Widget icon;

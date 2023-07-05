@@ -6,6 +6,10 @@
 	<string>$(DEVELOPMENT_LANGUAGE)</string>
 	<key>CFBundleDisplayName</key>
 	<string>Nfc E Wallet</string>
+    <key>NSCalendarsUsageDescription</key>
+    <string>Thông báo</string>
+    <key>NSRemindersUsageDescription</key>
+    <string>Thông báo</string>
 	<key>CFBundleExecutable</key>
 	<string>$(EXECUTABLE_NAME)</string>
 	<key>CFBundleIdentifier</key>

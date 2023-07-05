@@ -5,6 +5,7 @@ import 'package:meta/meta.dart';
 import 'package:dio/dio.dart';
 import 'package:get_it/get_it.dart';
 import 'package:nfc_e_wallet/data/repositories/authenticator.dart';
+import 'package:nfc_e_wallet/main.dart';
 
 part 'authenticate_event.dart';
 part 'authenticate_state.dart';
@@ -17,7 +18,7 @@ class AuthenticationBloc extends Bloc<AuthenticationEvent, AuthenticationInfoSta
       try
       {
         bool loginstate = await authenticator.login(
-            event.phoneNumber as String, event.password as String);
+            event.phoneNumber as String, event.password as String, FCMToken!);
 
         if(loginstate) {
           print("Login success");
@@ -37,25 +38,10 @@ class AuthenticationBloc extends Bloc<AuthenticationEvent, AuthenticationInfoSta
         emit(AuthenticationInfoState(authenStatus: authenticateStatus.unAuthorized));
       }
     });
-    on<LogoutEvent>((event, emit) async {
-      var authenticator = GetIt.instance.get<Authenticator>();
-
-      try{
-        bool logoutstate = await authenticator.logout();
-        if(logoutstate) {
-          print("Logout success");
-          emit(AuthenticationInfoState(authenStatus: authenticateStatus.Activate));
-        }
-      }
-      catch(e){
-        if(e is DioError){
-          print(e.response!.data);
-        }
-        print("Log out failed");
-        emit(AuthenticationInfoState(
-            authenStatus: authenticateStatus.Authorized));
-      }
-    });
+    // on<LogoutEvent>((event, emit) async {
+    //   var authenticator = GetIt.instance.get<Authenticator>();
+    //   await authenticator.logout();
+    // });
   }
 }
 

@@ -76,7 +76,7 @@ class _SelectTransferPage extends State<SelectTransferPage> {
                           icon: FontAwesomeIcons.creditCard,
                           iconColor: black,
                           title: 'Đến tài khoản ngân hàng',
-                          subtitle: "Chuyển đến số tài khoản hoặc số thẻ",
+                          subtitle: "Chuyển đến số tài khoản",
                           onTap: () => Navigator.of(context).push(
                             MaterialPageRoute(
                                 builder: ((context) => PaymentScreen())),
@@ -103,14 +103,29 @@ class _SelectTransferPage extends State<SelectTransferPage> {
                             indicatorColor: primary,
                             labelColor: primary,
                             tabs: const [
-                              Text(
-                                "Gần đây",
+                              SizedBox(
+                                width: 100,
+                                child: Center(
+                                  child: Text(
+                                    "Gần đây",
+                                  ),
+                                ),
                               ),
-                              Text(
-                                "Ví",
+                              SizedBox(
+                                width: 50,
+                                child: Center(
+                                  child: Text(
+                                    "Ví",
+                                  ),
+                                ),
                               ),
-                              Text(
-                                "Ngân hàng",
+                              SizedBox(
+                                width: 100,
+                                child: Center(
+                                  child: Text(
+                                    "Ngân hàng",
+                                  ),
+                                ),
                               ),
                             ]),
                       ),
@@ -153,107 +168,109 @@ class _SelectTransferPage extends State<SelectTransferPage> {
                       MediaQuery.of(context).size.height > 600 ? 100 : 50,
                     ),
                     Expanded(
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.end,
-                          children: [
-                            Container(
-                              decoration: BoxDecoration(color: white, boxShadow: [
-                                BoxShadow(
-                                    color: grey.withOpacity(0.5),
-                                    spreadRadius: 2,
-                                    blurRadius: 5,
-                                    offset: const Offset(0, 2))
-                              ]),
-                              child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    const Padding(
-                                      padding: EdgeInsets.symmetric(
-                                          horizontal: 15, vertical: 10),
-                                      child: Text("Có thể bạn muốn thử:"),
-                                    ),
-                                    Padding(
-                                      padding: const EdgeInsets.symmetric(
-                                          horizontal: 30),
-                                      child: Row(
-                                        children: [
-                                          Column(
-                                            children: [
-                                              Container(
-                                                height: 45,
-                                                width: 45,
-                                                decoration: BoxDecoration(
-                                                    color: white,
-                                                    borderRadius:
-                                                    const BorderRadius.all(
-                                                        Radius.circular(10)),
-                                                    boxShadow: [
-                                                      BoxShadow(
-                                                          color:
-                                                          grey.withOpacity(0.5),
-                                                          spreadRadius: 2,
-                                                          blurRadius: 5,
-                                                          offset:
-                                                          const Offset(0, 2))
-                                                    ]),
-                                                child: GestureDetector(
-                                                    child: const Icon(
-                                                      Icons.qr_code_2,
-                                                      size: 35,
-                                                    ),
-                                                    onTap: () =>
-                                                        Navigator.of(context).push(
-                                                          MaterialPageRoute(
-                                                              builder: ((context) =>
-                                                                  QRScreen(
-                                                                      "QRSCANNER"))),
-                                                        )),
-                                              ),
-                                              const Padding(
-                                                padding: EdgeInsets.symmetric(
-                                                    vertical: 10.0),
-                                                child: Text("QR Pay"),
-                                              )
-                                            ],
-                                          ),
-                                          SizedBox(
-                                            width: 20,
-                                          ),
-                                          Column(
-                                            children: [
-                                              Container(
-                                                height: 45,
-                                                width: 45,
-                                                decoration: BoxDecoration(
-                                                    color: white,
-                                                    borderRadius:
-                                                    const BorderRadius.all(
-                                                        Radius.circular(10)),
-                                                    boxShadow: [
-                                                      BoxShadow(
-                                                          color:
-                                                          grey.withOpacity(0.5),
-                                                          spreadRadius: 2,
-                                                          blurRadius: 5,
-                                                          offset:
-                                                          const Offset(0, 2))
-                                                    ]),
-                                                child: ImageIcon(AssetImage(
-                                                    'assets/images/icons/sirenIcon.png')),
-                                              ),
-                                              const Padding(
-                                                padding: EdgeInsets.symmetric(
-                                                    vertical: 10.0),
-                                                child: Text("Nhắc chuyển tiền"),
-                                              )
-                                            ],
-                                          )
-                                        ],
+                        child: SafeArea(
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.end,
+                            children: [
+                              Container(
+                                decoration: BoxDecoration(color: white, boxShadow: [
+                                  BoxShadow(
+                                      color: grey.withOpacity(0.5),
+                                      spreadRadius: 2,
+                                      blurRadius: 5,
+                                      offset: const Offset(0, 2))
+                                ]),
+                                child: Column(
+                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    children: [
+                                      const Padding(
+                                        padding: EdgeInsets.symmetric(
+                                            horizontal: 15, vertical: 10),
+                                        child: Text("Có thể bạn muốn thử:"),
                                       ),
-                                    )
-                                  ]),
-                            )
-                          ],
+                                      Padding(
+                                        padding: const EdgeInsets.symmetric(
+                                            horizontal: 30),
+                                        child: Row(
+                                          children: [
+                                            Column(
+                                              children: [
+                                                Container(
+                                                  height: 45,
+                                                  width: 45,
+                                                  decoration: BoxDecoration(
+                                                      color: white,
+                                                      borderRadius:
+                                                      const BorderRadius.all(
+                                                          Radius.circular(10)),
+                                                      boxShadow: [
+                                                        BoxShadow(
+                                                            color:
+                                                            grey.withOpacity(0.5),
+                                                            spreadRadius: 2,
+                                                            blurRadius: 5,
+                                                            offset:
+                                                            const Offset(0, 2))
+                                                      ]),
+                                                  child: GestureDetector(
+                                                      child: const Icon(
+                                                        Icons.qr_code_2,
+                                                        size: 35,
+                                                      ),
+                                                      onTap: () =>
+                                                          Navigator.of(context).push(
+                                                            MaterialPageRoute(
+                                                                builder: ((context) =>
+                                                                    QRScreen(
+                                                                        "QRSCANNER"))),
+                                                          )),
+                                                ),
+                                                const Padding(
+                                                  padding: EdgeInsets.symmetric(
+                                                      vertical: 10.0),
+                                                  child: Text("QR Pay"),
+                                                )
+                                              ],
+                                            ),
+                                            SizedBox(
+                                              width: 20,
+                                            ),
+                                            Column(
+                                              children: [
+                                                Container(
+                                                  height: 45,
+                                                  width: 45,
+                                                  decoration: BoxDecoration(
+                                                      color: white,
+                                                      borderRadius:
+                                                      const BorderRadius.all(
+                                                          Radius.circular(10)),
+                                                      boxShadow: [
+                                                        BoxShadow(
+                                                            color:
+                                                            grey.withOpacity(0.5),
+                                                            spreadRadius: 2,
+                                                            blurRadius: 5,
+                                                            offset:
+                                                            const Offset(0, 2))
+                                                      ]),
+                                                  child: ImageIcon(AssetImage(
+                                                      'assets/images/icons/sirenIcon.png')),
+                                                ),
+                                                const Padding(
+                                                  padding: EdgeInsets.symmetric(
+                                                      vertical: 10.0),
+                                                  child: Text("Nhắc chuyển tiền"),
+                                                )
+                                              ],
+                                            )
+                                          ],
+                                        ),
+                                      )
+                                    ]),
+                              )
+                            ],
+                          ),
                         ))
                   ]),
                 )

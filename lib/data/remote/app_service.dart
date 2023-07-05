@@ -27,13 +27,17 @@ abstract class AppService {
   Future<HttpResponse> verify(@Header('Authorization') String token);
 
   @POST("/verify_otp")
-  Future<HttpResponse> verifyOtp(@Body() Map<String, dynamic> request);
+  Future<HttpResponse> verifyOtp( @Header('Authorization') String token, @Body() Map<String, dynamic> request);
 
   @POST("/user/change_password/{id}")
   Future<HttpResponse> changePassword(@Path('id') String id, @Body() Map<String, dynamic> request);
 
-  @GET("/user/{id}}")
+  @GET("/user/{id}")
   Future<HttpResponse<BaseResponse>> getUser(@Path('id') String id, @Header('Authorization') String token);
+
+  @GET("/user/get_user_by_phone_number/{phone_number}")
+  Future<HttpResponse<BaseResponse>> getUserByPhoneNumber(
+      @Path('phone_number') String phoneNumber, @Header('Authorization') String token);
 
   @POST("/transaction/create_transfer")
   Future<HttpResponse> createTransferTransaction(@Header('Authorization') String token, @Body() Map<String, dynamic> request);
@@ -41,15 +45,19 @@ abstract class AppService {
   @POST("/transaction/create_transaction")
   Future<HttpResponse> createTransaction(@Header('Authorization') String token, @Body() Map<String, dynamic> request);
 
-  @POST("/transaction/{user_id}")
-  Future<HttpResponse<ListModelResponse>> getListTransaction(@Path('id') String id, @Header('Authorization') String token);
+  @GET("/transaction/{user_id}")
+  Future<HttpResponse> getListTransaction(@Path('user_id') String id, @Header('Authorization') String token);
 
   @POST("/wallet/{user_id}")
-  Future<HttpResponse> createWallet(@Path('id') String id, @Body() Map<String, dynamic> request);
+  Future<HttpResponse> createWallet(@Path('user_id') String id, @Header('Authorization') String token, @Body() Map<String, dynamic> request);
 
   @GET("/wallet/{user_id}")
   Future<HttpResponse<ListModelResponse>> getWalletByUserId(
-      @Path('id') String id, @Header('Authorization') String token);
+      @Path('user_id') String userId, @Header('Authorization') String token);
+
+  @GET("/wallet/get_user_by_wallet/{wallet_id}")
+  Future<HttpResponse> getUserByWallet(
+      @Path('wallet_id') String walletId, @Header('Authorization') String token);
 
   @POST("/transaction/{user_id}")
   Future<HttpResponse<ListModelResponse>> getListWallet(@Path('id') String id, @Header('Authorization') String token);

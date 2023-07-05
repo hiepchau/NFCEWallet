@@ -1,14 +1,18 @@
+
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:intl/intl.dart';
+import 'package:nfc_e_wallet/main.dart';
 import 'package:nfc_e_wallet/ui/screen/app_navigator.dart';
+import 'package:nfc_e_wallet/ui/screen/deposit/deposit_page.dart';
+import 'package:nfc_e_wallet/ui/screen/qr/qr_page.dart';
+import 'package:nfc_e_wallet/ui/select_transfer_page.dart';
 import 'package:nfc_e_wallet/ui/style/color.dart';
+import 'package:nfc_e_wallet/ui/withdraw_page.dart';
 import 'package:nfc_e_wallet/utils/snackbar.dart';
 
-import '../screen/qr/qr_page.dart';
-import '../select_transfer_page.dart';
-import '../withdraw_page.dart';
 import 'shortcut_icon.dart';
 
 class ShortcutPanel extends StatefulWidget {
@@ -28,9 +32,9 @@ class _ShortcutPanel extends State<ShortcutPanel> {
         decoration: BoxDecoration(
           color: Colors.white,
           borderRadius: MediaQuery.of(context).size.width > 900
-              ? BorderRadius.all(Radius.circular(30))
-              : BorderRadius.vertical(top: Radius.circular(30)),
-          boxShadow: [
+              ? const BorderRadius.all(Radius.circular(30))
+              : const BorderRadius.vertical(top: Radius.circular(30)),
+          boxShadow: const [
             BoxShadow(
               color: Colors.black45,
               blurRadius: 15,
@@ -50,10 +54,10 @@ class _ShortcutPanel extends State<ShortcutPanel> {
                   children: [
                     Expanded(
                       child: Container(
-                          padding: EdgeInsets.symmetric(horizontal: 10),
+                          padding: const EdgeInsets.symmetric(horizontal: 10),
                           decoration: BoxDecoration(
                             color: white,
-                            borderRadius: BorderRadius.all(Radius.circular(10)),
+                            borderRadius: const BorderRadius.all(Radius.circular(10)),
                             boxShadow: [
                               BoxShadow(
                                   color: grey.withOpacity(0.5),
@@ -85,15 +89,15 @@ class _ShortcutPanel extends State<ShortcutPanel> {
                             ),
                           )),
                     ),
-                    SizedBox(
+                    const SizedBox(
                       height: 10,
                     ),
                     Expanded(
                       child: Container(
-                        padding: EdgeInsets.symmetric(horizontal: 10),
+                        padding: const EdgeInsets.symmetric(horizontal: 10),
                         decoration: BoxDecoration(
                           color: white,
-                          borderRadius: BorderRadius.all(Radius.circular(10)),
+                          borderRadius: const BorderRadius.all(Radius.circular(10)),
                           boxShadow: [
                             BoxShadow(
                                 color: grey.withOpacity(0.5),
@@ -109,7 +113,7 @@ class _ShortcutPanel extends State<ShortcutPanel> {
                             children: [
                               Text(
                                 isVisible
-                                    ? "Số dư ví: 900.000.000đ"
+                                    ? "Số dư ví: ${formatCurrency(defaultWallet.balance.toString())}đ"
                                     : "Số dư ví: ************",
                                 style: TextStyle(
                                     color: primary,
@@ -137,7 +141,7 @@ class _ShortcutPanel extends State<ShortcutPanel> {
                         ),
                       ),
                     ),
-                    SizedBox(
+                    const SizedBox(
                       height: 20,
                     ),
                     Row(
@@ -198,10 +202,10 @@ class _ShortcutPanel extends State<ShortcutPanel> {
                         ),
                         ShortcutIcon(
                           Icon(
-                            Icons.qr_code,
+                            Icons.arrow_downward_rounded,
                             color: primary,
                           ),
-                          'Mã thanh toán',
+                          'Nạp tiền',
                           iconWidth,
                           maxWidth,
                           onTap: () {
@@ -209,7 +213,7 @@ class _ShortcutPanel extends State<ShortcutPanel> {
                                 context,
                                 MaterialPageRoute(
                                     builder: (context) =>
-                                    const QRScreen('QRCODE')));
+                                    const DepositPage()));
                           },
                         ),
                       ],
@@ -225,5 +229,10 @@ class _ShortcutPanel extends State<ShortcutPanel> {
         ),
       ),
     );
+  }
+  String formatCurrency(String amount) {
+    if (amount.isEmpty) return "";
+    final currencyFormat = NumberFormat("#,##0.##");
+    return currencyFormat.format(int.parse(amount));
   }
 }

@@ -60,6 +60,7 @@ abstract class RegisterModule {
           EventBus eventBus) =>
       UserRepo(logger, sharedPreferences, appService, requestFactory, eventBus);
 
+  @singleton
   WalletRepo walletRepo(
           Logger logger,
           SharedPreferences sharedPreferences,
@@ -69,6 +70,7 @@ abstract class RegisterModule {
       WalletRepo(
           logger, sharedPreferences, appService, requestFactory, eventBus);
 
+  @singleton
   TransactionRepo transactionRepo(
     Logger logger,
           SharedPreferences sharedPreferences,

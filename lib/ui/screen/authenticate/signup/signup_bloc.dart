@@ -1,10 +1,13 @@
 import 'dart:async';
 
 import 'package:bloc/bloc.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:get_it/get_it.dart';
 import 'package:meta/meta.dart';
+import 'package:nfc_e_wallet/main.dart';
 
 import '../../../../data/repositories/authenticator.dart';
+import '../../../../utils/notification_manager.dart';
 
 part 'signup_event.dart';
 part 'signup_state.dart';
@@ -24,6 +27,12 @@ class SignupBloc extends Bloc<SignupEvent,SignupInfoState>{
         if(otp != null) {
           print("Register success. OTP: $otp");
           emit(SignupInfoState(signupStatus: SignupStatus.Success));
+
+          await NotificationManager.showNotification(
+            id: 0,
+            title: 'OTP Received',
+            body: 'Your OTP is $otp',
+          );
         }
       } catch (e)
       {
