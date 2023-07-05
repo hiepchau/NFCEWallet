@@ -103,7 +103,7 @@ class _LoginFormState extends State<LoginForm> {
                           );
                         },
                         child: Text(
-                          "Không có tài khoản? Hãy đăng nhập",
+                          "Không có tài khoản? Hãy đăng ký",
                           style: TextStyle(color: Colors.white, fontSize: 16),
                         ),
                       ),
